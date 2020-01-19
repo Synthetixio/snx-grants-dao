@@ -133,6 +133,24 @@ contract('GrantsDAO', (accounts) => {
             'Receiver cannot be zero address',
           )
         })
+
+        it('adds to the locked amount', async () => {
+          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          assert.isTrue(new BN(oneToken).eq(await dao.locked.call()))
+        })
+
+        context('when another proposal is created without additional funding', () => {
+          beforeEach(async () => {
+            await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          })
+
+          it('reverts', async () => {
+            await expectRevert(
+              dao.createProposal(stranger, oneToken, { from: teamMember1 }),
+              'Invalid funds on DAO',
+            )
+          })
+        })
       })
     })
   })
@@ -256,6 +274,11 @@ contract('GrantsDAO', (accounts) => {
           expectEvent(tx.receipt, 'DeleteProposal', {
             proposalNumber: new BN(1),
           })
+        })
+
+        it('unlocks the proposal amount', async () => {
+          await dao.deleteProposal(1, { from: teamMember1 })
+          assert.isTrue(new BN(0).eq(await dao.locked.call()))
         })
       })
     })

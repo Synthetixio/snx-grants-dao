@@ -1,8 +1,11 @@
 pragma solidity 0.5.13;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 contract GrantsDAO {
+
+  using SafeMath for uint256;
 
   uint256 public constant SUBMISSION_PHASE = 2 days;
   uint256 public constant VOTING_PHASE = 9 days; // for 7 days after the submission phase
@@ -17,6 +20,7 @@ contract GrantsDAO {
   uint256 public counter = 1;
   uint256 public members;
   uint256 public toPass;
+  uint256 public locked;
   IERC20 public SNX;
 
   mapping(uint256 => Proposal) public proposals;
@@ -54,8 +58,10 @@ contract GrantsDAO {
   ) external onlyProposer() {
     require(_amount > 0, "Amount must be greater than 0");
     require(_receiver != address(0), "Receiver cannot be zero address");
-    require(_amount <= SNX.balanceOf(address(this)), "Invalid funds on DAO");
+    uint256 available = SNX.balanceOf(address(this)).sub(locked);
+    require(_amount <= available, "Invalid funds on DAO");
     proposals[counter] = Proposal(_receiver, _amount, block.timestamp, 0);
+    locked = locked.add(_amount);
     emit NewProposal(_receiver, _amount, counter);
     counter++;
   }
@@ -76,6 +82,7 @@ contract GrantsDAO {
   }
 
   function deleteProposal(uint256 _proposal) external onlyProposer() isExpiredProposal(_proposal) {
+    locked = locked.sub(proposals[_proposal].amount);
     delete proposals[_proposal];
     emit DeleteProposal(_proposal);
   }
