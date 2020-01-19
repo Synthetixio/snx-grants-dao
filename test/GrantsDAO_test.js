@@ -76,6 +76,22 @@ contract('GrantsDAO', (accounts) => {
         )
       })
     })
+
+    context('when teamMembers is 0', () => {
+      it('reverts', async () => {
+        const noMembers = []
+        await expectRevert(
+          GrantsDAO.new(
+            snx.address,
+            noMembers,
+            communityMembers,
+            new BN(communityMembers.length),
+            { from: defaultAccount },
+          ),
+          'Need least one teamMember',
+        )
+      })
+    })
   })
 
   describe('createProposal', () => {
