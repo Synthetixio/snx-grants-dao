@@ -6,6 +6,7 @@ contract GrantsDAO {
 
   struct Proposal {
     bool active;
+    address receiver;
     uint256 amount;
   }
 
@@ -13,37 +14,40 @@ contract GrantsDAO {
   IERC20 public SNX;
 
   mapping(uint256 => Proposal) public proposals;
-  mapping(address => bool) public teamSigners;
-  mapping(address => bool) public communitySigners;
+  mapping(address => bool) public teamMembers;
+  mapping(address => bool) public communityMembers;
 
-  event NewProposal(uint256 amount);
+  event NewProposal(address receiver, uint256 amount);
 
   constructor(
     address _snx,
-    address[] memory _teamSigners,
-    address[] memory _communitySigners
+    address[] memory _teamMembers,
+    address[] memory _communityMembers
   ) public {
-    for (uint i = 0; i < _teamSigners.length; i++) {
-      teamSigners[_teamSigners[i]] = true;
+    for (uint i = 0; i < _teamMembers.length; i++) {
+      teamMembers[_teamMembers[i]] = true;
     }
-    for (uint i = 0; i < _communitySigners.length; i++) {
-      communitySigners[_communitySigners[i]] = true;
+    for (uint i = 0; i < _communityMembers.length; i++) {
+      communityMembers[_communityMembers[i]] = true;
     }
 
     SNX = IERC20(_snx);
   }
 
-  function createProposal(uint256 _amount) external onlyProposer() {
+  function createProposal(
+    address _receiver,
+    uint256 _amount
+  ) external onlyProposer() {
     require(_amount <= SNX.balanceOf(address(this)), "Invalid funds on DAO");
-    proposals[counter] = Proposal(false, _amount);
+    proposals[counter] = Proposal(false, _receiver, _amount);
     counter++;
-    emit NewProposal(_amount);
+    emit NewProposal(_receiver, _amount);
   }
 
   modifier onlyProposer() {
     require(
-      teamSigners[msg.sender] ||
-      communitySigners[msg.sender],
+      teamMembers[msg.sender] ||
+      communityMembers[msg.sender],
       "Not proposer"
     );
     _;

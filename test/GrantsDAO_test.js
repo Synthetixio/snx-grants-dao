@@ -5,14 +5,14 @@ contract('GrantsDAO', (accounts) => {
   const SNXToken = artifacts.require('MockToken')
 
   const defaultAccount = accounts[0]
-  const teamSigner1 = accounts[1]
-  const teamSigner2 = accounts[2]
-  const communitySigner1 = accounts[3]
-  const communitySigner2 = accounts[4]
-  const communitySigner3 = accounts[5]
+  const teamMember1 = accounts[1]
+  const teamMember2 = accounts[2]
+  const communityMember1 = accounts[3]
+  const communityMember2 = accounts[4]
+  const communityMember3 = accounts[5]
   const stranger = accounts[6]
-  const teamSigners = [teamSigner1, teamSigner2]
-  const communitySigners = [communitySigner1, communitySigner2, communitySigner3]
+  const teamMembers = [teamMember1, teamMember2]
+  const communityMembers = [communityMember1, communityMember2, communityMember3]
 
   const oneToken = web3.utils.toWei('1')
   const tokenName = 'Synthetix Network Token'
@@ -32,16 +32,16 @@ contract('GrantsDAO', (accounts) => {
     )
     dao = await GrantsDAO.new(
       snx.address,
-      teamSigners,
-      communitySigners,
+      teamMembers,
+      communityMembers,
       { from: defaultAccount },
     )
   })
 
   describe('constructor', () => {
     it('deploys with the specified addresses as signers', async () => {
-      teamSigners.forEach(async s => assert.isTrue(await dao.teamSigners.call(s)))
-      communitySigners.forEach(async s => assert.isTrue(await dao.communitySigners.call(s)))
+      teamMembers.forEach(async s => assert.isTrue(await dao.teamMembers.call(s)))
+      communityMembers.forEach(async s => assert.isTrue(await dao.communityMembers.call(s)))
     })
 
     it('deploys with the specified token address', async () => {
@@ -53,7 +53,7 @@ contract('GrantsDAO', (accounts) => {
     context('when called by a stranger', () => {
       it('reverts', async () => {
         await expectRevert(
-          dao.createProposal(oneToken, { from: stranger }),
+          dao.createProposal(stranger, oneToken, { from: stranger }),
           'Not proposer',
         )
       })
@@ -63,7 +63,7 @@ contract('GrantsDAO', (accounts) => {
       context('and the DAO is not funded', () => {
         it('reverts', async () => {
           await expectRevert(
-            dao.createProposal(oneToken, { from: teamSigner1 }),
+            dao.createProposal(stranger, oneToken, { from: teamMember1 }),
             'Invalid funds on DAO',
           )
         })
@@ -75,17 +75,19 @@ contract('GrantsDAO', (accounts) => {
         })
 
         it('emits the NewProposal event', async () => {
-          const tx = await dao.createProposal(oneToken, { from: teamSigner1 })
+          const tx = await dao.createProposal(stranger, oneToken, { from: teamMember1 })
           expectEvent(tx.receipt, 'NewProposal', {
+            receiver: stranger,
             amount: oneToken,
           })
         })
 
         it('creates a proposal', async () => {
-          await dao.createProposal(oneToken, { from: teamSigner1 })
+          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
           const proposal = await dao.proposals(1)
           assert.isFalse(proposal.active)
           assert.equal(oneToken.toString(), proposal.amount.toString())
+          assert.equal(stranger, proposal.receiver)
         })
       })
     })
