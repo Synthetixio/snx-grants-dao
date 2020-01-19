@@ -62,7 +62,7 @@ contract('GrantsDAO', (accounts) => {
     })
 
     context('when toPass is more than members', () => {
-      it('reverts', async () => {
+      it('reverts in general case', async () => {
         const memberCount = teamMembers.length + communityMembers.length + 1
         await expectRevert(
           GrantsDAO.new(
@@ -73,6 +73,34 @@ contract('GrantsDAO', (accounts) => {
             { from: defaultAccount },
           ),
           'Not enough members to pass votes',
+        )
+      })
+
+      it('reverts when equal to communityMembers length', async () => {
+        const memberCount = communityMembers.length
+        await expectRevert(
+          GrantsDAO.new(
+            snx.address,
+            teamMembers,
+            communityMembers,
+            new BN(memberCount),
+            { from: defaultAccount },
+          ),
+          'Need higher value for toPass',
+        )
+      })
+
+      it('reverts when less than communityMembers length', async () => {
+        const memberCount = communityMembers.length - 1
+        await expectRevert(
+          GrantsDAO.new(
+            snx.address,
+            teamMembers,
+            communityMembers,
+            new BN(memberCount),
+            { from: defaultAccount },
+          ),
+          'Need higher value for toPass',
         )
       })
     })
@@ -155,6 +183,11 @@ contract('GrantsDAO', (accounts) => {
           assert.isTrue(new BN(oneToken).eq(await dao.locked.call()))
         })
 
+        it('counts the proposal as voted by the proposer', async () => {
+          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          assert.isTrue(await dao.voted.call(teamMember1, 1))
+        })
+
         context('when another proposal is created without additional funding', () => {
           beforeEach(async () => {
             await dao.createProposal(stranger, oneToken, { from: teamMember1 })
@@ -180,7 +213,7 @@ contract('GrantsDAO', (accounts) => {
     context('when called by a stranger', () => {
       it('reverts', async () => {
         await expectRevert(
-          dao.voteProposal(1, { from: stranger }),
+          dao.voteProposal(1, true, { from: stranger }),
           'Not proposer',
         )
       })
@@ -190,7 +223,7 @@ contract('GrantsDAO', (accounts) => {
       context('when the proposal is still in submission phase', () => {
         it('reverts', async () => {
           await expectRevert(
-            dao.voteProposal(1, { from: teamMember1 }),
+            dao.voteProposal(1, true, { from: communityMember1 }),
             'Proposal in submission phase',
           )
         })
@@ -203,7 +236,7 @@ contract('GrantsDAO', (accounts) => {
 
         it('reverts', async () => {
           await expectRevert(
-            dao.voteProposal(1, { from: teamMember1 }),
+            dao.voteProposal(1, true, { from: communityMember1 }),
             'Proposal not in voting phase',
           )
         })
@@ -215,9 +248,18 @@ contract('GrantsDAO', (accounts) => {
         })
 
         it('allows the proposal to be voted on', async () => {
-          const tx = await dao.voteProposal(1, { from: teamMember1 })
+          const tx = await dao.voteProposal(1, true, { from: communityMember1 })
           expectEvent(tx, 'VoteProposal', {
-            member: teamMember1,
+            member: communityMember1,
+          })
+        })
+
+        context('when the proposal has already been voted on by a member', () => {
+          it('reverts', async () => {
+            await expectRevert(
+              dao.voteProposal(1, true, { from: teamMember1 }),
+              'Already voted',
+            )
           })
         })
 
@@ -226,10 +268,9 @@ contract('GrantsDAO', (accounts) => {
 
           beforeEach(async () => {
             proposal = await dao.proposals.call(1)
-            await dao.voteProposal(1, { from: teamMember1 })
-            await dao.voteProposal(1, { from: teamMember2 })
-            await dao.voteProposal(1, { from: communityMember1 })
-            tx = await dao.voteProposal(1, { from: communityMember2 })
+            await dao.voteProposal(1, true, { from: teamMember2 })
+            await dao.voteProposal(1, true, { from: communityMember1 })
+            tx = await dao.voteProposal(1, true, { from: communityMember2 })
           })
 
           it('emits the ExecuteProposal event', async () => {
@@ -244,7 +285,7 @@ contract('GrantsDAO', (accounts) => {
             assert.equal(deleted.receiver, constants.ZERO_ADDRESS)
             assert.isTrue(deleted.amount.eq(new BN(0)))
             assert.isTrue(deleted.createdAt.eq(new BN(0)))
-            assert.isTrue(deleted.votes.eq(new BN(0)))
+            assert.isTrue(deleted.approvals.eq(new BN(0)))
           })
 
           it('sends the proposal amount to the receiver', async () => {
