@@ -14,6 +14,7 @@ contract('GrantsDAO', (accounts) => {
   const teamMembers = [teamMember1, teamMember2]
   const communityMembers = [communityMember1, communityMember2, communityMember3]
 
+  const toPass = new BN(1)
   const oneToken = web3.utils.toWei('1')
   const tokenName = 'Synthetix Network Token'
   const tokenSymbol = 'SNX'
@@ -36,6 +37,7 @@ contract('GrantsDAO', (accounts) => {
       snx.address,
       teamMembers,
       communityMembers,
+      toPass,
       { from: defaultAccount },
     )
   })
@@ -53,6 +55,26 @@ contract('GrantsDAO', (accounts) => {
     it('deploys with the correct members count', async () => {
       const memberCount = teamMembers.length + communityMembers.length
       assert.equal(memberCount, await dao.members.call())
+    })
+
+    it('deploys with the specified toPass value', async () => {
+      assert.isTrue(toPass.eq(await dao.toPass.call()))
+    })
+
+    context('when toPass is more than members', () => {
+      it('reverts', async () => {
+        const memberCount = teamMembers.length + communityMembers.length + 1
+        await expectRevert(
+          GrantsDAO.new(
+            snx.address,
+            teamMembers,
+            communityMembers,
+            new BN(memberCount),
+            { from: defaultAccount },
+          ),
+          'Not enough members to pass votes',
+        )
+      })
     })
   })
 

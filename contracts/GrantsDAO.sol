@@ -16,6 +16,7 @@ contract GrantsDAO {
 
   uint256 public counter = 1;
   uint256 public members;
+  uint256 public toPass;
   IERC20 public SNX;
 
   mapping(uint256 => Proposal) public proposals;
@@ -28,7 +29,8 @@ contract GrantsDAO {
   constructor(
     address _snx,
     address[] memory _teamMembers,
-    address[] memory _communityMembers
+    address[] memory _communityMembers,
+    uint256 _toPass
   ) public {
     for (uint i = 0; i < _teamMembers.length; i++) {
       teamMembers[_teamMembers[i]] = true;
@@ -39,6 +41,8 @@ contract GrantsDAO {
       members++;
     }
 
+    require(_toPass <= members, "Not enough members to pass votes");
+    toPass = _toPass;
     SNX = IERC20(_snx);
   }
 
