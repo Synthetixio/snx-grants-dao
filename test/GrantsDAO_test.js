@@ -108,6 +108,7 @@ contract('GrantsDAO', (accounts) => {
           expectEvent(tx.receipt, 'NewProposal', {
             receiver: stranger,
             amount: oneToken,
+            proposalNumber: new BN(1),
           })
         })
 

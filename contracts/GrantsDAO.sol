@@ -23,7 +23,7 @@ contract GrantsDAO {
   mapping(address => bool) public teamMembers;
   mapping(address => bool) public communityMembers;
 
-  event NewProposal(address receiver, uint256 amount);
+  event NewProposal(address receiver, uint256 amount, uint256 proposalNumber);
   event VoteProposal(address member);
   event ExecuteProposal(address receiver, uint256 amount);
 
@@ -55,8 +55,8 @@ contract GrantsDAO {
     require(_receiver != address(0), "Receiver cannot be zero address");
     require(_amount <= SNX.balanceOf(address(this)), "Invalid funds on DAO");
     proposals[counter] = Proposal(_receiver, _amount, block.timestamp, 0);
+    emit NewProposal(_receiver, _amount, counter);
     counter++;
-    emit NewProposal(_receiver, _amount);
   }
 
   function voteProposal(uint256 _proposal) external onlyProposer() isValidProposal(_proposal) {
