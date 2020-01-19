@@ -1,7 +1,8 @@
-const { expectEvent, expectRevert } = require('@openzeppelin/test-helpers')
+const { BN, expectEvent, expectRevert } = require('@openzeppelin/test-helpers')
 
 contract('GrantsDAO', (accounts) => {
   const GrantsDAO = artifacts.require('GrantsDAO')
+  const SNXToken = artifacts.require('MockToken')
 
   const defaultAccount = accounts[0]
   const teamSigner1 = accounts[1]
@@ -14,14 +15,26 @@ contract('GrantsDAO', (accounts) => {
   const communitySigners = [communitySigner1, communitySigner2, communitySigner3]
 
   const oneToken = web3.utils.toWei('1')
+  const tokenName = 'Synthetix Network Token'
+  const tokenSymbol = 'SNX'
+  const tokenDecimals = new BN(18)
+  const tokenInitialSupply = web3.utils.toWei('1000')
 
-  let dao
+  let dao, snx
 
   beforeEach(async () => {
+    snx = await SNXToken.new(
+      tokenName,
+      tokenSymbol,
+      tokenDecimals,
+      tokenInitialSupply,
+      { from: defaultAccount },
+    )
     dao = await GrantsDAO.new(
+      snx.address,
       teamSigners,
       communitySigners,
-      { from: defaultAccount }
+      { from: defaultAccount },
     )
   })
 
@@ -29,6 +42,10 @@ contract('GrantsDAO', (accounts) => {
     it('deploys with the specified addresses as signers', async () => {
       teamSigners.forEach(async s => assert.isTrue(await dao.teamSigners.call(s)))
       communitySigners.forEach(async s => assert.isTrue(await dao.communitySigners.call(s)))
+    })
+
+    it('deploys with the specified token address', async () => {
+      assert.equal(snx.address, await dao.SNX.call())
     })
   })
 
@@ -43,18 +60,33 @@ contract('GrantsDAO', (accounts) => {
     })
 
     context('when called by a proposer', () => {
-      it('emits the NewProposal event', async () => {
-        const tx = await dao.createProposal(oneToken, { from: teamSigner1 })
-        expectEvent(tx.receipt, 'NewProposal', {
-          amount: oneToken,
+      context('and the DAO is not funded', () => {
+        it('reverts', async () => {
+          await expectRevert(
+            dao.createProposal(oneToken, { from: teamSigner1 }),
+            'Invalid funds on DAO',
+          )
         })
       })
 
-      it('creates a proposal', async () => {
-        await dao.createProposal(oneToken, { from: teamSigner1 })
-        const proposal = await dao.proposals(1)
-        assert.isFalse(proposal.active)
-        assert.equal(oneToken.toString(), proposal.amount.toString())
+      context('and the DAO is funded', () => {
+        beforeEach(async () => {
+          await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+        })
+
+        it('emits the NewProposal event', async () => {
+          const tx = await dao.createProposal(oneToken, { from: teamSigner1 })
+          expectEvent(tx.receipt, 'NewProposal', {
+            amount: oneToken,
+          })
+        })
+
+        it('creates a proposal', async () => {
+          await dao.createProposal(oneToken, { from: teamSigner1 })
+          const proposal = await dao.proposals(1)
+          assert.isFalse(proposal.active)
+          assert.equal(oneToken.toString(), proposal.amount.toString())
+        })
       })
     })
   })
