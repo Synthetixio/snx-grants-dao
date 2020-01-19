@@ -26,6 +26,7 @@ contract GrantsDAO {
   event NewProposal(address receiver, uint256 amount, uint256 proposalNumber);
   event VoteProposal(address member);
   event ExecuteProposal(address receiver, uint256 amount);
+  event DeleteProposal(uint256 proposalNumber);
 
   constructor(
     address _snx,
@@ -72,6 +73,16 @@ contract GrantsDAO {
     delete proposals[_proposal];
     assert(SNX.transfer(proposal.receiver, proposal.amount));
     emit ExecuteProposal(proposal.receiver, proposal.amount);
+  }
+
+  function deleteProposal(uint256 _proposal) external onlyProposer() isExpiredProposal(_proposal) {
+    delete proposals[_proposal];
+    emit DeleteProposal(_proposal);
+  }
+
+  modifier isExpiredProposal(uint256 _proposal) {
+    require(block.timestamp > proposals[_proposal].createdAt + VOTING_PHASE, "Proposal not expired");
+    _;
   }
 
   modifier isValidProposal(uint256 _proposal) {

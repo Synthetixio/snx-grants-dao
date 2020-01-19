@@ -220,4 +220,44 @@ contract('GrantsDAO', (accounts) => {
       })
     })
   })
+
+  describe('deleteProposal', () => {
+    beforeEach(async () => {
+      await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+      await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+    })
+
+    context('when called by a stranger', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.deleteProposal(1, { from: stranger }),
+          'Not proposer',
+        )
+      })
+    })
+
+    context('when called by a proposer', () => {
+      context('when the proposal is not expired', () => {
+        it('reverts', async () => {
+          await expectRevert(
+            dao.deleteProposal(1, { from: teamMember1 }),
+            'Proposal not expired',
+          )
+        })
+      })
+
+      context('when the proposal is expired', () => {
+        beforeEach(async () => {
+          await time.increase(after9Days)
+        })
+
+        it('emits the DeleteProposal event', async () => {
+          const tx = await dao.deleteProposal(1, { from: teamMember1 })
+          expectEvent(tx.receipt, 'DeleteProposal', {
+            proposalNumber: new BN(1),
+          })
+        })
+      })
+    })
+  })
 })
