@@ -85,9 +85,10 @@ contract('GrantsDAO', (accounts) => {
         it('creates a proposal', async () => {
           await dao.createProposal(stranger, oneToken, { from: teamMember1 })
           const proposal = await dao.proposals(1)
-          assert.isFalse(proposal.active)
+          assert.isTrue(proposal.active)
           assert.equal(oneToken.toString(), proposal.amount.toString())
           assert.equal(stranger, proposal.receiver)
+          assert.isTrue(proposal.createdAt.gt(0))
         })
       })
     })

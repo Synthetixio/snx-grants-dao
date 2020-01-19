@@ -8,6 +8,7 @@ contract GrantsDAO {
     bool active;
     address receiver;
     uint256 amount;
+    uint256 createdAt;
   }
 
   uint256 public counter = 1;
@@ -39,7 +40,7 @@ contract GrantsDAO {
     uint256 _amount
   ) external onlyProposer() {
     require(_amount <= SNX.balanceOf(address(this)), "Invalid funds on DAO");
-    proposals[counter] = Proposal(false, _receiver, _amount);
+    proposals[counter] = Proposal(true, _receiver, _amount, block.timestamp);
     counter++;
     emit NewProposal(_receiver, _amount);
   }
