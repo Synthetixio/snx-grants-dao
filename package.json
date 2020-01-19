@@ -6,6 +6,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@openzeppelin/test-helpers": "^0.5.4",
     "truffle": "^5.1.9"
   }
 }
