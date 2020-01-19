@@ -4,6 +4,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract GrantsDAO {
 
+  uint256 public constant SUBMISSION_PHASE = 2 days;
+  uint256 public constant VOTING_PHASE = 9 days; // for 7 days after the submission phase
+
   struct Proposal {
     bool active;
     address receiver;
@@ -19,6 +22,7 @@ contract GrantsDAO {
   mapping(address => bool) public communityMembers;
 
   event NewProposal(address receiver, uint256 amount);
+  event VoteProposal(address member);
 
   constructor(
     address _snx,
@@ -43,6 +47,17 @@ contract GrantsDAO {
     proposals[counter] = Proposal(true, _receiver, _amount, block.timestamp);
     counter++;
     emit NewProposal(_receiver, _amount);
+  }
+
+  function voteProposal(uint256 _proposal) external onlyProposer() isValidProposal(_proposal) {
+    emit VoteProposal(msg.sender);
+  }
+
+  modifier isValidProposal(uint256 _proposal) {
+    uint256 createdAt = proposals[_proposal].createdAt;
+    require(createdAt <= block.timestamp - SUBMISSION_PHASE, "Proposal in submission phase");
+    require(block.timestamp <= createdAt + VOTING_PHASE, "Proposal not in voting phase");
+    _;
   }
 
   modifier onlyProposer() {

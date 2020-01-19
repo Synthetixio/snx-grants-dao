@@ -1,4 +1,4 @@
-const { BN, expectEvent, expectRevert } = require('@openzeppelin/test-helpers')
+const { BN, expectEvent, expectRevert, time } = require('@openzeppelin/test-helpers')
 
 contract('GrantsDAO', (accounts) => {
   const GrantsDAO = artifacts.require('GrantsDAO')
@@ -19,6 +19,8 @@ contract('GrantsDAO', (accounts) => {
   const tokenSymbol = 'SNX'
   const tokenDecimals = new BN(18)
   const tokenInitialSupply = web3.utils.toWei('1000')
+  const after2Days = 172801
+  const after9Days = 777601
 
   let dao, snx
 
@@ -89,6 +91,59 @@ contract('GrantsDAO', (accounts) => {
           assert.equal(oneToken.toString(), proposal.amount.toString())
           assert.equal(stranger, proposal.receiver)
           assert.isTrue(proposal.createdAt.gt(0))
+        })
+      })
+    })
+  })
+
+  describe('voteProposal', () => {
+    beforeEach(async () => {
+      await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+      await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+    })
+
+    context('when called by a stranger', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.voteProposal(1, { from: stranger }),
+          'Not proposer',
+        )
+      })
+    })
+
+    context('when called by a proposer', () => {
+      context('when the proposal is still in submission phase', () => {
+        it('reverts', async () => {
+          await expectRevert(
+            dao.voteProposal(1, { from: teamMember1 }),
+            'Proposal in submission phase',
+          )
+        })
+      })
+
+      context('when the proposal is outside of voting phase', () => {
+        beforeEach(async () => {
+          await time.increase(after9Days)
+        })
+
+        it('reverts', async () => {
+          await expectRevert(
+            dao.voteProposal(1, { from: teamMember1 }),
+            'Proposal not in voting phase',
+          )
+        })
+      })
+
+      context('when the proposal is inside the voting phase', () => {
+        beforeEach(async () => {
+          await time.increase(after2Days)
+        })
+
+        it('allows the proposal to be voted on', async () => {
+          const tx = await dao.voteProposal(1, { from: teamMember1 })
+          expectEvent(tx, 'VoteProposal', {
+            member: teamMember1,
+          })
         })
       })
     })
