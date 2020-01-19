@@ -49,6 +49,11 @@ contract('GrantsDAO', (accounts) => {
     it('deploys with the specified token address', async () => {
       assert.equal(snx.address, await dao.SNX.call())
     })
+
+    it('deploys with the correct members count', async () => {
+      const memberCount = teamMembers.length + communityMembers.length
+      assert.equal(memberCount, await dao.members.call())
+    })
   })
 
   describe('createProposal', () => {

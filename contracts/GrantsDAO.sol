@@ -15,6 +15,7 @@ contract GrantsDAO {
   }
 
   uint256 public counter = 1;
+  uint256 public members;
   IERC20 public SNX;
 
   mapping(uint256 => Proposal) public proposals;
@@ -31,9 +32,11 @@ contract GrantsDAO {
   ) public {
     for (uint i = 0; i < _teamMembers.length; i++) {
       teamMembers[_teamMembers[i]] = true;
+      members++;
     }
     for (uint i = 0; i < _communityMembers.length; i++) {
       communityMembers[_communityMembers[i]] = true;
+      members++;
     }
 
     SNX = IERC20(_snx);
