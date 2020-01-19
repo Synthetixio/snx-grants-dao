@@ -1,4 +1,4 @@
-const { BN, expectEvent, expectRevert, time } = require('@openzeppelin/test-helpers')
+const { BN, constants, expectEvent, expectRevert, time } = require('@openzeppelin/test-helpers')
 
 contract('GrantsDAO', (accounts) => {
   const GrantsDAO = artifacts.require('GrantsDAO')
@@ -14,7 +14,7 @@ contract('GrantsDAO', (accounts) => {
   const teamMembers = [teamMember1, teamMember2]
   const communityMembers = [communityMember1, communityMember2, communityMember3]
 
-  const toPass = new BN(1)
+  const toPass = new BN(4)
   const oneToken = web3.utils.toWei('1')
   const tokenName = 'Synthetix Network Token'
   const tokenSymbol = 'SNX'
@@ -114,10 +114,23 @@ contract('GrantsDAO', (accounts) => {
         it('creates a proposal', async () => {
           await dao.createProposal(stranger, oneToken, { from: teamMember1 })
           const proposal = await dao.proposals(1)
-          assert.isTrue(proposal.active)
           assert.equal(oneToken.toString(), proposal.amount.toString())
           assert.equal(stranger, proposal.receiver)
           assert.isTrue(proposal.createdAt.gt(0))
+        })
+
+        it('reverts for 0 in amount', async () => {
+          await expectRevert(
+            dao.createProposal(stranger, 0, { from: teamMember1 }),
+            'Amount must be greater than 0',
+          )
+        })
+
+        it('reverts for zero address in receiver', async () => {
+          await expectRevert(
+            dao.createProposal(constants.ZERO_ADDRESS, oneToken, { from: teamMember1 }),
+            'Receiver cannot be zero address',
+          )
         })
       })
     })
@@ -170,6 +183,37 @@ contract('GrantsDAO', (accounts) => {
           const tx = await dao.voteProposal(1, { from: teamMember1 })
           expectEvent(tx, 'VoteProposal', {
             member: teamMember1,
+          })
+        })
+
+        context('when enough votes have been reached to pass', () => {
+          let tx, proposal
+
+          beforeEach(async () => {
+            proposal = await dao.proposals.call(1)
+            await dao.voteProposal(1, { from: teamMember1 })
+            await dao.voteProposal(1, { from: teamMember2 })
+            await dao.voteProposal(1, { from: communityMember1 })
+            tx = await dao.voteProposal(1, { from: communityMember2 })
+          })
+
+          it('emits the ExecuteProposal event', async () => {
+            expectEvent(tx.receipt, 'ExecuteProposal', {
+              receiver: proposal.receiver,
+              amount: proposal.amount,
+            })
+          })
+
+          it('deletes the proposal from storage', async () => {
+            const deleted = await dao.proposals.call(1)
+            assert.equal(deleted.receiver, constants.ZERO_ADDRESS)
+            assert.isTrue(deleted.amount.eq(new BN(0)))
+            assert.isTrue(deleted.createdAt.eq(new BN(0)))
+            assert.isTrue(deleted.votes.eq(new BN(0)))
+          })
+
+          it('sends the proposal amount to the receiver', async () => {
+            assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(stranger)))
           })
         })
       })

@@ -8,10 +8,10 @@ contract GrantsDAO {
   uint256 public constant VOTING_PHASE = 9 days; // for 7 days after the submission phase
 
   struct Proposal {
-    bool active;
     address receiver;
     uint256 amount;
     uint256 createdAt;
+    uint256 votes;
   }
 
   uint256 public counter = 1;
@@ -25,6 +25,7 @@ contract GrantsDAO {
 
   event NewProposal(address receiver, uint256 amount);
   event VoteProposal(address member);
+  event ExecuteProposal(address receiver, uint256 amount);
 
   constructor(
     address _snx,
@@ -50,14 +51,27 @@ contract GrantsDAO {
     address _receiver,
     uint256 _amount
   ) external onlyProposer() {
+    require(_amount > 0, "Amount must be greater than 0");
+    require(_receiver != address(0), "Receiver cannot be zero address");
     require(_amount <= SNX.balanceOf(address(this)), "Invalid funds on DAO");
-    proposals[counter] = Proposal(true, _receiver, _amount, block.timestamp);
+    proposals[counter] = Proposal(_receiver, _amount, block.timestamp, 0);
     counter++;
     emit NewProposal(_receiver, _amount);
   }
 
   function voteProposal(uint256 _proposal) external onlyProposer() isValidProposal(_proposal) {
+    proposals[_proposal].votes++;
+    if (proposals[_proposal].votes == toPass) {
+      executeProposal(_proposal);
+    }
     emit VoteProposal(msg.sender);
+  }
+
+  function executeProposal(uint256 _proposal) private {
+    Proposal memory proposal = proposals[_proposal];
+    delete proposals[_proposal];
+    assert(SNX.transfer(proposal.receiver, proposal.amount));
+    emit ExecuteProposal(proposal.receiver, proposal.amount);
   }
 
   modifier isValidProposal(uint256 _proposal) {
