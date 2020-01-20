@@ -182,6 +182,7 @@ contract('GrantsDAO', (accounts) => {
         it('adds to the locked amount', async () => {
           await dao.createProposal(stranger, oneToken, { from: teamMember1 })
           assert.isTrue(new BN(oneToken).eq(await dao.locked.call()))
+          assert.isTrue(new BN(0).eq(await dao.withdrawable.call()))
         })
 
         it('counts the proposal as voted by the proposer', async () => {
@@ -436,6 +437,82 @@ contract('GrantsDAO', (accounts) => {
         it('unlocks the proposal amount', async () => {
           await dao.deleteProposal(1, { from: teamMember1 })
           assert.isTrue(new BN(0).eq(await dao.locked.call()))
+        })
+      })
+    })
+  })
+
+  describe('withdrawable', () => {
+    context('when the contract is not funded', () => {
+      it('returns 0', async () => {
+        assert.isTrue(new BN(0).eq(await dao.withdrawable.call()))
+      })
+
+      context('when the contract is funded', () => {
+        beforeEach(async () => {
+          await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+        })
+
+        it('returns the amount that was funded', async () => {
+          assert.isTrue(new BN(oneToken).eq(await dao.withdrawable.call()))
+        })
+
+        context('when a proposal is created', () => {
+          beforeEach(async () => {
+            await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+            await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          })
+
+          it('returns the balance minus what is locked in the proposal', async () => {
+            assert.isTrue(new BN(oneToken).eq(await dao.withdrawable.call()))
+          })
+        })
+      })
+    })
+  })
+
+  describe('withdraw', () => {
+    beforeEach(async () => {
+      await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+    })
+
+    context('when called by a community member', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.withdraw(stranger, oneToken, { from: communityMember1 }),
+          'Not team member',
+        )
+      })
+    })
+
+    context('when called by a stranger', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.withdraw(stranger, oneToken, { from: stranger }),
+          'Not team member',
+        )
+      })
+    })
+
+    context('when called by a team member', () => {
+      it('allows funds to be withdrawn', async () => {
+        await dao.withdraw(stranger, oneToken, { from: teamMember1 })
+        assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(stranger)))
+        assert.isTrue(new BN(0).eq(await snx.balanceOf(dao.address)))
+      })
+
+      context('when a proposal is created', () => {
+        beforeEach(async () => {
+          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+        })
+
+        it('does not allow locked funds to be withdrawn', async () => {
+          assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(dao.address)))
+          assert.isTrue(new BN(0).eq(await dao.withdrawable.call()))
+          await expectRevert(
+            dao.withdraw(stranger, oneToken, { from: teamMember1 }),
+            'Unable to withdraw amount',
+          )
         })
       })
     })

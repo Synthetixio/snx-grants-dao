@@ -100,6 +100,16 @@ contract GrantsDAO {
     _deleteProposal(_proposal);
   }
 
+  function withdraw(address _receiver, uint256 _amount) external {
+    require(teamMembers[msg.sender], "Not team member");
+    require(_amount <= withdrawable(), "Unable to withdraw amount");
+    assert(SNX.transfer(_receiver, _amount));
+  }
+
+  function withdrawable() public returns (uint256) {
+    return SNX.balanceOf(address(this)) - locked;
+  }
+
   function voted(address _member, uint256 _proposal) external view returns (bool) {
     return proposals[_proposal].voted[_member];
   }
