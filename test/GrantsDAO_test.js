@@ -602,4 +602,29 @@ contract('GrantsDAO', (accounts) => {
       })
     })
   })
+
+  describe('removeTeamMember', () => {
+    context('when called by a stranger', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.removeTeamMember(teamMember1, { from: stranger }),
+          'Not team member',
+        )
+      })
+    })
+
+    context('when called by a team member', () => {
+      it('removes the team member', async () => {
+        await dao.removeTeamMember(teamMember2, { from: teamMember1 })
+        assert.isFalse(await dao.teamMembers.call(teamMember2))
+      })
+
+      it('does not allow the team member to remove self', async () => {
+        await expectRevert(
+          dao.removeTeamMember(teamMember1, { from: teamMember1 }),
+          'Cannot remove self',
+        )
+      })
+    })
+  })
 })

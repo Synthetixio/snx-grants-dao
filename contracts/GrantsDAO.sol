@@ -118,6 +118,12 @@ contract GrantsDAO {
     teamMembers[_member] = true;
   }
 
+  function removeTeamMember(address _member) external onlyTeamMember() {
+    // Prevents the possibility of there being no team members
+    require(msg.sender != _member, "Cannot remove self");
+    delete teamMembers[_member];
+  }
+
   function withdrawable() public returns (uint256) {
     return SNX.balanceOf(address(this)) - locked;
   }
