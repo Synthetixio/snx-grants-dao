@@ -20,6 +20,7 @@ contract('GrantsDAO', (accounts) => {
   const tokenSymbol = 'SNX'
   const tokenDecimals = new BN(18)
   const tokenInitialSupply = web3.utils.toWei('1000')
+  const after1Day = 86401
   const after2Days = 172801
   const after9Days = 777601
 
@@ -224,7 +225,7 @@ contract('GrantsDAO', (accounts) => {
         it('reverts', async () => {
           await expectRevert(
             dao.voteProposal(1, true, { from: communityMember1 }),
-            'Proposal in submission phase',
+            'Proposal not in voting phase',
           )
         })
       })
@@ -259,12 +260,44 @@ contract('GrantsDAO', (accounts) => {
           assert.isTrue(await dao.voted.call(communityMember1, 1))
         })
 
+        it('allows a team member to delete a proposal by voting false', async () => {
+          const tx = await dao.voteProposal(1, false, { from: teamMember1 })
+          expectEvent(tx, 'DeleteProposal', {
+            proposalNumber: new BN(1),
+          })
+          const deleted = await dao.proposals.call(1)
+          assert.equal(deleted.receiver, constants.ZERO_ADDRESS)
+          assert.isTrue(deleted.amount.eq(new BN(0)))
+          assert.isTrue(deleted.createdAt.eq(new BN(0)))
+          assert.isTrue(deleted.approvals.eq(new BN(0)))
+        })
+
         context('when the proposal has already been voted on by a member', () => {
           it('reverts', async () => {
             await expectRevert(
               dao.voteProposal(1, true, { from: communityMember3 }),
               'Already voted',
             )
+          })
+        })
+
+        context('when all the community members have voted', () => {
+          let proposal
+
+          beforeEach(async () => {
+            await dao.voteProposal(1, true, { from: communityMember2 })
+            await dao.voteProposal(1, true, { from: communityMember1 })
+            proposal = await dao.proposals.call(1)
+            assert.isFalse(proposal.teamApproval)
+            assert.isTrue(new BN(3).eq(proposal.approvals))
+          })
+
+          it('does not execute the proposal until a team member approves', async () => {
+            const tx = await dao.voteProposal(1, true, { from: teamMember1 })
+            expectEvent(tx.receipt, 'ExecuteProposal', {
+              receiver: proposal.receiver,
+              amount: proposal.amount,
+            })
           })
         })
 
@@ -296,6 +329,68 @@ contract('GrantsDAO', (accounts) => {
           it('sends the proposal amount to the receiver', async () => {
             assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(stranger)))
           })
+        })
+      })
+    })
+
+    context('when multiple proposals are active', () => {
+      beforeEach(async () => {
+        await time.increase(after1Day)
+        await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+        await dao.createProposal(stranger, oneToken, { from: communityMember3 })
+      })
+
+      it('does not allow early voting for either proposal', async () => {
+        await expectRevert(
+          dao.voteProposal(1, true, { from: communityMember1 }),
+          'Proposal not in voting phase',
+        )
+        await expectRevert(
+          dao.voteProposal(2, true, { from: communityMember1 }),
+          'Proposal not in voting phase',
+        )
+      })
+
+      context('when one proposal is in the voting phase', () => {
+        beforeEach(async () => {
+          await time.increase(after1Day)
+          assert.isTrue(await dao.votingPhase.call(1))
+          assert.isFalse(await dao.votingPhase.call(2))
+        })
+
+        it('only allows voting for valid proposals', async () => {
+          const tx = await dao.voteProposal(1, true, { from: communityMember1 })
+          expectEvent(tx, 'VoteProposal', {
+            proposal: new BN(1),
+            member: communityMember1,
+            vote: true,
+          })
+          const proposal = await dao.proposals.call(1)
+          assert.isTrue(new BN(2).eq(proposal.approvals))
+          assert.isTrue(await dao.voted.call(communityMember1, 1))
+        })
+
+        it('does not allow voting for proposals that are still in submission phase', async () => {
+          await expectRevert(
+            dao.voteProposal(2, true, { from: communityMember1 }),
+            'Proposal not in voting phase',
+          )
+        })
+
+        it('allows proposals in the voting phase to be executed', async () => {
+          const proposal1 = await dao.proposals.call(1)
+          await dao.voteProposal(1, true, { from: communityMember1 })
+          await dao.voteProposal(1, true, { from: communityMember2 })
+          const tx = await dao.voteProposal(1, true, { from: teamMember2 })
+          expectEvent(tx.receipt, 'ExecuteProposal', {
+            receiver: proposal1.receiver,
+            amount: proposal1.amount,
+          })
+
+          const proposal2 = await dao.proposals.call(2)
+          assert.equal(oneToken.toString(), proposal2.amount.toString())
+          assert.equal(stranger, proposal2.receiver)
+          assert.isTrue(proposal2.createdAt.gt(0))
         })
       })
     })

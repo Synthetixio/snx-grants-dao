@@ -71,7 +71,8 @@ contract GrantsDAO {
     counter++;
   }
 
-  function voteProposal(uint256 _proposal, bool _vote) external onlyProposer() isValidProposal(_proposal) {
+  function voteProposal(uint256 _proposal, bool _vote) external onlyProposer() {
+    require(votingPhase(_proposal), "Proposal not in voting phase");
     require(!proposals[_proposal].voted[msg.sender], "Already voted");
     proposals[_proposal].voted[msg.sender] = true;
     if (_vote) {
@@ -87,18 +88,26 @@ contract GrantsDAO {
       // Allows a team member to automatically kill a proposal
       if (teamMembers[msg.sender]) {
         _deleteProposal(_proposal);
+        return;
       }
     }
 
     emit VoteProposal(_proposal, msg.sender, _vote);
   }
 
-  function deleteProposal(uint256 _proposal) external onlyProposer() isExpiredProposal(_proposal) {
+  function deleteProposal(uint256 _proposal) external onlyProposer() {
+    require(block.timestamp > proposals[_proposal].createdAt + VOTING_PHASE, "Proposal not expired");
     _deleteProposal(_proposal);
   }
 
   function voted(address _member, uint256 _proposal) external view returns (bool) {
     return proposals[_proposal].voted[_member];
+  }
+
+  function votingPhase(uint256 _proposal) public view returns (bool) {
+    uint256 createdAt = proposals[_proposal].createdAt;
+    return createdAt <= block.timestamp - SUBMISSION_PHASE &&
+      block.timestamp <= createdAt + VOTING_PHASE;
   }
 
   function _deleteProposal(uint256 _proposal) private {
@@ -112,18 +121,6 @@ contract GrantsDAO {
     delete proposals[_proposal];
     assert(SNX.transfer(proposal.receiver, proposal.amount));
     emit ExecuteProposal(proposal.receiver, proposal.amount);
-  }
-
-  modifier isExpiredProposal(uint256 _proposal) {
-    require(block.timestamp > proposals[_proposal].createdAt + VOTING_PHASE, "Proposal not expired");
-    _;
-  }
-
-  modifier isValidProposal(uint256 _proposal) {
-    uint256 createdAt = proposals[_proposal].createdAt;
-    require(createdAt <= block.timestamp - SUBMISSION_PHASE, "Proposal in submission phase");
-    require(block.timestamp <= createdAt + VOTING_PHASE, "Proposal not in voting phase");
-    _;
   }
 
   modifier onlyProposer() {
