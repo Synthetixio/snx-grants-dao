@@ -584,4 +584,22 @@ contract('GrantsDAO', (accounts) => {
       })
     })
   })
+
+  describe('addTeamMember', () => {
+    context('when called by a stranger', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.addTeamMember(stranger, { from: stranger }),
+          'Not team member',
+        )
+      })
+    })
+
+    context('when called by a team member', () => {
+      it('adds the team member', async () => {
+        await dao.addTeamMember(stranger, { from: teamMember1 })
+        assert.isTrue(await dao.teamMembers.call(stranger))
+      })
+    })
+  })
 })

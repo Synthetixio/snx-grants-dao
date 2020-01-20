@@ -114,6 +114,10 @@ contract GrantsDAO {
     toPass++;
   }
 
+  function addTeamMember(address _member) external onlyTeamMember() {
+    teamMembers[_member] = true;
+  }
+
   function withdrawable() public returns (uint256) {
     return SNX.balanceOf(address(this)) - locked;
   }
