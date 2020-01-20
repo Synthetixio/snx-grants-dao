@@ -116,7 +116,7 @@ contract('GrantsDAO', (accounts) => {
             new BN(communityMembers.length),
             { from: defaultAccount },
           ),
-          'Need least one teamMember',
+          'Need at least one teamMember',
         )
       })
     })
@@ -207,7 +207,7 @@ contract('GrantsDAO', (accounts) => {
   describe('voteProposal', () => {
     beforeEach(async () => {
       await snx.transfer(dao.address, oneToken, { from: defaultAccount })
-      await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+      await dao.createProposal(stranger, oneToken, { from: communityMember3 })
     })
 
     context('when called by a stranger', () => {
@@ -250,14 +250,19 @@ contract('GrantsDAO', (accounts) => {
         it('allows the proposal to be voted on', async () => {
           const tx = await dao.voteProposal(1, true, { from: communityMember1 })
           expectEvent(tx, 'VoteProposal', {
+            proposal: new BN(1),
             member: communityMember1,
+            vote: true,
           })
+          const proposal = await dao.proposals.call(1)
+          assert.isTrue(new BN(2).eq(proposal.approvals))
+          assert.isTrue(await dao.voted.call(communityMember1, 1))
         })
 
         context('when the proposal has already been voted on by a member', () => {
           it('reverts', async () => {
             await expectRevert(
-              dao.voteProposal(1, true, { from: teamMember1 }),
+              dao.voteProposal(1, true, { from: communityMember3 }),
               'Already voted',
             )
           })

@@ -40,7 +40,7 @@ contract GrantsDAO {
     address[] memory _communityMembers,
     uint256 _toPass
   ) public {
-    require(_teamMembers.length > 0, "Need least one teamMember");
+    require(_teamMembers.length > 0, "Need at least one teamMember");
     require(_toPass > _communityMembers.length, "Need higher value for toPass");
     for (uint i = 0; i < _teamMembers.length; i++) {
       teamMembers[_teamMembers[i]] = true;
