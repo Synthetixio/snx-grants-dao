@@ -114,6 +114,15 @@ contract GrantsDAO {
     toPass++;
   }
 
+  function removeCommunityMember(address _member, uint256[] calldata _proposals) external onlyTeamMember() {
+    delete communityMembers[_member];
+    for (uint i = 0; i < _proposals.length; i++) {
+      require(proposals[_proposals[i]].voted[_member], "Member did not vote for proposal");
+      delete proposals[_proposals[i]].voted[_member];
+      proposals[_proposals[i]].approvals--;
+    }
+  }
+
   function addTeamMember(address _member) external onlyTeamMember() {
     teamMembers[_member] = true;
   }

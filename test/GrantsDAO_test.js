@@ -585,6 +585,58 @@ contract('GrantsDAO', (accounts) => {
     })
   })
 
+  describe('removeCommunityMember', () => {
+    context('when called by a stranger', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.removeCommunityMember(communityMember1, [], { from: stranger }),
+          'Not team member',
+        )
+      })
+    })
+
+    context('when called by a team member', () => {
+      it('removes the community member', async () => {
+        await dao.removeCommunityMember(communityMember1, [], { from: teamMember1 })
+        assert.isFalse(await dao.communityMembers.call(communityMember1))
+      })
+
+      context('when the member has voted on proposals', () => {
+        beforeEach(async () => {
+          await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+          await dao.createProposal(stranger, oneToken, { from: communityMember1 })
+          await time.increase(after2Days)
+          await dao.voteProposal(1, true, { from: communityMember2 })
+          const proposal = await dao.proposals.call(1)
+          assert.isTrue(new BN(2).eq(proposal.approvals))
+        })
+
+        it('removes them if they created the proposal', async () => {
+          await dao.removeCommunityMember(communityMember1, [1], { from: teamMember1 })
+          const proposal = await dao.proposals.call(1)
+          assert.isTrue(new BN(1).eq(proposal.approvals))
+          assert.isFalse(await dao.voted.call(communityMember1, 1))
+        })
+
+        it('removes them if they voted on the proposal', async () => {
+          await dao.removeCommunityMember(communityMember2, [1], { from: teamMember1 })
+          const proposal = await dao.proposals.call(1)
+          assert.isTrue(new BN(1).eq(proposal.approvals))
+          assert.isFalse(await dao.voted.call(communityMember2, 1))
+        })
+      })
+
+      context('when the member has not voted on specified proposals', () => {
+        it('reverts', async () => {
+          await expectRevert(
+            dao.removeCommunityMember(communityMember1, [1], { from: teamMember1 }),
+            'Member did not vote for proposal',
+          )
+        })
+      })
+    })
+  })
+
   describe('addTeamMember', () => {
     context('when called by a stranger', () => {
       it('reverts', async () => {
