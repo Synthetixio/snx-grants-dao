@@ -64,11 +64,15 @@ contract GrantsDAO {
     require(_receiver != address(0), "Receiver cannot be zero address");
     uint256 available = SNX.balanceOf(address(this)).sub(locked);
     require(_amount <= available, "Invalid funds on DAO");
-    proposals[counter] = Proposal(false, _receiver, _amount, block.timestamp, 1);
-    locked = locked.add(_amount);
-    proposals[counter].voted[msg.sender] = true;
-    emit NewProposal(_receiver, _amount, counter);
+    uint256 _counter = counter;
     counter++;
+    proposals[_counter] = Proposal(false, _receiver, _amount, block.timestamp, 1);
+    if (teamMembers[msg.sender]) {
+      proposals[_counter].teamApproval = true;
+    }
+    locked = locked.add(_amount);
+    proposals[_counter].voted[msg.sender] = true;
+    emit NewProposal(_receiver, _amount, _counter);
   }
 
   function voteProposal(uint256 _proposal, bool _vote) external onlyProposer() {

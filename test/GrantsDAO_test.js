@@ -190,6 +190,32 @@ contract('GrantsDAO', (accounts) => {
           assert.isTrue(await dao.voted.call(teamMember1, 1))
         })
 
+        context('when proposed by a team member', () => {
+          let proposal
+
+          beforeEach(async () => {
+            await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+            proposal = await dao.proposals.call(1)
+          })
+
+          it('marks the proposal as approved by the team', async () => {
+            assert.isTrue(proposal.teamApproval)
+          })
+        })
+
+        context('when proposed by a community member', () => {
+          let proposal
+
+          beforeEach(async () => {
+            await dao.createProposal(stranger, oneToken, { from: communityMember1 })
+            proposal = await dao.proposals.call(1)
+          })
+
+          it('does not mark the proposal as approved by the team', async () => {
+            assert.isFalse(proposal.teamApproval)
+          })
+        })
+
         context('when another proposal is created without additional funding', () => {
           beforeEach(async () => {
             await dao.createProposal(stranger, oneToken, { from: teamMember1 })
