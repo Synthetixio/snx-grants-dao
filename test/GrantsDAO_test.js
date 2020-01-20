@@ -62,50 +62,6 @@ contract('GrantsDAO', (accounts) => {
       assert.isTrue(toPass.eq(await dao.toPass.call()))
     })
 
-    context('when toPass is more than members', () => {
-      it('reverts in general case', async () => {
-        const memberCount = teamMembers.length + communityMembers.length + 1
-        await expectRevert(
-          GrantsDAO.new(
-            snx.address,
-            teamMembers,
-            communityMembers,
-            new BN(memberCount),
-            { from: defaultAccount },
-          ),
-          'Not enough members to pass votes',
-        )
-      })
-
-      it('reverts when equal to communityMembers length', async () => {
-        const memberCount = communityMembers.length
-        await expectRevert(
-          GrantsDAO.new(
-            snx.address,
-            teamMembers,
-            communityMembers,
-            new BN(memberCount),
-            { from: defaultAccount },
-          ),
-          'Need higher value for toPass',
-        )
-      })
-
-      it('reverts when less than communityMembers length', async () => {
-        const memberCount = communityMembers.length - 1
-        await expectRevert(
-          GrantsDAO.new(
-            snx.address,
-            teamMembers,
-            communityMembers,
-            new BN(memberCount),
-            { from: defaultAccount },
-          ),
-          'Need higher value for toPass',
-        )
-      })
-    })
-
     context('when teamMembers is 0', () => {
       it('reverts', async () => {
         const noMembers = []
@@ -118,6 +74,22 @@ contract('GrantsDAO', (accounts) => {
             { from: defaultAccount },
           ),
           'Need at least one teamMember',
+        )
+      })
+    })
+
+    context('when toPass is less than members', () => {
+      it('reverts', async () => {
+        const tooMany = teamMembers.length + communityMembers.length + 1
+        await expectRevert(
+          GrantsDAO.new(
+            snx.address,
+            teamMembers,
+            communityMembers,
+            new BN(tooMany),
+            { from: defaultAccount },
+          ),
+          'Invalid value to pass proposals',
         )
       })
     })
@@ -138,7 +110,7 @@ contract('GrantsDAO', (accounts) => {
         it('reverts', async () => {
           await expectRevert(
             dao.createProposal(stranger, oneToken, { from: teamMember1 }),
-            'Invalid funds on DAO',
+            'Unavailable funds on DAO',
           )
         })
       })
@@ -224,7 +196,7 @@ contract('GrantsDAO', (accounts) => {
           it('reverts', async () => {
             await expectRevert(
               dao.createProposal(stranger, oneToken, { from: teamMember1 }),
-              'Invalid funds on DAO',
+              'Unavailable funds on DAO',
             )
           })
         })
@@ -558,11 +530,6 @@ contract('GrantsDAO', (accounts) => {
       it('adds the member as a proposer', async () => {
         await dao.addCommunityMember(stranger, { from: teamMember1 })
         assert.isTrue(await dao.communityMembers.call(stranger))
-      })
-
-      it('increments the value for toPass', async () => {
-        await dao.addCommunityMember(stranger, { from: teamMember1 })
-        assert.isTrue(new BN(5).eq(await dao.toPass.call()))
       })
 
       context('when members have already voted on a proposal', () => {
