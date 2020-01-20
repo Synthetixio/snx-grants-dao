@@ -543,4 +543,45 @@ contract('GrantsDAO', (accounts) => {
       })
     })
   })
+
+  describe('addCommunityMember', () => {
+    context('when called by a stranger', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.addCommunityMember(stranger, { from: stranger }),
+          'Not team member',
+        )
+      })
+    })
+
+    context('when called by a team member', () => {
+      it('adds the member as a proposer', async () => {
+        await dao.addCommunityMember(stranger, { from: teamMember1 })
+        assert.isTrue(await dao.communityMembers.call(stranger))
+      })
+
+      it('increments the value for toPass', async () => {
+        await dao.addCommunityMember(stranger, { from: teamMember1 })
+        assert.isTrue(new BN(5).eq(await dao.toPass.call()))
+      })
+
+      context('when members have already voted on a proposal', () => {
+        beforeEach(async () => {
+          await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+          await dao.createProposal(stranger, oneToken, { from: communityMember1 })
+          await time.increase(after2Days)
+          await dao.voteProposal(1, true, { from: communityMember2 })
+          await dao.voteProposal(1, true, { from: communityMember3 })
+          await dao.addCommunityMember(stranger, { from: teamMember1 })
+        })
+
+        it('does not execute the proposal when the new member votes', async () => {
+          await dao.voteProposal(1, true, { from: stranger })
+          const proposal = await dao.proposals.call(1)
+          assert.isFalse(proposal.teamApproval)
+          assert.equal(proposal.receiver, stranger)
+        })
+      })
+    })
+  })
 })

@@ -104,10 +104,14 @@ contract GrantsDAO {
     _deleteProposal(_proposal);
   }
 
-  function withdraw(address _receiver, uint256 _amount) external {
-    require(teamMembers[msg.sender], "Not team member");
+  function withdraw(address _receiver, uint256 _amount) external onlyTeamMember () {
     require(_amount <= withdrawable(), "Unable to withdraw amount");
     assert(SNX.transfer(_receiver, _amount));
+  }
+
+  function addCommunityMember(address _member) external onlyTeamMember() {
+    communityMembers[_member] = true;
+    toPass++;
   }
 
   function withdrawable() public returns (uint256) {
@@ -135,6 +139,11 @@ contract GrantsDAO {
     delete proposals[_proposal];
     assert(SNX.transfer(proposal.receiver, proposal.amount));
     emit ExecuteProposal(proposal.receiver, proposal.amount);
+  }
+
+  modifier onlyTeamMember() {
+    require(teamMembers[msg.sender], "Not team member");
+    _;
   }
 
   modifier onlyProposer() {
