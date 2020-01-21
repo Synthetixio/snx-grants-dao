@@ -76,11 +76,12 @@ contract GrantsDAO {
    * Emits NewProposal event.
    * @param _receiver The address to receive funds if proposal executes
    * @param _amount The amount that the receiver will receive
+   * @return The proposal number for reference
    */
   function createProposal(
     address _receiver,
     uint256 _amount
-  ) external onlyProposer() {
+  ) external onlyProposer() returns (uint256) {
     require(_amount > 0, "Amount must be greater than 0");
     require(_receiver != address(0), "Receiver cannot be zero address");
     uint256 available = SNX.balanceOf(address(this)).sub(locked);
@@ -100,6 +101,8 @@ contract GrantsDAO {
     proposals[_counter].voted[msg.sender] = true;
 
     emit NewProposal(_receiver, _amount, _counter);
+
+    return _counter;
   }
 
   /**

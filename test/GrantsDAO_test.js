@@ -129,6 +129,11 @@ contract('GrantsDAO', (accounts) => {
           })
         })
 
+        it('returns the proposal number', async () => {
+          const proposal = await dao.createProposal.call(stranger, oneToken, { from: teamMember1 })
+          assert.isTrue(new BN(1).eq(proposal))
+        })
+
         it('creates a proposal', async () => {
           await dao.createProposal(stranger, oneToken, { from: teamMember1 })
           const proposal = await dao.proposals(1)
