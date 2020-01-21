@@ -201,6 +201,15 @@ contract GrantsDAO {
   }
 
   /**
+   * @notice Allows the number of votes required to pass a proposal to be updated
+   * @param _toPass The new value for the number of votes to pass a proposal
+   */
+  function updateToPass(uint256 _toPass) external onlyTeamMember() {
+    require(_toPass > 0, "Invalid value to pass proposals");
+    toPass = _toPass;
+  }
+
+  /**
    * @notice Shows the balance of the contract which can be withdrawn by team members
    * @return The withdrawable balance
    */

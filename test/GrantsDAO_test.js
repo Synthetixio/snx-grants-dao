@@ -651,4 +651,29 @@ contract('GrantsDAO', (accounts) => {
       })
     })
   })
+
+  describe('updateToPass', () => {
+    context('when called by a stranger', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.updateToPass(1, { from: stranger }),
+          'Not team member',
+        )
+      })
+    })
+
+    context('when called by a team member', () => {
+      it('sets the new value', async () => {
+        await dao.updateToPass(1, { from: teamMember1 })
+        assert.isTrue(new BN(1).eq(await dao.toPass.call()))
+      })
+
+      it('does not allow the value to be 0', async () => {
+        await expectRevert(
+          dao.updateToPass(0, { from: teamMember1 }),
+          'Invalid value to pass proposals',
+        )
+      })
+    })
+  })
 })

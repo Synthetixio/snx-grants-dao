@@ -38,6 +38,10 @@ Team members may be added to the contract since all proposals need at least one 
 
 Team members may also be removed from the contract, but a team member cannot remove themself. This prevents a scenario where no team members are on the contract, which would mean no proposals could be executed and no tokens could be withdrawn.
 
+#### `updateToPass`
+
+This function allows the number of votes required to pass a proposal to be updated. It should be noted that all proposals still require approval by at least one team member, even if this number has been met.
+
 ### Views
 
 #### `withdrawable`
