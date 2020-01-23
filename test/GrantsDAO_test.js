@@ -53,11 +53,6 @@ contract('GrantsDAO', (accounts) => {
       assert.equal(snx.address, await dao.SNX.call())
     })
 
-    it('deploys with the correct members count', async () => {
-      const memberCount = teamMembers.length + communityMembers.length
-      assert.equal(memberCount, await dao.members.call())
-    })
-
     it('deploys with the specified toPass value', async () => {
       assert.isTrue(toPass.eq(await dao.toPass.call()))
     })
@@ -537,6 +532,12 @@ contract('GrantsDAO', (accounts) => {
         assert.isTrue(await dao.communityMembers.call(stranger))
       })
 
+      it('adds the member to the communityAddresses', async () => {
+        const expected = [communityMember1, communityMember2, communityMember3, stranger]
+        await dao.addCommunityMember(stranger, { from: teamMember1 })
+        assert.deepEqual(expected, await dao.getCommunityMembers.call())
+      })
+
       context('when members have already voted on a proposal', () => {
         beforeEach(async () => {
           await snx.transfer(dao.address, oneToken, { from: defaultAccount })
@@ -571,6 +572,25 @@ contract('GrantsDAO', (accounts) => {
       it('removes the community member', async () => {
         await dao.removeCommunityMember(communityMember1, [], { from: teamMember1 })
         assert.isFalse(await dao.communityMembers.call(communityMember1))
+      })
+
+      it('removes the member form communityAddresses', async () => {
+        const expected = [communityMember3, communityMember2]
+        await dao.removeCommunityMember(communityMember1, [], { from: teamMember1 })
+        assert.deepEqual(expected, await dao.getCommunityMembers.call())
+      })
+
+      context('when the community member is the last member', () => {
+        beforeEach(async () => {
+          await dao.removeCommunityMember(communityMember1, [], { from: teamMember1 })
+          await dao.removeCommunityMember(communityMember2, [], { from: teamMember1 })
+        })
+
+        it('allows the last community member to be removed', async () => {
+          const expected = []
+          await dao.removeCommunityMember(communityMember3, [], { from: teamMember1 })
+          assert.deepEqual(expected, await dao.getCommunityMembers.call())
+        })
       })
 
       context('when the member has voted on proposals', () => {
@@ -624,6 +644,12 @@ contract('GrantsDAO', (accounts) => {
         await dao.addTeamMember(stranger, { from: teamMember1 })
         assert.isTrue(await dao.teamMembers.call(stranger))
       })
+
+      it('adds the team member to teamAddresses', async () => {
+        await dao.addTeamMember(stranger, { from: teamMember1 })
+        const expected = [teamMember1, teamMember2, stranger]
+        assert.deepEqual(expected, await dao.getTeamMembers.call())
+      })
     })
   })
 
@@ -648,6 +674,12 @@ contract('GrantsDAO', (accounts) => {
           dao.removeTeamMember(teamMember1, { from: teamMember1 }),
           'Cannot remove self',
         )
+      })
+
+      it('removes the team member from teamAddresses', async () => {
+        const expected = [teamMember1]
+        await dao.removeTeamMember(teamMember2, { from: teamMember1 })
+        assert.deepEqual(expected, await dao.getTeamMembers.call())
       })
     })
   })

@@ -44,6 +44,14 @@ This function allows the number of votes required to pass a proposal to be updat
 
 ### Views
 
+#### `getCommunityMembers`
+
+Returns the addresses of the community members.
+
+#### `getTeamMembers`
+
+Returns the addresses of hte team members.
+
 #### `withdrawable`
 
 Returns the amount of tokens which may be withdrawn from the contract by team members. This excludes the amount locked in proposals.

@@ -17,7 +17,6 @@ contract GrantsDAO {
   uint256 public constant VOTING_PHASE = 9 days; // for 7 days after the submission phase
   uint256 public toPass;
   uint256 public counter = 1;
-  uint256 public members;
   uint256 public locked;
 
   IERC20 public SNX;
@@ -34,6 +33,9 @@ contract GrantsDAO {
   mapping(uint256 => Proposal) public proposals;
   mapping(address => bool) public teamMembers;
   mapping(address => bool) public communityMembers;
+
+  address[] private teamAddresses;
+  address[] private communityAddresses;
 
   event NewProposal(address receiver, uint256 amount, uint256 proposalNumber);
   event VoteProposal(uint256 proposal, address member, bool vote);
@@ -60,11 +62,11 @@ contract GrantsDAO {
     // Add members to their respective mappings and increase members count
     for (uint i = 0; i < _teamMembers.length; i++) {
       teamMembers[_teamMembers[i]] = true;
-      members++;
+      teamAddresses.push(_teamMembers[i]);
     }
     for (uint i = 0; i < _communityMembers.length; i++) {
       communityMembers[_communityMembers[i]] = true;
-      members++;
+      communityAddresses.push(_communityMembers[i]);
     }
 
     toPass = _toPass;
@@ -149,6 +151,22 @@ contract GrantsDAO {
   }
 
   /**
+   * @notice Returns the addresses for the active community members
+   * @return Array of community member addresses
+   */
+  function getCommunityMembers() external view returns (address[] memory) {
+    return communityAddresses;
+  }
+
+  /**
+   * @notice Gets the addresses for the active team members
+   * @return Array of team member addresses
+   */
+  function getTeamMembers() external view returns (address[] memory) {
+    return teamAddresses;
+  }
+
+  /**
    * @notice Called by team members to withdraw extra tokens in the contract
    * @dev Will not allow withdrawing balances locked in proposals
    * @param _receiver The address to receive tokens
@@ -165,6 +183,7 @@ contract GrantsDAO {
    */
   function addCommunityMember(address _member) external onlyTeamMember() {
     communityMembers[_member] = true;
+    communityAddresses.push(_member);
   }
 
   /**
@@ -175,6 +194,12 @@ contract GrantsDAO {
    */
   function removeCommunityMember(address _member, uint256[] calldata _proposals) external onlyTeamMember() {
     delete communityMembers[_member];
+    for (uint i = 0; i < communityAddresses.length; i++) {
+      if (communityAddresses[i] == _member) {
+        communityAddresses[i] = communityAddresses[communityAddresses.length - 1];
+        communityAddresses.length--;
+      }
+    }
     for (uint i = 0; i < _proposals.length; i++) {
       require(proposals[_proposals[i]].voted[_member], "Member did not vote for proposal");
       delete proposals[_proposals[i]].voted[_member];
@@ -188,6 +213,7 @@ contract GrantsDAO {
    */
   function addTeamMember(address _member) external onlyTeamMember() {
     teamMembers[_member] = true;
+    teamAddresses.push(_member);
   }
 
   /**
@@ -198,6 +224,12 @@ contract GrantsDAO {
     // Prevents the possibility of there being no team members
     require(msg.sender != _member, "Cannot remove self");
     delete teamMembers[_member];
+    for (uint i = 0; i < teamAddresses.length; i++) {
+      if (teamAddresses[i] == _member) {
+        teamAddresses[i] = teamAddresses[teamAddresses.length - 1];
+        teamAddresses.length--;
+      }
+    }
   }
 
   /**
