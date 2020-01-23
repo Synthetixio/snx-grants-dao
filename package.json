@@ -2,7 +2,7 @@
   "name": "snx-grants-dao",
   "version": "0.1.0",
   "scripts": {
-    "test": "npx truffle test"
+    "test": "npx truffle test --migrations_directory migrations_null"
   },
   "license": "MIT",
   "devDependencies": {
