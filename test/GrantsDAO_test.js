@@ -113,6 +113,8 @@ contract('GrantsDAO', (accounts) => {
       context('and the DAO is funded', () => {
         beforeEach(async () => {
           await snx.transfer(dao.address, oneToken, { from: defaultAccount })
+          assert.equal(oneToken, await dao.withdrawable.call())
+          assert.equal(oneToken, await dao.totalBalance.call())
         })
 
         it('emits the NewProposal event', async () => {

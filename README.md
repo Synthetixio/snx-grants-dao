@@ -60,6 +60,10 @@ Returns the IDs of active proposals.
 
 Returns the amount of tokens which may be withdrawn from the contract by team members. This excludes the amount locked in proposals.
 
+#### `totalBalance`
+
+Returns the total balance of tokens on the contract, including locked and withdrawable balances.
+
 #### `voted`
 
 This function may be used to check if an address has voted on a proposal, regardless if they voted `true` or `false`.

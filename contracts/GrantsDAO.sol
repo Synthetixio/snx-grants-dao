@@ -260,6 +260,14 @@ contract GrantsDAO {
   }
 
   /**
+   * @notice Displays the total balance of the contract, including locked and withdrawable
+   * @return The balance of the contract
+   */
+  function totalBalance() external view returns (uint256) {
+    return SNX.balanceOf(address(this));
+  }
+
+  /**
    * @notice Checks to see whether an address has voted on a proposal
    * @return Boolean indicating if the address has voted
    */
