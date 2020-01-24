@@ -52,6 +52,10 @@ Returns the addresses of the community members.
 
 Returns the addresses of hte team members.
 
+#### `getProposals`
+
+Returns the IDs of active proposals.
+
 #### `withdrawable`
 
 Returns the amount of tokens which may be withdrawn from the contract by team members. This excludes the amount locked in proposals.

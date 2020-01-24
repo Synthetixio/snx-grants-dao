@@ -36,6 +36,7 @@ contract GrantsDAO {
 
   address[] private teamAddresses;
   address[] private communityAddresses;
+  uint256[] private validProposals;
 
   event NewProposal(address receiver, uint256 amount, uint256 proposalNumber);
   event VoteProposal(uint256 proposal, address member, bool vote);
@@ -101,6 +102,7 @@ contract GrantsDAO {
 
     locked = locked.add(_amount);
     proposals[_counter].voted[msg.sender] = true;
+    validProposals.push(_counter);
 
     emit NewProposal(_receiver, _amount, _counter);
 
@@ -164,6 +166,14 @@ contract GrantsDAO {
    */
   function getTeamMembers() external view returns (address[] memory) {
     return teamAddresses;
+  }
+
+  /**
+   * @notice Gets the proposal IDs of active proposals
+   * @return Unsorted array of proposal IDs
+   */
+  function getProposals() external view returns (uint256[] memory) {
+    return validProposals;
   }
 
   /**
@@ -275,6 +285,12 @@ contract GrantsDAO {
   function _deleteProposal(uint256 _proposal) private {
     locked = locked.sub(proposals[_proposal].amount);
     delete proposals[_proposal];
+    for (uint i = 0; i < validProposals.length; i++) {
+      if (validProposals[i] == _proposal) {
+        validProposals[i] = validProposals[validProposals.length - 1];
+        validProposals.length--;
+      }
+    }
     emit DeleteProposal(_proposal);
   }
 
@@ -285,6 +301,12 @@ contract GrantsDAO {
   function _executeProposal(uint256 _proposal) private {
     Proposal memory proposal = proposals[_proposal];
     delete proposals[_proposal];
+    for (uint i = 0; i < validProposals.length; i++) {
+      if (validProposals[i] == _proposal) {
+        validProposals[i] = validProposals[validProposals.length - 1];
+        validProposals.length--;
+      }
+    }
     assert(SNX.transfer(proposal.receiver, proposal.amount));
     emit ExecuteProposal(proposal.receiver, proposal.amount);
   }

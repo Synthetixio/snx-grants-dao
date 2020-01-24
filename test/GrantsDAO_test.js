@@ -137,6 +137,14 @@ contract('GrantsDAO', (accounts) => {
           assert.isTrue(proposal.createdAt.gt(0))
         })
 
+        it('adds to the array of valid proposals', async () => {
+          const expected = ['1']
+          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          const proposals = await dao.getProposals.call()
+          const proposalsStrings = proposals.map(p => p.toString())
+          assert.deepEqual(expected, proposalsStrings)
+        })
+
         it('reverts for 0 in amount', async () => {
           await expectRevert(
             dao.createProposal(stranger, 0, { from: teamMember1 }),
@@ -325,6 +333,11 @@ contract('GrantsDAO', (accounts) => {
             assert.isTrue(deleted.approvals.eq(new BN(0)))
           })
 
+          it('deletes the proposal ID from the list of valid proposals', async () => {
+            const expected = []
+            assert.deepEqual(expected, await dao.getProposals.call())
+          })
+
           it('sends the proposal amount to the receiver', async () => {
             assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(stranger)))
           })
@@ -435,6 +448,12 @@ contract('GrantsDAO', (accounts) => {
         it('unlocks the proposal amount', async () => {
           await dao.deleteProposal(1, { from: teamMember1 })
           assert.isTrue(new BN(0).eq(await dao.locked.call()))
+        })
+
+        it('deletes the proposal ID from the list of valid proposals', async () => {
+          const expected = []
+          await dao.deleteProposal(1, { from: teamMember1 })
+          assert.deepEqual(expected, await dao.getProposals.call())
         })
       })
     })
