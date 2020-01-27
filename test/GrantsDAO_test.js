@@ -24,6 +24,8 @@ contract('GrantsDAO', (accounts) => {
   const after2Days = 172801
   const after9Days = 777601
 
+  const description = 'This is a proposal'
+
   let dao, snx
 
   beforeEach(async () => {
@@ -94,7 +96,7 @@ contract('GrantsDAO', (accounts) => {
     context('when called by a stranger', () => {
       it('reverts', async () => {
         await expectRevert(
-          dao.createProposal(stranger, oneToken, { from: stranger }),
+          dao.createProposal(stranger, oneToken, description, { from: stranger }),
           'Not proposer',
         )
       })
@@ -104,7 +106,7 @@ contract('GrantsDAO', (accounts) => {
       context('and the DAO is not funded', () => {
         it('reverts', async () => {
           await expectRevert(
-            dao.createProposal(stranger, oneToken, { from: teamMember1 }),
+            dao.createProposal(stranger, oneToken, description, { from: teamMember1 }),
             'Unavailable funds on DAO',
           )
         })
@@ -118,7 +120,7 @@ contract('GrantsDAO', (accounts) => {
         })
 
         it('emits the NewProposal event', async () => {
-          const tx = await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          const tx = await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
           expectEvent(tx.receipt, 'NewProposal', {
             receiver: stranger,
             amount: oneToken,
@@ -127,12 +129,12 @@ contract('GrantsDAO', (accounts) => {
         })
 
         it('returns the proposal number', async () => {
-          const proposal = await dao.createProposal.call(stranger, oneToken, { from: teamMember1 })
+          const proposal = await dao.createProposal.call(stranger, oneToken, description, { from: teamMember1 })
           assert.isTrue(new BN(1).eq(proposal))
         })
 
         it('creates a proposal', async () => {
-          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
           const proposal = await dao.proposals(1)
           assert.equal(oneToken.toString(), proposal.amount.toString())
           assert.equal(stranger, proposal.receiver)
@@ -141,7 +143,7 @@ contract('GrantsDAO', (accounts) => {
 
         it('adds to the array of valid proposals', async () => {
           const expected = ['1']
-          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
           const proposals = await dao.getProposals.call()
           const proposalsStrings = proposals.map(p => p.toString())
           assert.deepEqual(expected, proposalsStrings)
@@ -149,26 +151,26 @@ contract('GrantsDAO', (accounts) => {
 
         it('reverts for 0 in amount', async () => {
           await expectRevert(
-            dao.createProposal(stranger, 0, { from: teamMember1 }),
+            dao.createProposal(stranger, 0, description, { from: teamMember1 }),
             'Amount must be greater than 0',
           )
         })
 
         it('reverts for zero address in receiver', async () => {
           await expectRevert(
-            dao.createProposal(constants.ZERO_ADDRESS, oneToken, { from: teamMember1 }),
+            dao.createProposal(constants.ZERO_ADDRESS, oneToken, description, { from: teamMember1 }),
             'Receiver cannot be zero address',
           )
         })
 
         it('adds to the locked amount', async () => {
-          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
           assert.isTrue(new BN(oneToken).eq(await dao.locked.call()))
           assert.isTrue(new BN(0).eq(await dao.withdrawable.call()))
         })
 
         it('counts the proposal as voted by the proposer', async () => {
-          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
           assert.isTrue(await dao.voted.call(teamMember1, 1))
         })
 
@@ -176,7 +178,7 @@ contract('GrantsDAO', (accounts) => {
           let proposal
 
           beforeEach(async () => {
-            await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+            await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
             proposal = await dao.proposals.call(1)
           })
 
@@ -189,7 +191,7 @@ contract('GrantsDAO', (accounts) => {
           let proposal
 
           beforeEach(async () => {
-            await dao.createProposal(stranger, oneToken, { from: communityMember1 })
+            await dao.createProposal(stranger, oneToken, description, { from: communityMember1 })
             proposal = await dao.proposals.call(1)
           })
 
@@ -200,12 +202,12 @@ contract('GrantsDAO', (accounts) => {
 
         context('when another proposal is created without additional funding', () => {
           beforeEach(async () => {
-            await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+            await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
           })
 
           it('reverts', async () => {
             await expectRevert(
-              dao.createProposal(stranger, oneToken, { from: teamMember1 }),
+              dao.createProposal(stranger, oneToken, description, { from: teamMember1 }),
               'Unavailable funds on DAO',
             )
           })
@@ -217,7 +219,7 @@ contract('GrantsDAO', (accounts) => {
   describe('voteProposal', () => {
     beforeEach(async () => {
       await snx.transfer(dao.address, oneToken, { from: defaultAccount })
-      await dao.createProposal(stranger, oneToken, { from: communityMember3 })
+      await dao.createProposal(stranger, oneToken, description, { from: communityMember3 })
     })
 
     context('when called by a stranger', () => {
@@ -351,7 +353,7 @@ contract('GrantsDAO', (accounts) => {
       beforeEach(async () => {
         await time.increase(after1Day)
         await snx.transfer(dao.address, oneToken, { from: defaultAccount })
-        await dao.createProposal(stranger, oneToken, { from: communityMember3 })
+        await dao.createProposal(stranger, oneToken, description, { from: communityMember3 })
       })
 
       it('does not allow early voting for either proposal', async () => {
@@ -413,7 +415,7 @@ contract('GrantsDAO', (accounts) => {
   describe('deleteProposal', () => {
     beforeEach(async () => {
       await snx.transfer(dao.address, oneToken, { from: defaultAccount })
-      await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+      await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
     })
 
     context('when called by a stranger', () => {
@@ -479,7 +481,7 @@ contract('GrantsDAO', (accounts) => {
         context('when a proposal is created', () => {
           beforeEach(async () => {
             await snx.transfer(dao.address, oneToken, { from: defaultAccount })
-            await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+            await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
           })
 
           it('returns the balance minus what is locked in the proposal', async () => {
@@ -522,7 +524,7 @@ contract('GrantsDAO', (accounts) => {
 
       context('when a proposal is created', () => {
         beforeEach(async () => {
-          await dao.createProposal(stranger, oneToken, { from: teamMember1 })
+          await dao.createProposal(stranger, oneToken, description, { from: teamMember1 })
         })
 
         it('does not allow locked funds to be withdrawn', async () => {
@@ -562,7 +564,7 @@ contract('GrantsDAO', (accounts) => {
       context('when members have already voted on a proposal', () => {
         beforeEach(async () => {
           await snx.transfer(dao.address, oneToken, { from: defaultAccount })
-          await dao.createProposal(stranger, oneToken, { from: communityMember1 })
+          await dao.createProposal(stranger, oneToken, description, { from: communityMember1 })
           await time.increase(after2Days)
           await dao.voteProposal(1, true, { from: communityMember2 })
           await dao.voteProposal(1, true, { from: communityMember3 })
@@ -617,7 +619,7 @@ contract('GrantsDAO', (accounts) => {
       context('when the member has voted on proposals', () => {
         beforeEach(async () => {
           await snx.transfer(dao.address, oneToken, { from: defaultAccount })
-          await dao.createProposal(stranger, oneToken, { from: communityMember1 })
+          await dao.createProposal(stranger, oneToken, description, { from: communityMember1 })
           await time.increase(after2Days)
           await dao.voteProposal(1, true, { from: communityMember2 })
           const proposal = await dao.proposals.call(1)
