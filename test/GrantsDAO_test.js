@@ -138,6 +138,7 @@ contract('GrantsDAO', (accounts) => {
           const proposal = await dao.proposals(1)
           assert.equal(oneToken.toString(), proposal.amount.toString())
           assert.equal(stranger, proposal.receiver)
+          assert.equal(description, proposal.description)
           assert.isTrue(proposal.createdAt.gt(0))
         })
 
