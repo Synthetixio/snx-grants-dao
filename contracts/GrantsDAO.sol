@@ -28,6 +28,7 @@ contract GrantsDAO {
     uint256 createdAt;
     uint256 approvals;
     string description;
+    string url;
     mapping(address => bool) voted;
   }
 
@@ -86,7 +87,8 @@ contract GrantsDAO {
   function createProposal(
     address _receiver,
     uint256 _amount,
-    string calldata _description
+    string calldata _description,
+    string calldata _url
   ) external onlyProposer() returns (uint256) {
     require(_amount > 0, "Amount must be greater than 0");
     require(_receiver != address(0), "Receiver cannot be zero address");
@@ -96,7 +98,15 @@ contract GrantsDAO {
     uint256 _counter = counter; // Pull counter into memory to save gas
     counter = _counter.add(1);
 
-    proposals[_counter] = Proposal(false, _receiver, _amount, block.timestamp, 1, _description);
+    proposals[_counter] = Proposal(
+      false,
+      _receiver,
+      _amount,
+      block.timestamp,
+      1,
+      _description,
+      _url
+    );
 
     // If a proposal is created by a team member, mark it as approved by the team
     if (teamMembers[msg.sender]) {
