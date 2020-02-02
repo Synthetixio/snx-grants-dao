@@ -29,6 +29,7 @@ module.exports = async (deployer, network, accounts) => {
   deployedInstance = await GrantsDAO.deployed()
   deployedToken = await MockToken.deployed()
   await deployedToken.transfer(GrantsDAO.address, web3.utils.toWei("1000"))
-  await deployedInstance.createProposal(accounts[0], web3.utils.toWei("50"), "Example Proposal", {from: accounts[1]})
+  await deployedInstance.createProposal(accounts[0], web3.utils.toWei("50"), "Example Proposal", "testurl.com", {from: accounts[1]})
+  //await deployedInstance.voteProposal(1, true, {from: accounts[2]})
   console.log("Test Data Injected")
 }

@@ -33,12 +33,14 @@ contract GrantsDAO {
   }
 
   mapping(uint256 => Proposal) public proposals;
+  mapping(uint256 => Proposal) public completeProposals;
   mapping(address => bool) public teamMembers;
   mapping(address => bool) public communityMembers;
 
   address[] private teamAddresses;
   address[] private communityAddresses;
   uint256[] private validProposals;
+  uint256[] private completeProposalIds;
 
   event NewProposal(address receiver, uint256 amount, uint256 proposalNumber);
   event VoteProposal(uint256 proposal, address member, bool vote);
@@ -190,6 +192,14 @@ contract GrantsDAO {
   }
 
   /**
+   * @notice Gets the proposal IDs of complete proposals
+   * @return Unsorted array of proposal IDs
+   */
+  function getCompleteProposals() external view returns (uint256[] memory) {
+    return completeProposalIds;
+  }
+
+  /**
    * @notice Called by team members to withdraw extra tokens in the contract
    * @dev Will not allow withdrawing balances locked in proposals
    * @param _receiver The address to receive tokens
@@ -321,6 +331,8 @@ contract GrantsDAO {
    */
   function _executeProposal(uint256 _proposal) private {
     Proposal memory proposal = proposals[_proposal];
+    completeProposalIds.push(_proposal);
+    completeProposals[_proposal] = proposal;
     delete proposals[_proposal];
     for (uint i = 0; i < validProposals.length; i++) {
       if (validProposals[i] == _proposal) {
