@@ -23,13 +23,16 @@ To enable Synthetix to decentralise the funding of proposals that are worked on 
 Once Voted: Funds executed or Not depending out the outcome of the proposal 
 
 ## Estimated hours: 
-55 Hours Backend Contracts Build & Test
-75 Hours Frontend Deployment & Testing (Wallet Integration)
-10 Hours Original Idea Mapping and Coordination with the Synthetix team
-140 Total
+- 55 Hours Backend Contracts Build & Test
+
+- 75 Hours Frontend Deployment & Testing (Wallet Integration)
+
+- 10 Hours Original Idea Mapping and Coordination with the Synthetix team
+
+- 140 Hours Total
 
 ## Price (SNX): 
-5500 SNX (Approx. $50 USD/hour at current prices)
+- 5500 SNX (Approx. $50 USD/hour at current prices)
 
 ## Ethereum Address: 
-0xC3Ac2a9AfE64E24048F922C76cacB4216A9C6522
+- 0xC3Ac2a9AfE64E24048F922C76cacB4216A9C6522
