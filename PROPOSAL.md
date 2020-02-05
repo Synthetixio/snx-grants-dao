@@ -7,7 +7,8 @@ Create the backend (smart contracts) and the frontend (UI) for the SNX Grants DA
 To enable Synthetix to decentralise the funding of proposals that are worked on by outside developers or developer teams. This enables Synthetix to solve the granting of funds in a public and open forum much similar to how larger corporate entities have a tender process for external contracts. SNX stakeholders will be able to transparently observe all outgoing grants, which contributes to a more engaged community of stakeholders.
 
 ## Additional information (e.g. specs): 
-A DAO mimicking some of the lower level functionality of the Moloch DAO
+A DAO mimicking some of the lower level functionality of the Moloch DAO.
+
 Solidity backend deployed on Ethereum mainnet with a ReactJS reading the state.
 
 ### Functionality
