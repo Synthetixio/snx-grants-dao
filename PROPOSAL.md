@@ -20,7 +20,7 @@ To enable Synthetix to decentralise the funding of proposals that are worked on 
 
 - A 7 day voting period: At which point the 5 members vote on the proposal. You only need 4 out of the 5 members to vote YES to pass a proposal.  
 
-Once Voted: Funds executed or Not depending out the outcome of the proposal 
+- Once Voted: Funds executed or Not depending out the outcome of the proposal 
 
 ## Estimated hours: 
 - 55 Hours Backend Contracts Build & Test
