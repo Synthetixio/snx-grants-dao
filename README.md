@@ -56,6 +56,14 @@ Returns the addresses of hte team members.
 
 Returns the IDs of active proposals.
 
+#### `getCompleteProposals`
+
+Returns an array of the completed proposal IDs.
+
+#### `completeProposals`
+
+Returns the proposal for a given Proposal ID which has been executed.
+
 #### `withdrawable`
 
 Returns the amount of tokens which may be withdrawn from the contract by team members. This excludes the amount locked in proposals.
