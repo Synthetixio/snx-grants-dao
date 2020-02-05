@@ -1,8 +1,10 @@
 ## Title of job: Creation and Deployment of SNX Grants DAO
 
-## Description: Create the backend (smart contracts) and the frontend (UI) for the SNX Grants DAO and incorporate MetaMask wallet functionality for a system that enables SNX grants to be deployed to teams and people developing the Synthetix Network.  
+## Description: 
+Create the backend (smart contracts) and the frontend (UI) for the SNX Grants DAO and incorporate MetaMask wallet functionality for a system that enables SNX grants to be deployed to teams and people developing the Synthetix Network.  
 
-## Motivation (i.e. purpose of outcome): To enable Synthetix to decentralise the funding of proposals that are worked on by outside developers or developer teams. This enables Synthetix to solve the granting of funds in a public and open forum much similar to how larger corporate entities have a tender process for external contracts. SNX stakeholders will be able to transparently observe all outgoing grants, which contributes to a more engaged community of stakeholders.
+## Motivation (i.e. purpose of outcome): 
+To enable Synthetix to decentralise the funding of proposals that are worked on by outside developers or developer teams. This enables Synthetix to solve the granting of funds in a public and open forum much similar to how larger corporate entities have a tender process for external contracts. SNX stakeholders will be able to transparently observe all outgoing grants, which contributes to a more engaged community of stakeholders.
 
 ## Additional information (e.g. specs): 
 A DAO mimicking some of the lower level functionality of the Moloch DAO
