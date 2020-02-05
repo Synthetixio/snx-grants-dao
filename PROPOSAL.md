@@ -12,9 +12,13 @@ Solidity backend deployed on Ethereum mainnet with a ReactJS reading the state.
 
 ### Functionality
 Proposal submission: As an external team you can submit a proposal that will be voted on by 5 members who are stakeholders of the Synthetix network the proposal has attached the - Title of Job, Description, Motivation (i.e. purpose of outcome), Additional Information (e.g. specs), Estimated Hours, Price (SNX) and the Ethereum Address. 
+
 Anti-spam mechanism: A way to prevent the DAO from being spammed with proposals - you must get in contact with a member of the DAO to submit a proposal on your behalf 
+
 A 2 day wireframe: which prevents anyone from being framed by how others are voting 
+
 A 7 day voting period: At which point the 5 members vote on the proposal. You only need 4 out of the 5 members to vote YES to pass a proposal.  
+
 Once Voted: Funds executed or Not depending out the outcome of the proposal 
 
 ## Estimated hours: 
