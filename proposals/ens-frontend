@@ -1,0 +1,28 @@
+## Title of proposal: 
+ENS Frontend 
+
+## Description: 
+Create an IPFS content hash of the frontend of syntehtix.exchange and Mintr and host it using an ENS domain name (see uniswapexchange.eth, uniswapexchange.eth.link)
+
+## Motivation: 
+The purpose of this proposal would be to create a persistant web3 version of the frontends to make them accessable to anyone, anywhere
+
+## Additional information: 
+ENS names with IPFS content hashes are available with web3 browsers like Metamask and Opera Beta, adding .link/ makes them accessable with any browser
+
+## Previous work: 
+uniswap.geoblock.eth uniswap.geoblock.eth.link uniswapexchange.eth Uniswapexchange.eth.link  tornado.geoblock.eth tornado.geoblock.eth.link 
+
+## Estimated hours: 
+e.g. 
+- 1 hours planning
+- 2 hours building
+
+Total: 3 hours
+
+## Price (SNX): 
+e.g. 
+60 SNX (60/20 SNX per hour)
+
+## Ethereum Address: 
+- 0x358102Be6f587f7455D102Cc330230a1d112d085
