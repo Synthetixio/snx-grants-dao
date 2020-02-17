@@ -1,4 +1,5 @@
 ## Title: xSNX Staking Wrapper
+*(Updated Feb 17)*
 
 ## Description:
 
@@ -33,22 +34,17 @@ As it currently stands, these investors are mostly passing on SNX as an investme
 
 ## Estimated Hours:
 
-- 175 hours researching, writing contracts, testing, audit remediation
+- 200 hours researching, writing contracts, testing, audit remediation
 - 75 hours building frontend, testing, web3 integration
 
-- 250 hours total
+- 275 hours total
 
 ## Price:
 
-*Proposed milestones*:
+- 15000 SNX @ $0.95 for 250 hours
+- TBD SNX for contract audit
 
-- 3250 SNX Initial Grant
-- 3250 SNX on Submitting Contract to Audit
-- 3250 SNX on Passing of Contract Audit
-- 3250 SNX on xSNX Launch
-- TBD SNX for Audit
-
-~$47/hour at current SNX price of $1.10
+~$52/hour
 
 ## Ethereum Address:
 
