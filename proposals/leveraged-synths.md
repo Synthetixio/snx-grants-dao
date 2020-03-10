@@ -12,9 +12,9 @@ It is anticipated that the contract will typically be under-collateralized (i.e.
 Lenders may benefit both from interest charged on the loan and from liquidations that are able to be executed at prices that are below the maintenance margin amount but above the Trader's true bankruptcy price. Lenders will lose capital on liquidations in fast moving markets that fall below the Trader's true bankruptcy price.
 
 ## Motivation:
-Traders like leverage. A high-leverage, non-recourse loan, will provide Traders with the potential for significant gains with limited, defined downside. High leverage loans are currently not common in the Ethereum defi ecosystem.
+Traders like leverage. A high-leverage, non-recourse loan, will provide Traders with the potential for significant gains with limited, defined downside. High leverage trading is currently not common in the Ethereum defi ecosystem.
 
-Lending to high-leverage traders will likely be more risky than traditional margin lending. It also has more potential upside and may attract sophisticated investors that are capable of monitoring their  loan portfolio risk and likely liquidation points. The liquidation process is modeled after the Bitmex liquidation system, except that  excess gains obtained by the Bitmex liquidation engine are deposited in an insurance fund whereas in leveraged-synths excess gains are immediately given to the Lender. The Bitmex insurance fund is large (~35k BTC) and steadily growing [(insurance fund link)](https://www.bitmex.com/app/insuranceFund).
+Lending to high-leverage traders will likely be more risky than traditional margin lending. It also has more potential upside and may attract sophisticated investors that are capable of monitoring their loan portfolio risk and likely liquidation points. The liquidation process is modeled after the Bitmex liquidation system, except that  excess gains obtained by the Bitmex liquidation engine are deposited in an insurance fund whereas in leveraged-synths excess gains are immediately given to the Lender. The Bitmex insurance fund is large (~35k BTC) and steadily growing [(insurance fund link)](https://www.bitmex.com/app/insuranceFund).
 
 Possible Advantages Include:
 - No increased risk or systemic risk to the Synthetix ecosystem. No modifications required to the Synthetix contracts.
