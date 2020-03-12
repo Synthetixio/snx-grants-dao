@@ -27,9 +27,10 @@ contract('GrantsDAO', (accounts) => {
   const description = 'This is a proposal'
   const url = 'https://example.com'
 
-  let dao, snx
+  let dao, snx, randomToken
 
   beforeEach(async () => {
+
     snx = await SNXToken.new(
       tokenName,
       tokenSymbol,
@@ -42,6 +43,13 @@ contract('GrantsDAO', (accounts) => {
       teamMembers,
       communityMembers,
       toPass,
+      { from: defaultAccount },
+    )
+    randomToken = await SNXToken.new(
+      "Random Token",
+      "RND",
+      new BN(18),
+      tokenInitialSupply,
       { from: defaultAccount },
     )
   })
@@ -538,6 +546,20 @@ contract('GrantsDAO', (accounts) => {
             'Unable to withdraw amount',
           )
         })
+
+        it('allows any ERC20 funds to be withdrawn', async () => {
+          await randomToken.transfer(dao.address, oneToken, { from: defaultAccount })
+          await dao.withdrawERC20(stranger, oneToken, randomToken.address, { from: teamMember1 })
+          assert.isTrue(new BN(oneToken).eq(await randomToken.balanceOf(stranger)))
+          assert.isTrue(new BN(0).eq(await randomToken.balanceOf(dao.address)))
+        })
+
+        it('does not allow the SNX token to be withdrawn via withdrawERC20', async () => {
+          await expectRevert(
+            dao.withdrawERC20(stranger, oneToken, snx.address, { from: teamMember1 }),
+            'Unable to withdraw token',
+          )
+        })
       })
     })
   })
@@ -730,6 +752,31 @@ contract('GrantsDAO', (accounts) => {
         await expectRevert(
           dao.updateToPass(0, { from: teamMember1 }),
           'Invalid value to pass proposals',
+        )
+      })
+    })
+  })
+
+  describe('updateProxyAddress', () => {
+    context('when called by a stranger', () => {
+      it('reverts', async () => {
+        await expectRevert(
+          dao.updateProxyAddress(teamMember1, { from: stranger }),
+          "Not team member"
+        )
+      })
+    })
+
+    context('when called by a team member', () => {
+      it('allows the proxy to be set', async () => {
+        await dao.updateProxyAddress(teamMember1, { from: teamMember1 })
+        assert.equal(await dao.SNX.call(), teamMember1)
+      })
+
+      it('reverts if the same proxy address is used', async () => {
+        await expectRevert(
+          dao.updateProxyAddress(snx.address, { from: teamMember1 }),
+          "Cannot set proxy address to the current proxy address"
         )
       })
     })
