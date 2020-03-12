@@ -211,8 +211,8 @@ contract GrantsDAO {
   }
 
   /**
-  * @notice Allows team members to withdraw any tokens aside from the current set SNX token
-  * @dev Will not allow withdrawing of the current SNX token
+  * @notice Allows team members to withdraw any tokens from the contract
+  * @dev Will not allow withdrawing SNX balances locked in proposals
   * @param _receiver The address to receive tokens
   * @param _amount The amount to withdraw
   * @param _erc20 The address of the ERC20 token being transferred
