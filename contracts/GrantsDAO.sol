@@ -219,7 +219,9 @@ contract GrantsDAO {
   *
   */
   function withdrawERC20(address _receiver, uint256 _amount, address _erc20) external onlyTeamMember() {
-    require(_erc20 != address(SNX), "Unable to withdraw token");
+    if (_erc20 == address(SNX)) {
+      require(_amount <= withdrawable(), "Unable to withdraw amount");
+    }
     assert(IERC20(_erc20).transfer(_receiver, _amount));
   }
 

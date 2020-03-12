@@ -554,10 +554,12 @@ contract('GrantsDAO', (accounts) => {
           assert.isTrue(new BN(0).eq(await randomToken.balanceOf(dao.address)))
         })
 
-        it('does not allow the SNX token to be withdrawn via withdrawERC20', async () => {
+        it('does not allow locked funds to be withdrawn via withdrawERC20 ', async () => {
+          assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(dao.address)))
+          assert.isTrue(new BN(0).eq(await dao.withdrawable.call()))
           await expectRevert(
-            dao.withdrawERC20(stranger, oneToken, snx.address, { from: teamMember1 }),
-            'Unable to withdraw token',
+            dao.withdraw(stranger, oneToken, { from: teamMember1 }),
+            'Unable to withdraw amount',
           )
         })
       })
