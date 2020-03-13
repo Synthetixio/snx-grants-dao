@@ -1,5 +1,7 @@
 # Synthetix Grants DAO
 
+[![CircleCI](https://circleci.com/gh/Synthetixio/snx-grants-dao.svg?style=svg)](https://circleci.com/gh/Synthetixio/snx-grants-dao)
+
 ## Usage
 
 ### Voting
