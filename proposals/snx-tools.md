@@ -71,16 +71,13 @@ _Workstreams:_
 **Resources:** 100k SNX ($45k)
 
 Staking
-
-![staking](https://github.com/
+![staking](images/staking.png?raw=true)
 
 Trading
+![trading](images/trading.png?raw=true)
 
-![trading](https://github.com/
-
-Rewards Calculator
-
-![rewards](https://github.com/
+Rewards Calculator\
+![rewards](images/rewards.png?raw=true)
 
 
 ### _Phase 1b - Expand Explorer to feature Transaction Viewer (saved for a future proposal)_
