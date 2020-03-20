@@ -41,7 +41,7 @@ To provide developer tooling for both the official and unofficial Synthetix exch
 
 
 ## Previous work: 
-Mosendo team has created relayers and smart contract wallets which are relevant to the architecture of this proposal:
+[RaidGuild](raidguild.org) DAO agency is made up of web3 builders who have built things such as MolochDAO and Mosendo. This Raid Team will consist of Tom Howard and Nour Haridy who have created relayers and smart contract wallets which are relevant to the architecture of this proposal:
 - https://github.com/mosendo/gasless.js
 - https://mosendo.com/
 - https://medium.com/lamarkaz/dai-in-the-hands-of-all-8ed335879ae9
@@ -51,9 +51,20 @@ This is an R&D proposal which will result in a full technical spec of this featu
 
 - 1-2 weeks of research and spec
 
+### Estimate for next phase
+
+- Limit order contract - 2-3 weeks
+- Order execution node - 4-5 weeks
+- Javascript library - 2-3 weeks
+
+Total timeline: 2-3 months
+Cost: based on $12k/mo/eng rate
+
+**Timing to be refined during R&D phase to inform follow on proposal.**
+
 ## Price: 
 
-- 5000 sUSD
+- $5000 worth of SNX
 
 ## Ethereum Address: 
-- `tomhoward.eth`
+- 0x6da94f37BE30D9AFAD1D057477fB91860F28C457
