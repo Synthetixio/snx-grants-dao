@@ -205,9 +205,24 @@ contract GrantsDAO {
    * @param _receiver The address to receive tokens
    * @param _amount The amount to withdraw
    */
-  function withdraw(address _receiver, uint256 _amount) external onlyTeamMember () {
+  function withdraw(address _receiver, uint256 _amount) external onlyTeamMember() {
     require(_amount <= withdrawable(), "Unable to withdraw amount");
     assert(SNX.transfer(_receiver, _amount));
+  }
+
+  /**
+  * @notice Allows team members to withdraw any tokens from the contract
+  * @dev Will not allow withdrawing SNX balances locked in proposals
+  * @param _receiver The address to receive tokens
+  * @param _amount The amount to withdraw
+  * @param _erc20 The address of the ERC20 token being transferred
+  *
+  */
+  function withdrawERC20(address _receiver, uint256 _amount, address _erc20) external onlyTeamMember() {
+    if (_erc20 == address(SNX)) {
+      require(_amount <= withdrawable(), "Unable to withdraw amount");
+    }
+    assert(IERC20(_erc20).transfer(_receiver, _amount));
   }
 
   /**
@@ -272,6 +287,15 @@ contract GrantsDAO {
   function updateToPass(uint256 _toPass) external onlyTeamMember() {
     require(_toPass > 0, "Invalid value to pass proposals");
     toPass = _toPass;
+  }
+
+  /**
+  * @notice Allows team members to update the SNX proxy address being used
+  * @param _proxy The new proxy address to be used
+  */
+  function updateProxyAddress(address _proxy) external onlyTeamMember() {
+    require(_proxy != address(SNX), "Cannot set proxy address to the current proxy address");
+    SNX = IERC20(_proxy);
   }
 
   /**
