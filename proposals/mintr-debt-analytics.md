@@ -33,7 +33,7 @@ I would need to evaluate Mintr a bit more to understand how much time it can tak
 
 ## Price (SNX):
 To be determined.
-I have access to archive node that I can lend out as well.
+I have access to an archive node that I can lend out as well.
 
 ## Ethereum Address: 
 0x43a5C1331375f1F34BD774eCaeE51501E9Ca2dB5
