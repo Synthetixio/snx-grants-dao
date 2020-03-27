@@ -7,9 +7,9 @@ Add Debt Tracking/Analytics to Mintr.
 Help minters understand their debt by isolating mints and burns from the on-chain debt. 
 This will give a good idea to the minter on how the debt pool fluctuates.
 
-E.g. : 
+E.g.: 
 I mint 100 sUSD and burn 50 sUSD. A day later my debt is at 52 sUSD. 
-This would mean that the debt pool has fluctuated by 2 sUSD against the minter. 
+This would mean that the debt pool has fluctuated by 2 sUSD against me. 
 The goal is to help minters visualize this information at any point in time.
 
 ## Motivation: 
