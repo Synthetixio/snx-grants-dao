@@ -28,6 +28,7 @@ defisnap.io
 
 ## Estimated hours: 
 - To date: 12 hours already put in
+
 I would need to evaluate Mintr a bit more to understand how much time it can take to implement.
 
 ## Price (SNX):
