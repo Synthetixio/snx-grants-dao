@@ -20,14 +20,14 @@ Check out this demo -> defisnap.io/#/kain.
 
 It shows two charts with the gross debt(mint and burn debt), actual debt(on-chain debt) and net debt(isolated debt).
 
-The first chart has the gross debt applied retroactively (from present debt)
-The second chart has the gross debt applied from the first mint and burn event.
+- The first chart has the gross debt applied retroactively (from present debt)
+- The second chart has the gross debt applied from the first mint and burn event.
 
 ## Previous work: 
 defisnap.io
 
 ## Estimated hours: 
-To date: 12 hours already put in
+- To date: 12 hours already put in
 I would need to evaluate Mintr a bit more to understand how much time it can take to implement.
 
 ## Price (SNX):
@@ -35,4 +35,4 @@ To be determined.
 I have access to archive node that I can lend out as well.
 
 ## Ethereum Address: 
-- 0x43a5C1331375f1F34BD774eCaeE51501E9Ca2dB5
+0x43a5C1331375f1F34BD774eCaeE51501E9Ca2dB5
