@@ -17,7 +17,9 @@ It is currently very hard for minters to understand their debt.
 
 ## Additional information: 
 Check out this demo -> defisnap.io/#/kain. 
+
 It shows two charts with the gross debt(mint and burn debt), actual debt(on-chain debt) and net debt(isolated debt).
+
 The first chart has the gross debt applied retroactively (from present debt)
 The second chart has the gross debt applied from the first mint and burn event.
 
