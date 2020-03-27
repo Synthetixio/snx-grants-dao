@@ -13,22 +13,23 @@ This would mean that the debt pool has fluctuated by 2 sUSD against the minter.
 The goal is to help minters visualize this information at any point in time.
 
 ## Motivation: 
-It is currently very hard to minters to understand their debt. 
+It is currently very hard for minters to understand their debt. 
 
 ## Additional information: 
-Check out this demo @ defisnap.io/#/kain.
-
-![Image description](https://drive.google.com/file/d/15u8DyfTqWgby08lnerI1Qmgyq681dukV/view?usp=sharing)
+Check out this demo -> defisnap.io/#/kain. 
+It shows two charts with the gross debt(mint and burn debt), actual debt(on-chain debt) and net debt(isolated debt).
+The first chart has the gross debt applied retroactively (from present debt)
+The second chart has the gross debt applied from the first mint and burn event.
 
 ## Previous work: 
 defisnap.io
 
 ## Estimated hours: 
-To date: 14 hours already put in
+To date: 12 hours already put in
 I would need to evaluate Mintr a bit more to understand how much time it can take to implement.
 
 ## Price (SNX):
-To be determined, I rarely do hourly rates.
+To be determined.
 I have access to archive node that I can lend out as well.
 
 ## Ethereum Address: 
