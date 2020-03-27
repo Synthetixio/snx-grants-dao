@@ -21,8 +21,6 @@ It shows two charts with the gross debt(mint and burn debt), actual debt(on-chai
 The first chart has the gross debt applied retroactively (from present debt)
 The second chart has the gross debt applied from the first mint and burn event.
 
-![Chart Image](https://drive.google.com/file/d/15u8DyfTqWgby08lnerI1Qmgyq681dukV/view?usp=sharing)
-
 ## Previous work: 
 defisnap.io
 
