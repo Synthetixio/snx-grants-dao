@@ -1,11 +1,11 @@
 ## Title of proposal: 
-Mintr Debt Analytics
+Mintr + DefiSnap Debt Analytics
 
 ## Description: 
-Add Debt Tracking/Analytics to Mintr.
+Add debt tracking and anaylitics to Mintr and DefiSnap.
 
-Help minters understand their debt by isolating mints and burns from the on-chain debt. 
-This will give a good idea to the minter on how the debt pool fluctuates.
+The goal of this proposal is to help minters understand their debt by isolating mints and burns from the on-chain debt. 
+This will give the Minter a good idea on how the debt pool fluctuates.
 
 E.g.: 
 I mint 100 sUSD and burn 50 sUSD. A day later my debt is at 52 sUSD. 
@@ -13,7 +13,7 @@ This would mean that the debt pool has fluctuated by 2 sUSD against me.
 The goal is to help minters visualize this information at any point in time.
 
 ## Motivation: 
-It is currently very hard for minters to understand their debt. 
+It is currently very hard for minters to understand their debt, thus adding friction to the experience.  
 
 ## Additional information: 
 Check out this demo -> defisnap.io/#/kain. 
@@ -26,14 +26,10 @@ It shows two charts with the gross debt(mint and burn debt), actual debt(on-chai
 ## Previous work: 
 defisnap.io
 
-## Estimated hours: 
-- To date: 12 hours already put in
-
-I would need to evaluate Mintr a bit more to understand how much time it can take to implement.
-
 ## Price (SNX):
-To be determined.
-I have access to an archive node that I can lend out as well.
+- 1000 SNX upfront (for DefiSnap integration)
+- 7500 SNX for renting archive node
+- 15000 SNX on final Mintr integration
 
 ## Ethereum Address: 
 0x43a5C1331375f1F34BD774eCaeE51501E9Ca2dB5
