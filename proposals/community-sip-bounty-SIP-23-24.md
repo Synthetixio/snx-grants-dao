@@ -20,4 +20,4 @@ N/A
 5000 SNX 
 
 ## Ethereum Address: 
-to add
+0x28d6037EDEAf8ec2c91c9b2cF9A1643111d8F198
