@@ -20,4 +20,4 @@ N/A
 2,000 SNX (upon reaching immplemented stage)
 
 ## Ethereum Address: 
-0x28d6037EDEAf8ec2c91c9b2cF9A1643111d8F198
+0x003F6b20BFA4B5cAb701960eCF73859Cb3c095Fc
