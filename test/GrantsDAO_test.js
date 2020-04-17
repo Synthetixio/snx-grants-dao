@@ -356,6 +356,10 @@ contract('GrantsDAO', (accounts) => {
           it('sends the proposal amount to the receiver', async () => {
             assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(stranger)))
           })
+
+          it('deducts from the locked balance', async () => {
+            assert.isTrue(new BN(0).eq(await dao.locked.call()))
+          })
         })
       })
     })

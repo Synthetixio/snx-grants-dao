@@ -357,7 +357,7 @@ contract GrantsDAO {
     Proposal memory proposal = proposals[_proposal];
     completeProposalIds.push(_proposal);
     completeProposals[_proposal] = proposal;
-    delete proposals[_proposal];
+    _deleteProposal(_proposal);
     for (uint i = 0; i < validProposals.length; i++) {
       if (validProposals[i] == _proposal) {
         validProposals[i] = validProposals[validProposals.length - 1];
