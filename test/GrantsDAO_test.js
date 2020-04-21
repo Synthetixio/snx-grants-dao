@@ -282,6 +282,18 @@ contract('GrantsDAO', (accounts) => {
               amount: proposal.amount,
             })
           })
+
+          it('allows a team member to delete a proposal by voting false', async () => {	
+            const tx = await dao.voteProposal(1, false, { from: teamMember1 })	
+            expectEvent(tx, 'DeleteProposal', {	
+              proposalNumber: new BN(1),	
+            })	
+            const deleted = await dao.proposals.call(1)	
+            assert.equal(deleted.receiver, constants.ZERO_ADDRESS)	
+            assert.isTrue(deleted.amount.eq(new BN(0)))	
+            assert.isTrue(deleted.createdAt.eq(new BN(0)))	
+            assert.isTrue(deleted.approvals.eq(new BN(0)))	
+          })
         })
 
         context('when enough votes have been reached to pass', () => {
