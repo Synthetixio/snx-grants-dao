@@ -13,11 +13,9 @@ contract GrantsDAO {
 
   using SafeMath for uint256;
 
-  uint256 public constant SUBMISSION_PHASE = 2 days;
-  uint256 public constant VOTING_PHASE = 9 days; // for 7 days after the submission phase
+  uint256 public constant VOTING_PHASE = 9 days;
   uint256 public toPass;
   uint256 public counter = 1;
-  uint256 public locked;
 
   IERC20 public SNX;
 
@@ -94,8 +92,6 @@ contract GrantsDAO {
   ) external onlyProposer() returns (uint256) {
     require(_amount > 0, "Amount must be greater than 0");
     require(_receiver != address(0), "Receiver cannot be zero address");
-    uint256 available = SNX.balanceOf(address(this)).sub(locked);
-    require(_amount <= available, "Unavailable funds on DAO");
 
     uint256 _counter = counter; // Pull counter into memory to save gas
     counter = _counter.add(1);
@@ -115,7 +111,6 @@ contract GrantsDAO {
       proposals[_counter].teamApproval = true;
     }
 
-    locked = locked.add(_amount);
     proposals[_counter].voted[msg.sender] = true;
     validProposals.push(_counter);
 
@@ -201,7 +196,6 @@ contract GrantsDAO {
 
   /**
    * @notice Called by team members to withdraw extra tokens in the contract
-   * @dev Will not allow withdrawing balances locked in proposals
    * @param _receiver The address to receive tokens
    * @param _amount The amount to withdraw
    */
@@ -212,7 +206,6 @@ contract GrantsDAO {
 
   /**
   * @notice Allows team members to withdraw any tokens from the contract
-  * @dev Will not allow withdrawing SNX balances locked in proposals
   * @param _receiver The address to receive tokens
   * @param _amount The amount to withdraw
   * @param _erc20 The address of the ERC20 token being transferred
@@ -303,11 +296,11 @@ contract GrantsDAO {
    * @return The withdrawable balance
    */
   function withdrawable() public view returns (uint256) {
-    return SNX.balanceOf(address(this)).sub(locked);
+    return SNX.balanceOf(address(this));
   }
 
   /**
-   * @notice Displays the total balance of the contract, including locked and withdrawable
+   * @notice Displays the total balance of the contract
    * @return The balance of the contract
    */
   function totalBalance() external view returns (uint256) {
@@ -329,8 +322,7 @@ contract GrantsDAO {
    */
   function votingPhase(uint256 _proposal) public view returns (bool) {
     uint256 createdAt = proposals[_proposal].createdAt;
-    return createdAt <= block.timestamp.sub(SUBMISSION_PHASE) &&
-      block.timestamp <= createdAt.add(VOTING_PHASE);
+    return block.timestamp <= createdAt.add(VOTING_PHASE);
   }
 
   /**
@@ -338,7 +330,6 @@ contract GrantsDAO {
    * @param _proposal The proposal number to delete
    */
   function _deleteProposal(uint256 _proposal) private {
-    locked = locked.sub(proposals[_proposal].amount);
     delete proposals[_proposal];
     for (uint i = 0; i < validProposals.length; i++) {
       if (validProposals[i] == _proposal) {
@@ -355,6 +346,7 @@ contract GrantsDAO {
    */
   function _executeProposal(uint256 _proposal) private {
     Proposal memory proposal = proposals[_proposal];
+    require(withdrawable() >= proposal.amount, "Not enough SNX to execute proposal");
     completeProposalIds.push(_proposal);
     completeProposals[_proposal] = proposal;
     _deleteProposal(_proposal);

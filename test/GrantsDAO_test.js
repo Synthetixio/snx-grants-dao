@@ -113,14 +113,15 @@ contract('GrantsDAO', (accounts) => {
 
     context('when called by a proposer', () => {
       context('and the DAO is not funded', () => {
-        it('reverts', async () => {
-          await expectRevert(
-            dao.createProposal(stranger, oneToken, description, url, { from: teamMember1 }),
-            'Unavailable funds on DAO',
-          )
+        it('emits the NewProposal event', async () => {
+          const tx = await dao.createProposal(stranger, oneToken, description, url, { from: teamMember1 })
+          expectEvent(tx.receipt, 'NewProposal', {
+            receiver: stranger,
+            amount: oneToken,
+            proposalNumber: new BN(1),
+          })
         })
       })
-
       context('and the DAO is funded', () => {
         beforeEach(async () => {
           await snx.transfer(dao.address, oneToken, { from: defaultAccount })
@@ -174,12 +175,6 @@ contract('GrantsDAO', (accounts) => {
           )
         })
 
-        it('adds to the locked amount', async () => {
-          await dao.createProposal(stranger, oneToken, description, url, { from: teamMember1 })
-          assert.isTrue(new BN(oneToken).eq(await dao.locked.call()))
-          assert.isTrue(new BN(0).eq(await dao.withdrawable.call()))
-        })
-
         it('counts the proposal as voted by the proposer', async () => {
           await dao.createProposal(stranger, oneToken, description, url, { from: teamMember1 })
           assert.isTrue(await dao.voted.call(teamMember1, 1))
@@ -210,19 +205,6 @@ contract('GrantsDAO', (accounts) => {
             assert.isFalse(proposal.teamApproval)
           })
         })
-
-        context('when another proposal is created without additional funding', () => {
-          beforeEach(async () => {
-            await dao.createProposal(stranger, oneToken, description, url, { from: teamMember1 })
-          })
-
-          it('reverts', async () => {
-            await expectRevert(
-              dao.createProposal(stranger, oneToken, description, url, { from: teamMember1 }),
-              'Unavailable funds on DAO',
-            )
-          })
-        })
       })
     })
   })
@@ -243,15 +225,6 @@ contract('GrantsDAO', (accounts) => {
     })
 
     context('when called by a proposer', () => {
-      context('when the proposal is still in submission phase', () => {
-        it('reverts', async () => {
-          await expectRevert(
-            dao.voteProposal(1, true, { from: communityMember1 }),
-            'Proposal not in voting phase',
-          )
-        })
-      })
-
       context('when the proposal is outside of voting phase', () => {
         beforeEach(async () => {
           await time.increase(after9Days)
@@ -280,18 +253,6 @@ contract('GrantsDAO', (accounts) => {
           const proposal = await dao.proposals.call(1)
           assert.isTrue(new BN(2).eq(proposal.approvals))
           assert.isTrue(await dao.voted.call(communityMember1, 1))
-        })
-
-        it('allows a team member to delete a proposal by voting false', async () => {
-          const tx = await dao.voteProposal(1, false, { from: teamMember1 })
-          expectEvent(tx, 'DeleteProposal', {
-            proposalNumber: new BN(1),
-          })
-          const deleted = await dao.proposals.call(1)
-          assert.equal(deleted.receiver, constants.ZERO_ADDRESS)
-          assert.isTrue(deleted.amount.eq(new BN(0)))
-          assert.isTrue(deleted.createdAt.eq(new BN(0)))
-          assert.isTrue(deleted.approvals.eq(new BN(0)))
         })
 
         context('when the proposal has already been voted on by a member', () => {
@@ -357,11 +318,27 @@ contract('GrantsDAO', (accounts) => {
             assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(stranger)))
           })
 
-          it('deducts from the locked balance', async () => {
-            assert.isTrue(new BN(0).eq(await dao.locked.call()))
-          })
         })
-      })
+
+        context('when there is not enough SNX to pay the grant', () => {
+          let tx, proposal
+
+          beforeEach(async () => {
+            proposal = await dao.proposals.call(1)
+            await dao.withdraw(teamMember1, await dao.withdrawable.call(), {from: teamMember1})
+            await dao.voteProposal(1, true, { from: teamMember2 })
+            await dao.voteProposal(1, true, { from: communityMember1 })
+          })
+
+          it('reverts', async () => {
+            await expectRevert(
+              dao.voteProposal(1, true, { from: communityMember2 }),
+              'Not enough SNX to execute proposal',
+            )
+          })
+
+        })
+
     })
 
     context('when multiple proposals are active', () => {
@@ -370,24 +347,6 @@ contract('GrantsDAO', (accounts) => {
         await snx.transfer(dao.address, oneToken, { from: defaultAccount })
         await dao.createProposal(stranger, oneToken, description, url, { from: communityMember3 })
       })
-
-      it('does not allow early voting for either proposal', async () => {
-        await expectRevert(
-          dao.voteProposal(1, true, { from: communityMember1 }),
-          'Proposal not in voting phase',
-        )
-        await expectRevert(
-          dao.voteProposal(2, true, { from: communityMember1 }),
-          'Proposal not in voting phase',
-        )
-      })
-
-      context('when one proposal is in the voting phase', () => {
-        beforeEach(async () => {
-          await time.increase(after1Day)
-          assert.isTrue(await dao.votingPhase.call(1))
-          assert.isFalse(await dao.votingPhase.call(2))
-        })
 
         it('only allows voting for valid proposals', async () => {
           const tx = await dao.voteProposal(1, true, { from: communityMember1 })
@@ -399,13 +358,6 @@ contract('GrantsDAO', (accounts) => {
           const proposal = await dao.proposals.call(1)
           assert.isTrue(new BN(2).eq(proposal.approvals))
           assert.isTrue(await dao.voted.call(communityMember1, 1))
-        })
-
-        it('does not allow voting for proposals that are still in submission phase', async () => {
-          await expectRevert(
-            dao.voteProposal(2, true, { from: communityMember1 }),
-            'Proposal not in voting phase',
-          )
         })
 
         it('allows proposals in the voting phase to be executed', async () => {
@@ -464,11 +416,6 @@ contract('GrantsDAO', (accounts) => {
           })
         })
 
-        it('unlocks the proposal amount', async () => {
-          await dao.deleteProposal(1, { from: teamMember1 })
-          assert.isTrue(new BN(0).eq(await dao.locked.call()))
-        })
-
         it('deletes the proposal ID from the list of valid proposals', async () => {
           const expected = []
           await dao.deleteProposal(1, { from: teamMember1 })
@@ -497,10 +444,6 @@ contract('GrantsDAO', (accounts) => {
           beforeEach(async () => {
             await snx.transfer(dao.address, oneToken, { from: defaultAccount })
             await dao.createProposal(stranger, oneToken, description, url, { from: teamMember1 })
-          })
-
-          it('returns the balance minus what is locked in the proposal', async () => {
-            assert.isTrue(new BN(oneToken).eq(await dao.withdrawable.call()))
           })
         })
       })
@@ -542,29 +485,11 @@ contract('GrantsDAO', (accounts) => {
           await dao.createProposal(stranger, oneToken, description, url, { from: teamMember1 })
         })
 
-        it('does not allow locked funds to be withdrawn', async () => {
-          assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(dao.address)))
-          assert.isTrue(new BN(0).eq(await dao.withdrawable.call()))
-          await expectRevert(
-            dao.withdraw(stranger, oneToken, { from: teamMember1 }),
-            'Unable to withdraw amount',
-          )
-        })
-
         it('allows any ERC20 funds to be withdrawn', async () => {
           await randomToken.transfer(dao.address, oneToken, { from: defaultAccount })
           await dao.withdrawERC20(stranger, oneToken, randomToken.address, { from: teamMember1 })
           assert.isTrue(new BN(oneToken).eq(await randomToken.balanceOf(stranger)))
           assert.isTrue(new BN(0).eq(await randomToken.balanceOf(dao.address)))
-        })
-
-        it('does not allow locked funds to be withdrawn via withdrawERC20 ', async () => {
-          assert.isTrue(new BN(oneToken).eq(await snx.balanceOf(dao.address)))
-          assert.isTrue(new BN(0).eq(await dao.withdrawable.call()))
-          await expectRevert(
-            dao.withdraw(stranger, oneToken, { from: teamMember1 }),
-            'Unable to withdraw amount',
-          )
         })
       })
     })
