@@ -435,20 +435,11 @@ We actively participated in the ecosystem by providing our contribution to vario
 
 The project as illustrated in the previous section is divided into four phases, each of which provides a set of features to be delivered and a respective budget proportional to the time needed and to the people involved, internal or external to the SNX Link team.
 
-After delivering Phase A over a short period of time, we ask for the grant at this stage to cover Phase A and Phase B on which we have already started working convinced that this product can bring immense benefit to the entire platform in terms of adoption and value for Synthetix community:
+We are asking for the grant at this stage to cover the first part of the phase A that we already delivered, conviced that this product can bring immense benefit to the entire platform in terms of adoption and value for Synthetix community.    
 
--   Phase A (45 days) - $75k
-    
--   Phase B (55 days) - $95k
-    
-
-For a total of 220k SNX ($170K).  
+For a total in this moment of 25k SNX.  
   
-Once Phase A and B will be completed we can proceed with the next phases we described above:
-
--   Phase C (40 days) - approx $60k-$70k
-    
--   Phase D (TBD) - TBD
+In the meantime we are proceeding with the next phases we described above.
 
 ## 
 ### Ethereum Address:
