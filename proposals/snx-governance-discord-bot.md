@@ -15,7 +15,8 @@ There are many Discord voting bots on the market, but most have the same fatal f
 
 ### DISCORD ROLE BASED
 
-This will be primarily Discord role-based, and will be configurable to whatever final outcome is desired, but I will propose that there be 2 functional roles:
+This will be primarily Discord role-based, and will be configurable to whatever final outcome is desired, but I will propose that there be 3 functional roles:
+
 - `ORGANIZER` - this role will be the top level, they need the following funcitons:
    - `!createPoll` - starts a new poll, will need to supply the prompt and options
    - `!updatePoll` - functions to update a curently running poll title/content/end
@@ -44,6 +45,7 @@ This will be primarily Discord role-based, and will be configurable to whatever 
 Not included in this proposal, but certainly part of the value is the future experiments that having our own bot will enable. 
 
 Potential future features include:
+
     - We can track/display/reward voting history and can discover 'unusual activity' 
     - separate voter preference sliced by voter engagement/account history etc.
     - automatically assign voter roles based on discord statistics (no more moderator-approval necessary)
@@ -53,7 +55,9 @@ I would be very interested in discussing success/failures in this PoC and then m
 
 ### Hosting
 
-I am willing to self-host on my own hardware as the initial deployment (provided a small chance of potential instability is acceptable), but am open to coordinating with someone else if you already have a preferred hosting system for JS apps.  I am also willing to submit an additional proposal to manage the bot hosting, if you would like me to manage it longer-term.
+I am willing to self-host on my own hardware as the initial deployment (provided a small chance of potential instability is acceptable), but am open to coordinating with someone else if you already have a preferred hosting system for JS apps.  
+
+I am also willing to submit an additional proposal to manage the bot hosting, if you would like me to manage it longer-term.
 
 ## Previous work: 
 
