@@ -22,5 +22,7 @@ One other thing that would be great would be if it also served as the UI for the
 
 All assets of this request can be discussed personally with the grantsDAO if you're thinking of proposing to build it. 
 
+The contract is deployed at [0x86626E1BbBd0ce95ED52e0C5E19f371a6640B591](https://etherscan.io/address/0x86626e1bbbd0ce95ed52e0c5e19f371a6640b591#code)
+
 ## For respondents to the request (Do not edit)
 Proposals should follow the proposal template available in the /proposals folder. 
