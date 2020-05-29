@@ -25,7 +25,7 @@ Total: 2x hours
 
 ## Price (SNX): 
 e.g. 
-- y SNX (y/2x SNX per hour)
+- y SNX 
 
 ## Ethereum Address: 
 - Please add an eligible Ethereum wallet address you'd like the funds sent to. 
