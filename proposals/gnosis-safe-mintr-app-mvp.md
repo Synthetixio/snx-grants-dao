@@ -102,4 +102,4 @@ Project delivery: 3 to 4 weeks.
 
 
 ## Ethereum Address: 
-- Please add an eligible Ethereum wallet address you'd like the funds sent to. 
+0xDEAf1d7775D198Dfa5eD9f1df7FA664cFDA920F6
