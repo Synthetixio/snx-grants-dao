@@ -132,9 +132,6 @@ Relevant projects:
 Total: 200 to 240 hours. 
 Project delivery: 4 to 5 weeks.
 
-
-Total: 2x hours
-
 ## Price (SNX): 
 * Total budget: USD 15000 (worth of SNX)
 * Payment terms: 50% upfront / 50% main net
