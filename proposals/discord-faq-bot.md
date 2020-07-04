@@ -9,11 +9,11 @@ The idea is to build the bot by assembling all common questions&answers already 
 Additionally, I would build a framework for anyone to add more questions&answers with git PRs.
 
 ## Additional information: 
-1. The bot would only give anwers in DM to not be abused and spam other channels
-2. If summoned with "!faq" in other channel, the bot would kindly ask the user to take their questions to DM
+1. The bot would only give anwers in DM as to not be abused and spam other channels
+2. If summoned with "!faq" in a channel, the bot would kindly ask the user to take their questions to DM
 3. The bot will have a command to give a list of all known categories with questions
 4. The bot will be able to list all questions per category
-5. The bot will be able to answer a predefined question with discord embeds to support rich text and pretty print
+5. The bot will be able to answer a predefined question with discord embeds to support rich text answers and pretty print
 6. The bot will also be able to answer questions such as: current gas/minting price, rewards, liquidity pools, etc...
 7. The bot will provide a search feature for users to search known questions&answers by keyword
 
@@ -31,7 +31,6 @@ e.g.
 
 
 ## Price (SNX): 
-e.g. 
 - 1000 SNX
 ## Ethereum Address: 
 0x461783A831E6dB52D68Ba2f3194F6fd1E0087E04 
