@@ -45,6 +45,10 @@ Every item of the list is subject to feedback of community.
 19. Fix the bug where one can not exersize winnings if he has claimed options
 20. TBD: Options trading UI, will be estimated once the requirements are clearer
 
+Additions:
+21. Options overview page should also display users bids in a dedicated column, and allow user to filter to only see the options he bid on
+22. TBD: Dedicated page showing all options an user has
+
 
 ## Previous work: 
 This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjakovic
@@ -53,18 +57,18 @@ Given my full time employment, I would partner up with another frontend develope
 ## Estimated hours: 
 e.g. 
 - 25 hours planning, communicating changes with community in discord, gathering feedback
-- 100 hours building
+- 120 hours building
 - 25 hours rollout, reacting to QA and community feedback, and support
 
 Estimate is given considering the list of work items assembled in additional information, with a buffer for smaller changes to the suggested items.
 New requirements or pages would be additionally estimates when they become clear.
 
 
-Total: 150 hours
+Total: 170 hours
 
 ## Price (SNX): 
 ~$30 per hour (50% off my rate towards toptal) = 13 SNX per hour with the current price of $2.3 per SNX
-- 1950 SNX 
+- 2200 SNX 
 
 ## Ethereum Address: 
 0x461783A831E6dB52D68Ba2f3194F6fd1E0087E04
