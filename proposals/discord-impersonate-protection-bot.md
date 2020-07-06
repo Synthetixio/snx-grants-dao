@@ -1,16 +1,19 @@
 ## Title of proposal: 
-A bot to report users trying to impersonate core team, guardians, etc...
+A bot to report known spammers and users trying to impersonate core team, guardians, etc...
 
 ## Description: 
 There is a constant effort to protect discord members from getting scammed by impersonators.
 Its possible to react to new joiners or users changing their names and report if an impersonation get detected.
 
+Community member DKOB has offered resources where he keeps track of all banned spammers accross 500 discord channels.
+Those scammers bounce arround and many will try to join synthetix discord. We can recognize them and report when they join.
 ## Motivation: 
 The bot would react to events related to user joining or renaming and either push a message to report an impersonation or delete the user automatically if that is the approach chosen.
+The bot will report if a know scammer joins based on the feed from 500 discord channels and their banned users.
 
 ## Additional information: 
-1. The bot will react  to guildMemberAdd event and check if the name ressembles that of a predefined list of protected names
-2. The bot will react  to guildMemberUpdate event and check if the name ressembles that of a predefined list of protected names
+1. The bot will react  to guildMemberAdd event and check if the name ressembles that of a predefined list of protected names, or the name is in the list of known scammers
+2. The bot will react  to guildMemberUpdate event and check if the name ressembles that of a predefined list of protected names, or the name is in the list of known scammers
 3. If an impersonation is detected, a message is pushed to the channel "impersonation-protection" and guardins get a change to delete this user
 4. Alternately, the user can be deleted programatically
 ## Previous work: 
@@ -24,10 +27,12 @@ This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjako
     4. Implement image similarity check on avatar against the list of known avatars for privileged users
 2. Implement logic to push messages to the impersonation-protection channel
 3. Implement the list of protected names
-- 60h
+4. Implement integration with DKOBs feed on know scammers
+5. Report if a known scammers joins
+- 100h
 
 
 ## Price (SNX): 
-- 750 SNX
+- 1200 SNX
 ## Ethereum Address: 
 0x461783A831E6dB52D68Ba2f3194F6fd1E0087E04 
