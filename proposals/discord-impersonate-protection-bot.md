@@ -14,7 +14,7 @@ The bot will report if a know scammer joins based on the feed from 500 discord c
 ## Additional information: 
 1. The bot will react  to guildMemberAdd event and check if the name ressembles that of a predefined list of protected names, or the name is in the list of known scammers
 2. The bot will react  to guildMemberUpdate event and check if the name ressembles that of a predefined list of protected names, or the name is in the list of known scammers
-3. If an impersonation is detected, a message is pushed to the channel "impersonation-protection" and guardins get a change to delete this user
+3. If an impersonation is detected, a message is pushed to the channel "scam-protection" and guardins get a change to delete this user
 4. Alternately, the user can be deleted programatically
 ## Previous work: 
 This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjakovic
@@ -25,7 +25,7 @@ This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjako
     2. User name resembles a protected name (e.g. KAINE)
     3. Implement pattern matching based on previous impersonation examples
     4. Implement image similarity check on avatar against the list of known avatars for privileged users
-2. Implement logic to push messages to the impersonation-protection channel
+2. Implement logic to push messages to the scam-protection channel
 3. Implement the list of protected names
 4. Implement integration with DKOBs feed on know scammers
 5. Report if a known scammers joins
