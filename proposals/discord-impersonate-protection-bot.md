@@ -6,8 +6,7 @@ There is a constant effort to protect discord members from getting scammed by im
 Its possible to react to new joiners or users changing their names and report if an impersonation get detected.
 
 ## Motivation: 
-The idea is to build the bot by assembling all common questions&answers already available on official and community synthetix pages.
-Additionally, I would build a framework for anyone to add more questions&answers with git PRs.
+The bot would reach to events related to user joining or renaming and either push a message to report an impersonation or delete the user automatically if that is the approach chosen.
 
 ## Additional information: 
 1. The bot will react  to guildMemberAdd event and check if the name ressembles that of a predefined list of protected names
@@ -18,7 +17,6 @@ Additionally, I would build a framework for anyone to add more questions&answers
 This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjakovic
 
 ## Estimated hours: 
-e.g. 
 - 32h
 
 
