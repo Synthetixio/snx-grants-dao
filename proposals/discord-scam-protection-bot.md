@@ -1,5 +1,5 @@
 ## Title of proposal: 
-A bot to report known spammers and users trying to impersonate core team, guardians, etc...
+A bot to report known scammers and users trying to impersonate core team, guardians, etc...
 
 ## Description: 
 There is a constant effort to protect discord members from getting scammed by impersonators.
