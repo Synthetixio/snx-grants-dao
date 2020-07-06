@@ -24,7 +24,7 @@ This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjako
     4. Implement image similarity check on avatar against the list of known avatars for privileged users
 2. Implement logic to push messages to the impersonation-protection channel
 3. Implement the list of protected names
-- 50h
+- 60h
 
 
 ## Price (SNX): 
