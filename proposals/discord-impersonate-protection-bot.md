@@ -20,12 +20,14 @@ This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjako
 1. Implement the logic with impersonation detection
     1. User name matches a protected name fully
     2. User name resembles a protected name (e.g. KAINE)
+    3. Implement pattern matching based on previous impersonation examples
+    4. Implement avatar check against the list of known avatars for privileged users
 2. Implement logic to push messages to the impersonation-protection channel
 3. Implement the list of protected names
-- 35h
+- 50h
 
 
 ## Price (SNX): 
-- 500 SNX
+- 650 SNX
 ## Ethereum Address: 
 0x461783A831E6dB52D68Ba2f3194F6fd1E0087E04 
