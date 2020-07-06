@@ -6,7 +6,7 @@ There is a constant effort to protect discord members from getting scammed by im
 Its possible to react to new joiners or users changing their names and report if an impersonation get detected.
 
 ## Motivation: 
-The bot would reach to events related to user joining or renaming and either push a message to report an impersonation or delete the user automatically if that is the approach chosen.
+The bot would react to events related to user joining or renaming and either push a message to report an impersonation or delete the user automatically if that is the approach chosen.
 
 ## Additional information: 
 1. The bot will react  to guildMemberAdd event and check if the name ressembles that of a predefined list of protected names
@@ -17,7 +17,12 @@ The bot would reach to events related to user joining or renaming and either pus
 This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjakovic
 
 ## Estimated hours: 
-- 32h
+1. Implement the logic with impersonation detection
+    1. User name matches a protected name fully
+    2. User name resembles a protected name (e.g. KAINE)
+2. Implement logic to push messages to the impersonation-protection channel
+3. Implement the list of protected names
+- 35h
 
 
 ## Price (SNX): 
