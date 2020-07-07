@@ -46,11 +46,13 @@ Since this wrapper will bennefit all protocols that are integrated into DeFi777,
 
 The cost of the audit will depend on the number of projects that are willing to fund the audit:
 
-* 1 grant: $9,000 (3734 SNX)
-* 2 grants: $4,500 (1867 SNX)
-* 3 grants: $3,000 (1245 SNX)
-* 4 grants: $2,250 (934 SNX)
-* 5 grants: $1,800 (747 SNX)
+**Update:** A $2,500 grant has been secured from Aave, leaving the $6,500 left to raise
+
+* ~~1 grant: $9,000 (3734 SNX)~~
+* 2 grants: $6,500 (2653 SNX)
+* 3 grants: $3,250 (1326.5 SNX)
+* 4 grants: $2,167 (884.5 SNX)
+* 5 grants: $1,625 (663 SNX)
 
 If I'm unable to raise sufficent funds for the audit, all grant funds will be returned.
 
