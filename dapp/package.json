@@ -1,0 +1,43 @@
+{
+  "name": "snx-grants-dao-frontend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "gatsby build",
+    "clean": "gatsby clean",
+    "develop": "netlify dev",
+    "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,md}'",
+    "lint": "eslint . --ext ts --ext tsx",
+    "start": "yarn develop",
+    "test": "yarn type-check && yarn lint",
+    "type-check": "tsc --noEmit --pretty"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.0.0-rc.10",
+    "gatsby": "^2.23.21",
+    "gatsby-plugin-env-variables": "^1.0.2",
+    "gatsby-plugin-manifest": "^2.4.17",
+    "gatsby-plugin-netlify": "^2.3.7",
+    "gatsby-plugin-offline": "^3.2.16",
+    "gatsby-plugin-react-helmet": "^3.3.9",
+    "gatsby-plugin-styled-components": "^3.3.9",
+    "gatsby-source-graphql": "^2.6.1",
+    "graphql": "^14.6.0",
+    "normalize.css": "^8.0.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
+    "react-is": "^16.13.1",
+    "styled-components": "^5.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "12",
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-helmet": "^6.0.0",
+    "@types/styled-components": "^5.1.0",
+    "netlify-cli": "^2.58.0",
+    "prettier": "2.0.5",
+    "typescript": "^3.9.6"
+  }
+}

@@ -1,0 +1,12 @@
+:root {
+  /* Layout */
+  --header-width: 1280px;
+  --content-width: 1024px;
+
+  /* Palette */
+  --color-1: #0a0816;
+  --color-2: #19162d;
+  --color-3: #4f58d0;
+  --color-4: #f4f7fa;
+  --color-5: #56bb98;
+}

@@ -1,0 +1,7 @@
+[build]
+  base = "dapp"
+  command = "gatsby build"
+  publish = "dapp/public"
+
+[dev]
+  command = "gatsby develop"
