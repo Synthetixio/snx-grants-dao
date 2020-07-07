@@ -26,7 +26,7 @@ Every item of the list is subject to feedback of community.
     3. Show options in maturity phase
     4. Show expired options
     5. Show mine
-6. Above filter cans be combined
+6. Above filter can be combined
 7. Add pagination to options view
 8. Add filters/advanced search to options page:
     1. by asset
@@ -43,11 +43,13 @@ Every item of the list is subject to feedback of community.
 17. Withdrawal seems buggy and inconsistent with contract: Check exact rules and clearly depict them in UI
 18. In trading phase clearly explain what claim options does and that is not needed for those wanting only to exersize their bids
 19. Fix the bug where one can not exersize winnings if he has claimed options
-20. TBD: Options trading UI, will be estimated once the requirements are clearer
+20. Fix the bug where the deposited bid ammount is shown incorrectly
 
 Additions:
-21. Options overview page should also display users bids in a dedicated column, and allow user to filter to only see the options he bid on
-22. TBD: Dedicated page showing all options an user has
+21. TBD: Options trading UI, will be estimated once the requirements are clearer
+22. Options overview page should also display users bids in a dedicated column, and allow user to filter to only see the options he bid on
+23. TBD: Dedicated page showing all options an user has
+24. Improve how the option is displayed when shared on twitter (suggested by Bojan)
 
 
 ## Previous work: 
