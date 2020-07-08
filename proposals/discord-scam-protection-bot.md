@@ -27,7 +27,7 @@ This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjako
     4. Implement image similarity check on avatar against the list of known avatars for privileged users
 2. Implement logic to push messages to the scam-protection channel
 3. Implement the list of protected names
-4. Implement integration with DKOBs feed on know scammers
+4. Implement integration with DKOBs feed on known scammers
 5. Report if a known scammers joins
 - 100h
 
