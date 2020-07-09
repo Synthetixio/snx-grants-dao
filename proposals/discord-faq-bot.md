@@ -22,14 +22,14 @@ This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjako
 I already started building the bot, and can provide some examples or screenshots in discord
 
 ## Estimated hours: 
-- 200SNX build the framework for questions and answers and categories, so anyone can add new FAQs
-- 200SNX scramble and assemble known questions and categorize them
+- 150SNX build the framework for questions and answers and categories, so anyone can add new FAQs
+- 150SNX scramble and assemble known questions and categorize them
 - 150SNX implement search
-- 200SNX implement REST calls or crawlers to get information such us: gas price, mint price, rewards per SNX, liquidity rewards, etc...
+- 150SNX implement REST calls or crawlers to get information such us: gas price, mint price, rewards per SNX, liquidity rewards, etc...
 - 150SNX rollout, maintanance  and support
 
 
 ## Price (SNX): 
-- 900 SNX
+- 750 SNX
 ## Ethereum Address: 
 0x461783A831E6dB52D68Ba2f3194F6fd1E0087E04 

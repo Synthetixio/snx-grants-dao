@@ -33,6 +33,6 @@ This is my public toptal profile: https://www.toptal.com/resume/danijel-gornjako
 
 
 ## Price (SNX): 
-- 1200 SNX
+- 1000 SNX
 ## Ethereum Address: 
 0x461783A831E6dB52D68Ba2f3194F6fd1E0087E04 
