@@ -21,12 +21,13 @@ const Layout = ({ children }) => {
 
 const GlobalStyle = createGlobalStyle`
   html {
-    font-family: sans-serif;
+    font-family: Ruda, sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
   }
 
   body {
+    letter-spacing: 0.09em;
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -35,7 +36,7 @@ const GlobalStyle = createGlobalStyle`
   }
   
   a {
-    color: var(--color-5);
+    color: var(--color-3);
     text-decoration: none;
     
     &:hover {
@@ -53,10 +54,15 @@ const Page = styled.main`
 
 const Content = styled.div`
   margin: 0 auto;
-  padding: 0 1.0875rem 1.45rem;
+  box-sizing: border-box;
+  padding: 0 1.0875rem;
   width: 100%;
   max-width: 1024px;
   flex: 1;
+
+  @media (min-width: var(--screen-lg)) {
+    /* padding: 0; */
+  }
 `
 
 export default Layout

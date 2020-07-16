@@ -12,7 +12,7 @@ const Header: React.FC = () => (
       </h1>
 
       <Menu>
-        <Link to="/proposal/new">Create proposal</Link>
+        <Link to="/proposals/new">Create proposal</Link>
         <Link to="/pool">Pool</Link>
       </Menu>
     </Content>
@@ -29,11 +29,14 @@ const Content = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: 1.45rem 1.0875rem;
-  width: var(--header-width);
+  width: 100%;
+  height: var(--header-height);
 
   h1 {
+    font-size: 1.25rem;
     margin: 0;
   }
 

@@ -32,7 +32,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // Create one page for each proposal
   data.grantsdao.proposals.forEach(proposal => {
     actions.createPage({
-      path: `/proposal/${proposal.number}`,
+      path: `/proposals/${proposal.number}`,
       component: proposalPageTemplate,
       context: {
         proposal,

@@ -1,5 +1,6 @@
 import React from "react"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
+import fetch from "isomorphic-fetch"
 
 import Layout from "./src/components/layout"
 
@@ -9,6 +10,7 @@ export function wrapRootElement({ element }) {
   const client = new ApolloClient({
     uri: process.env.SUBGRAPH_URL,
     cache,
+    fetch,
   })
 
   return <ApolloProvider client={client}>{element}</ApolloProvider>
