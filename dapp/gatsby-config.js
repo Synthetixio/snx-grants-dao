@@ -1,4 +1,5 @@
 require("dotenv/config")
+const path = require("path")
 
 module.exports = {
   siteMetadata: {
@@ -45,7 +46,13 @@ module.exports = {
         url: process.env.SUBGRAPH_URL,
       },
     },
-
-
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${path.join(__dirname, "../proposals")}`,
+        name: "proposals-pages",
+      },
+    },
+    "gatsby-transformer-remark",
   ],
 }

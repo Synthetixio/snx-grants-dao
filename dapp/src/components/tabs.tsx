@@ -17,10 +17,14 @@ const Tabs = ({ proposalsCount, requestsCount, availableBalance }: Props) => {
 
   return (
     <Wrapper>
-      <LinkItem to="/proposals/" activeClassName="active">
+      <LinkItem
+        to="/proposals/"
+        activeClassName="active"
+        partiallyActive={true}
+      >
         Proposals <Pill size="md">{proposalsCount}</Pill>
       </LinkItem>
-      <LinkItem to="/requests/" activeClassName="active">
+      <LinkItem to="/requests/" activeClassName="active" partiallyActive={true}>
         Requests <Pill size="md">{requestsCount}</Pill>
       </LinkItem>
       <Rest>
