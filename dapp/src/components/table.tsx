@@ -28,7 +28,11 @@ const Table = ({ columns, data, initialState, noDataMessage }: Props) => {
     useSortBy
   )
 
-  return (
+  return data.length === 0 ? (
+    <EmptyContent>
+      <Text>{noDataMessage || "No records"}</Text>
+    </EmptyContent>
+  ) : (
     <StyledTable {...getTableProps()}>
       <thead>
         {headerGroups.map(headerGroup => (
@@ -54,30 +58,33 @@ const Table = ({ columns, data, initialState, noDataMessage }: Props) => {
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
-        {rows.length === 0 ? (
-          <tr>
-            <td colSpan={columns.length} style={{ textAlign: "center" }}>
-              <Text>{noDataMessage || "No records"}</Text>
-            </td>
-          </tr>
-        ) : (
-          rows.map(row => {
-            prepareRow(row)
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                })}
-              </tr>
-            )
-          })
-        )}
+        {rows.map(row => {
+          prepareRow(row)
+          return (
+            <tr {...row.getRowProps()}>
+              {row.cells.map(cell => {
+                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+              })}
+            </tr>
+          )
+        })}
       </tbody>
     </StyledTable>
   )
 }
 
 export default Table
+
+const EmptyContent = styled.div`
+  font-size: 0.75rem;
+  text-align: center;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0px 0px 15px -4px rgba(212, 212, 212, 1);
+  background-color: #fff;
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
+`
 
 const StyledTable = styled.table`
   font-size: 0.75rem;

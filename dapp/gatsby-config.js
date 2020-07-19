@@ -64,6 +64,14 @@ module.exports = {
       },
     },
     {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${path.join(__dirname, "../requests")}`,
+        name: "requests-pages",
+        ignore: [`**/request-template.md`],
+      },
+    },
+    {
       resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [
