@@ -1,4 +1,8 @@
+import React from "react"
 import styled, { css } from "styled-components"
+import isFuture from "date-fns/isFuture"
+import { getProposalEndDate } from "../utils"
+import GithubMark from "../images/github-mark.svg"
 
 type PillProps = {
   size: "sm" | "md"
@@ -57,6 +61,11 @@ export const InfoBadge = styled(Badge)`
   background-color: var(--color-4);
 `
 
+export const InvertedInfoBadge = styled(Badge)`
+  color: #fff;
+  background-color: var(--color-3);
+`
+
 export const PrimaryBadge = styled(Badge)`
   color: #fff;
   background-color: var(--color-5);
@@ -69,3 +78,53 @@ export const DangerBadge = styled(Badge)`
 export const Text = styled.span`
   font-family: Montserrat, sans-serif;
 `
+
+export const proposalStatusToBadge = (proposal, systemInfo) => {
+  if (proposal.status === "COMPLETED") {
+    return <PrimaryBadge>Completed</PrimaryBadge>
+  }
+
+  if (proposal.status === "REJECTED") {
+    return <DangerBadge>Rejected</DangerBadge>
+  }
+
+  if (proposal.status === "PROPOSED") {
+    const inVotingPeriod = isFuture(
+      getProposalEndDate(proposal.createdAt, systemInfo.votingPhaseDuration)
+    )
+
+    return inVotingPeriod ? (
+      <InfoBadge>In Voting</InfoBadge>
+    ) : (
+      <DangerBadge>Expired</DangerBadge>
+    )
+  }
+
+  return null
+}
+
+const GithubLinkWrapper = styled.div`
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+`
+export const GithubLink = ({ text, href }) => {
+  //console.log({ githubMark })
+  return (
+    <GithubLinkWrapper>
+      <GithubMark />
+      <a href={href} target="blank">
+        {text}
+      </a>
+    </GithubLinkWrapper>
+  )
+}

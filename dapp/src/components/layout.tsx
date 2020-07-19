@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
 import styled, { createGlobalStyle } from "styled-components"
+import ReactTooltip from "react-tooltip"
 
 import "./layout.css"
 
@@ -15,6 +16,7 @@ const Layout = ({ children }) => {
       <Content>{children}</Content>
       <Footer>© {currentYear} Synthetix</Footer>
       <GlobalStyle />
+      <ReactTooltip type="info" effect="solid" />
     </Page>
   )
 }

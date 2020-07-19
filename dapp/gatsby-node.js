@@ -8,12 +8,17 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           proposalCount
           totalBalance
           totalExecuted
+          votingPhaseDuration
+          votesToPass
+          memberCount
         }
 
         proposals(orderBy: createdAt) {
           number
+          status
           description
           amount
+          createdAt
           url
           receiver {
             address
@@ -22,6 +27,16 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           proposer {
             account {
               address
+            }
+          }
+          votes {
+            timestamp
+            approve
+            member {
+              type
+              account {
+                address
+              }
             }
           }
         }
@@ -37,11 +52,12 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const proposalPageTemplate = path.resolve("./src/pages/template-proposal.tsx")
 
   // Create one page for each proposal
-  data.grantsdao.proposals.forEach(async proposal => {
-    const proposalFile = proposal.url.substring(
-      proposal.url.lastIndexOf("/") + 1
-    )
-    const { data: markDownRemarkData, errors } = await graphql(`
+  await Promise.all(
+    data.grantsdao.proposals.map(async proposal => {
+      const proposalFile = proposal.url.substring(
+        proposal.url.lastIndexOf("/") + 1
+      )
+      const { data: markDownRemarkData, errors } = await graphql(`
       query {
         markdownRemark(
           fileAbsolutePath: { regex: "/${proposalFile}$/" }
@@ -59,14 +75,15 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       }
     `)
 
-    actions.createPage({
-      path: `/proposals/${proposal.number}`,
-      component: proposalPageTemplate,
-      context: {
-        proposal,
-        systemInfo: data.grantsdao.systemInfo,
-        html: markDownRemarkData.markdownRemark.html,
-      },
+      actions.createPage({
+        path: `/proposals/${proposal.number}`,
+        component: proposalPageTemplate,
+        context: {
+          proposal,
+          systemInfo: data.grantsdao.systemInfo,
+          html: markDownRemarkData.markdownRemark.html,
+        },
+      })
     })
-  })
+  )
 }

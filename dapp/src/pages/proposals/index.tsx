@@ -1,21 +1,18 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import { graphql, PageProps, useStaticQuery, Link } from "gatsby"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import fromUnixTime from "date-fns/fromUnixTime"
-import addSeconds from "date-fns/addSeconds"
-import isFuture from "date-fns/isFuture"
 
 import SEO from "../../components/seo"
 import Tabs from "../../components/tabs"
 import {
   Pill,
   Section,
-  InfoBadge,
-  PrimaryBadge,
-  DangerBadge,
   Text,
+  proposalStatusToBadge,
 } from "../../components/common"
 import Table from "../../components/table"
+import { formatNumber } from "../../utils"
 
 const PROPOSALS_PAGE_QUERY = graphql`
   query ProposalsPage {
@@ -24,6 +21,7 @@ const PROPOSALS_PAGE_QUERY = graphql`
         proposalCount
         totalBalance
         totalExecuted
+        votingPhaseDuration
       }
 
       all: proposals(orderBy: createdAt) {
@@ -138,7 +136,7 @@ const ProposalsPage: React.FC<PageProps> = () => {
       {
         Header: "",
         accessor: "status",
-        Cell: ({ row }) => statusToBadge(row.original, systemInfo),
+        Cell: ({ row }) => proposalStatusToBadge(row.original, systemInfo),
       },
       {
         Header: "",
@@ -157,11 +155,6 @@ const ProposalsPage: React.FC<PageProps> = () => {
       sortBy: [{ id: "modifiedAt", desc: true }],
     }),
     []
-  )
-
-  const totalExecuted = useMemo(
-    () => new Intl.NumberFormat().format(Number(systemInfo.totalExecuted)),
-    systemInfo
   )
 
   return (
@@ -187,7 +180,9 @@ const ProposalsPage: React.FC<PageProps> = () => {
 
       <Section>
         Approved <Pill size="sm">{approved.length}</Pill>{" "}
-        <span className="right">TRIBUTED {totalExecuted} SNX</span>
+        <span className="right">
+          TRIBUTED {formatNumber(systemInfo.totalExecuted)} SNX
+        </span>
       </Section>
 
       <Table
@@ -209,33 +204,6 @@ const ProposalsPage: React.FC<PageProps> = () => {
       />
     </>
   )
-}
-
-const statusToBadge = (proposal, systemInfo) => {
-  if (proposal.status === "COMPLETED") {
-    return <PrimaryBadge>Completed</PrimaryBadge>
-  }
-
-  if (proposal.status === "REJECTED") {
-    return <DangerBadge>Rejected</DangerBadge>
-  }
-
-  if (proposal.status === "PROPOSED") {
-    const inVotingPeriod = isFuture(
-      addSeconds(
-        fromUnixTime(proposal.createdAt),
-        systemInfo.votingPhaseDuration
-      )
-    )
-
-    return inVotingPeriod ? (
-      <InfoBadge>In Voting</InfoBadge>
-    ) : (
-      <DangerBadge>Expired</DangerBadge>
-    )
-  }
-
-  return null
 }
 
 export default ProposalsPage
