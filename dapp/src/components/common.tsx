@@ -143,3 +143,81 @@ export const GithubLink = ({ text, href }) => {
     </GithubLinkWrapper>
   )
 }
+
+export const Wrapper = styled.section``
+
+export const Title = styled.h2`
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  text-transform: uppercase;
+  margin: 2.25rem 0;
+
+  a svg {
+    font-size: 1.5rem;
+    color: var(--color-1);
+    margin-right: 0.625rem;
+    opacity: 0.5;
+  }
+`
+
+export const Content = styled.div`
+  display: flex;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0px 0px 15px -4px rgba(212, 212, 212, 1);
+  background-color: #fff;
+  padding: 2rem;
+  box-sizing: border-box;
+  letter-spacing: normal;
+`
+
+export const Document = styled.article.attrs(props => ({
+  className: `${props.className} markdown-body`,
+}))`
+  font-family: Montserrat, sans-serif;
+  font-size: 0.75rem;
+  width: 70%;
+`
+
+export const PanelItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 0.75rem;
+
+  > :not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+
+  label {
+    font-family: Montserrat;
+    font-weight: 700;
+  }
+`
+
+export const PanelItemInfo = styled(PanelItem)`
+  background-color: var(--color-4);
+  padding: 0.75rem;
+  border-radius: 10px;
+`
+
+export const DetailPanel = styled.div`
+  width: 30%;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  padding-right: 1.5rem;
+
+  ${PanelItem}, ${PanelItemInfo} {
+    margin-top: 1rem;
+  }
+`
+
+export const PanelItemContainer = styled.div`
+  display: flex;
+
+  ${PanelItem} {
+    flex: 1;
+  }
+`

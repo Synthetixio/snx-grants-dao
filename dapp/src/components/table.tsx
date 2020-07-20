@@ -101,27 +101,25 @@ const StyledTable = styled.table`
       padding: 0.75rem 1.5rem;
       text-align: left;
       text-transform: uppercase;
+      white-space: nowrap;
     }
   }
 
-  tbody tr {
-    :not(:last-child) {
-      border-bottom: 1px solid var(--color-6);
-    }
-
-    :hover {
-      background-color: var(--color-6-light);
-    }
-
-    td {
-      padding: 0.75rem 1.5rem;
-    }
+  tbody {
+    letter-spacing: 0.03rem;
+    line-height: normal;
 
     tr {
       :not(:last-child) {
-        td {
-          border-bottom: 1px solid var(--color-6);
-        }
+        border-bottom: 1px solid var(--color-6);
+      }
+
+      :hover {
+        background-color: var(--color-6-light);
+      }
+
+      td {
+        padding: 0.75rem 1.5rem;
       }
     }
   }
