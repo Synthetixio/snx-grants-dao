@@ -16,6 +16,12 @@ import { formatNumber } from "../../utils"
 
 const PROPOSALS_PAGE_QUERY = graphql`
   query ProposalsPage {
+    requests: allMarkdownRemark(
+      filter: { fileAbsolutePath: { regex: "/requests//" } }
+    ) {
+      totalCount
+    }
+
     grantsdao {
       systemInfo(id: "current") {
         proposalCount
@@ -97,7 +103,8 @@ const PROPOSALS_PAGE_QUERY = graphql`
 
 const ProposalsPage: React.FC<PageProps> = () => {
   const {
-    grantsdao: { systemInfo, all, proposed, approved, completed, rejected },
+    requests,
+    grantsdao: { systemInfo, proposed, approved, completed, rejected },
   } = useStaticQuery(PROPOSALS_PAGE_QUERY)
   const columns = useMemo(
     () => [
@@ -163,7 +170,7 @@ const ProposalsPage: React.FC<PageProps> = () => {
 
       <Tabs
         proposalsCount={systemInfo.proposalCount}
-        requestsCount={"0"}
+        requestsCount={requests.totalCount}
         availableBalance={systemInfo.totalBalance}
       />
 

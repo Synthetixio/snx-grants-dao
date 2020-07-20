@@ -10,11 +10,15 @@ export const formatNumber = (number: number): string =>
   defaultNumberFormat.format(number)
 
 export const toShortDate = timestamp => {
-  return format(fromUnixTime(timestamp), "yyyy/MM/dd")
+  return formatDate(fromUnixTime(timestamp))
 }
 
 export const toShortDateTime = timestamp => {
   return formatDateTime(fromUnixTime(timestamp))
+}
+
+export const formatDate = date => {
+  return format(date, "yyyy/MM/dd")
 }
 
 export const formatDateTime = date => {

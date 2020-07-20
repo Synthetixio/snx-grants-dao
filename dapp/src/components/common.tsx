@@ -103,6 +103,22 @@ export const proposalStatusToBadge = (proposal, systemInfo) => {
   return null
 }
 
+export const requestStatusToBadge = status => {
+  if (status === "proposed") {
+    return <InfoBadge>Proposed</InfoBadge>
+  }
+
+  if (status === "completed") {
+    return <PrimaryBadge>Completed</PrimaryBadge>
+  }
+
+  if (status === "deprecated") {
+    return <DangerBadge>Deprecated</DangerBadge>
+  }
+
+  return null
+}
+
 const GithubLinkWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -118,7 +134,6 @@ const GithubLinkWrapper = styled.div`
   }
 `
 export const GithubLink = ({ text, href }) => {
-  //console.log({ githubMark })
   return (
     <GithubLinkWrapper>
       <GithubMark />

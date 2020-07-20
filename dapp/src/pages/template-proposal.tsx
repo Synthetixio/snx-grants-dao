@@ -27,18 +27,18 @@ import {
   formatDateTime,
   toShortDateTime,
 } from "../utils"
-import CopyToClipboard, {
-  CopyAddressToClipboard,
-} from "../components/copyToClipboard"
+import { CopyAddressToClipboard } from "../components/copyToClipboard"
 
-const ProposalPage = ({ pageContext: { proposal, systemInfo, html } }) => {
+const ProposalPage = ({
+  pageContext: { proposal, systemInfo, html, requestsTotalCount },
+}) => {
   return (
     <Wrapper>
       <SEO title={`#${proposal.number} ${proposal.description}`} />
 
       <Tabs
         proposalsCount={systemInfo.proposalCount}
-        requestsCount={"0"}
+        requestsCount={requestsTotalCount}
         availableBalance={systemInfo.totalBalance}
       />
 
