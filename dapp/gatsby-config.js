@@ -6,6 +6,12 @@ module.exports = {
     title: `Synthetix GrantsDAO DApp`,
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-favicon`,
+      options: {
+        logo: `${path.join(__dirname, "./src/images/snx.svg")}`,
+      },
+    },
     `gatsby-plugin-sharp`,
     // Configure React Helmet
     {

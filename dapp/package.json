@@ -20,6 +20,7 @@
     "date-fns": "^2.14.0",
     "gatsby": "^2.23.21",
     "gatsby-plugin-env-variables": "^1.0.2",
+    "gatsby-plugin-favicon": "^3.1.6",
     "gatsby-plugin-manifest": "^2.4.17",
     "gatsby-plugin-netlify": "^2.3.7",
     "gatsby-plugin-offline": "^3.2.16",
