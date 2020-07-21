@@ -1,14 +1,20 @@
 import React from "react"
 import { Link } from "gatsby"
 import styled from "styled-components"
+import SynthetixLogo from "../images/Synthetix-logo.svg"
+
+const StyledLink = styled(Link)`
+margin-left: 10px;
+`;
 
 const Header: React.FC = () => (
   <Wrapper>
     <Content>
       <h1>
-        <Link to="/">
-          Synthetix Grants<b>DAO</b>
-        </Link>
+        <SynthetixLogo />
+        <StyledLink to="/">
+          grants<b>DAO</b>
+        </StyledLink>
       </h1>
 
       <Menu>
