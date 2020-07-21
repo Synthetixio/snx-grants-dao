@@ -171,10 +171,10 @@ const Votes = ({ votes }) => {
           size="sm"
           type={vote.member.type}
           data-tip={
-            vote.member.type === "TEAM" ? "Team Member" : "Community Member"
+            vote.member.type === "TEAM" ? "Core Contributor" : "Community Member"
           }
         >
-          {vote.member.type === "TEAM" ? "TM" : "CM"}
+          {vote.member.type === "TEAM" ? "CC" : "CM"}
         </VoteTypePill>
         <VoteApprovePill
           size="sm"
