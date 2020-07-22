@@ -31,6 +31,9 @@ export const Pill = styled.div<PillProps>`
       width: 24px;
       height: 24px;
     `}
+    p {
+    margin-left: 2px;
+  }
 `
 
 export const Section = styled.h3`
@@ -176,7 +179,7 @@ export const Document = styled.article.attrs(props => ({
   className: `${props.className} markdown-body`,
 }))`
   font-family: Montserrat, sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   width: 70%;
 `
 

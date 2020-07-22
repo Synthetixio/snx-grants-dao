@@ -102,7 +102,7 @@ const RequestsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Proposed <Pill size="sm">{requests.proposed.length}</Pill>
+        Proposed <Pill size="sm"><p>{requests.proposed.length}</p></Pill>
       </Section>
 
       <Table
@@ -113,7 +113,7 @@ const RequestsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Completed <Pill size="sm">{requests.completed.length}</Pill>
+        Completed <Pill size="sm"><p>{requests.completed.length}</p></Pill>
       </Section>
 
       <Table
@@ -124,7 +124,7 @@ const RequestsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Deprecated <Pill size="sm">{requests.deprecated.length}</Pill>
+        Deprecated <Pill size="sm"><p>{requests.deprecated.length}</p></Pill>
       </Section>
 
       <Table

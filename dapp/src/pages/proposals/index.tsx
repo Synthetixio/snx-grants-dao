@@ -175,7 +175,7 @@ const ProposalsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Proposed <Pill size="sm">{proposed.length}</Pill>
+        Proposed <Pill size="sm"><p>{proposed.length}</p></Pill>
       </Section>
 
       <Table
@@ -186,7 +186,7 @@ const ProposalsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Approved <Pill size="sm">{approved.length}</Pill>{" "}
+        Approved <Pill size="sm"><p>{approved.length}</p></Pill>{" "}
         <span className="right">
           TRIBUTED {formatNumber(systemInfo.totalExecuted)} SNX
         </span>
@@ -200,7 +200,7 @@ const ProposalsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Completed <Pill size="sm">{completed.length}</Pill>
+        Completed <Pill size="sm"><p>{completed.length}</p></Pill>
       </Section>
 
       <Table

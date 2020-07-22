@@ -18,10 +18,10 @@ const Tabs = ({ proposalsCount, requestsCount, availableBalance }: Props) => {
         activeClassName="active"
         partiallyActive={true}
       >
-        Proposals <Pill size="md">{proposalsCount}</Pill>
+        Proposals <Pill size="md"><p>{proposalsCount}</p></Pill>
       </LinkItem>
       <LinkItem to="/requests/" activeClassName="active" partiallyActive={true}>
-        Requests <Pill size="md">{requestsCount}</Pill>
+        Requests <Pill size="md"><p>{requestsCount}</p></Pill>
       </LinkItem>
       <Rest>
         <span>Available {formatNumber(Number(availableBalance))} SNX</span>
