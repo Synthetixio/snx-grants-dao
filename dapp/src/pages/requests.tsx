@@ -6,7 +6,7 @@ import parseISO from "date-fns/parseISO"
 import SEO from "../components/seo"
 import Tabs from "../components/tabs"
 import { Section, Pill, Text } from "../components/common"
-import Table from "../components/table"
+import Table, { TitleLink } from "../components/table"
 
 const REQUESTS_PAGE_QUERY = graphql`
   query RequestsPage {
@@ -59,7 +59,7 @@ const RequestsPage: React.FC<PageProps> = () => {
             to={"/requests/" + row.original.name}
             title={row.original.title}
           >
-            <Text>{row.original.title}</Text>
+            <TitleLink>{row.original.title}</TitleLink>
           </Link>
         ),
       },

@@ -124,3 +124,6 @@ const StyledTable = styled.table`
     }
   }
 `
+export const TitleLink = styled(Text)`
+  font-size: 0.85rem;
+`

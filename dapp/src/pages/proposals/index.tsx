@@ -11,7 +11,7 @@ import {
   Text,
   proposalStatusToBadge,
 } from "../../components/common"
-import Table from "../../components/table"
+import Table, { TitleLink } from "../../components/table"
 import { formatNumber } from "../../utils"
 
 const PROPOSALS_PAGE_QUERY = graphql`
@@ -116,9 +116,9 @@ const ProposalsPage: React.FC<PageProps> = () => {
             to={"/proposals/" + row.original.number}
             title={row.original.description}
           >
-            <Text>
+            <TitleLink>
               <strong>#{row.original.number}</strong> {row.original.description}
-            </Text>
+            </TitleLink>
           </Link>
         ),
       },
