@@ -2,7 +2,7 @@ import React from "react"
 import styled, { css } from "styled-components"
 import isFuture from "date-fns/isFuture"
 import { getProposalEndDate } from "../utils"
-import GithubMark from "../images/github-mark.svg"
+import GithubMark from "../assets/svgs/github-mark.svg"
 
 type PillProps = {
   size: "sm" | "md"

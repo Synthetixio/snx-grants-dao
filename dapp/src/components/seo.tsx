@@ -1,6 +1,7 @@
 import React from "react"
 import { Helmet } from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
+import snxGrantsDaoThumbnail from "../assets/images/snx-grantsdao.png"
 
 interface SEOProps {
   lang?: string
@@ -13,6 +14,7 @@ const SEO: React.FC<SEOProps> = ({ title, lang }) => {
       query {
         site {
           siteMetadata {
+            author
             title
           }
         }
@@ -25,6 +27,44 @@ const SEO: React.FC<SEOProps> = ({ title, lang }) => {
       htmlAttributes={{ lang }}
       title={title}
       titleTemplate={`%s | ${site.siteMetadata.title}`}
+      meta={[
+        {
+          name: `description`,
+          content: site.siteMetadata.title,
+        },
+        {
+          property: `og:image`,
+          content: snxGrantsDaoThumbnail,
+        },
+        {
+          property: `og:title`,
+          content: title,
+        },
+        {
+          property: `og:description`,
+          content: site.siteMetadata.title,
+        },
+        {
+          property: `og:type`,
+          content: `website`,
+        },
+        {
+          name: `twitter:card`,
+          content: `summary`,
+        },
+        {
+          name: `twitter:creator`,
+          content: site.siteMetadata.author,
+        },
+        {
+          name: `twitter:title`,
+          content: title,
+        },
+        {
+          name: `twitter:description`,
+          content: site.siteMetadata.title,
+        },
+      ]}
     />
   )
 }

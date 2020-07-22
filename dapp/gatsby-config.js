@@ -3,13 +3,14 @@ const path = require("path")
 
 module.exports = {
   siteMetadata: {
+    author: `Synthetix`,
     title: `Synthetix GrantsDAO DApp`,
   },
   plugins: [
     {
       resolve: `gatsby-plugin-favicon`,
       options: {
-        logo: `${path.join(__dirname, "./src/images/snx.svg")}`,
+        logo: `${path.join(__dirname, "./src/assets/svgs/snx.svg")}`,
       },
     },
     `gatsby-plugin-sharp`,
@@ -48,7 +49,7 @@ module.exports = {
       resolve: "gatsby-plugin-react-svg",
       options: {
         rule: {
-          include: /images/,
+          include: /svgs/,
         },
       },
     },

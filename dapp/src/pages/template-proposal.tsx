@@ -6,7 +6,7 @@ import {
   faCheck,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons"
-import SNXIcon from "../images/snx.svg"
+import SNXIcon from "../assets/svgs/snx.svg"
 import "github-markdown-css/github-markdown.css"
 
 import SEO from "../components/seo"
@@ -171,7 +171,9 @@ const Votes = ({ votes }) => {
           size="sm"
           type={vote.member.type}
           data-tip={
-            vote.member.type === "TEAM" ? "Core Contributor" : "Community Member"
+            vote.member.type === "TEAM"
+              ? "Core Contributor"
+              : "Community Member"
           }
         >
           {vote.member.type === "TEAM" ? "CC" : "CM"}

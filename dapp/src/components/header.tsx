@@ -1,18 +1,14 @@
 import React from "react"
 import { Link } from "gatsby"
 import styled from "styled-components"
-import SynthetixLogo from "../images/Synthetix-logo.svg"
-
-const StyledLink = styled(Link)`
-margin-left: 10px;
-`;
+import SynthetixLogo from "../assets/svgs/Synthetix-logo.svg"
 
 const Header: React.FC = () => (
   <Wrapper>
     <Content>
       <h1>
-        <SynthetixLogo />
         <StyledLink to="/">
+          <SynthetixLogo />
           grants<b>DAO</b>
         </StyledLink>
       </h1>
@@ -57,6 +53,12 @@ const Menu = styled.nav`
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
   text-align: right;
+`
+
+const StyledLink = styled(Link)`
+  svg {
+    margin-right: 10px;
+  }
 `
 
 export default Header
