@@ -273,8 +273,8 @@ This stage will consist of three main areas: necessary protocol improvements, UX
 ## Price (SNX):
 
 Assuming $60 USD/h = $12k in total
-Duration: estimated ~ one month
+Duration: estimated ~ 1 month
 
 ## Ethereum Address:
 
-0x7D5024bfb6512211acb7521A76A8d60f8980FD7c
+0x3a18F90dAF0C2A26a95Ce714Fa37Db20d1217550
