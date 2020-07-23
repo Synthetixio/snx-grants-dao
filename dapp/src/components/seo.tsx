@@ -1,7 +1,6 @@
 import React from "react"
 import { Helmet } from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
-import snxGrantsDaoThumbnail from "../assets/images/snx-grantsdao.png"
 
 interface SEOProps {
   lang?: string
@@ -34,7 +33,7 @@ const SEO: React.FC<SEOProps> = ({ title, lang }) => {
         },
         {
           property: `og:image`,
-          content: snxGrantsDaoThumbnail,
+          content: "/snx-grantsdao.png",
         },
         {
           property: `og:title`,
