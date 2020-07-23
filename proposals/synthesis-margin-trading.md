@@ -249,11 +249,32 @@ This stage will consist of three main areas: necessary protocol improvements, UX
 | Unexpected issues risk buffer (15%)                       | 72               |
 | **Total**                                                 | 550              |
 
+## Phase 1
+
+| Tasks                                               | Workload (hours) |
+| --------------------------------------------------- | ---------------- |
+| **Core protocol improvements**                      |                  |
+| Extracing and improving solvency model              | 16               |
+| Improving on-chain calculations precision           | 4                |
+| Tradable assets configuration (currently hardcoded) | 8                |
+| Gas optimisations (trading accounts factory)        | 16               |
+| Extra safety measures (pausing, funds escape hatch) | 8                |
+| Proper error handling & inputs sanitization         | 16               |
+| **Lending Pool - missing parts implementation**     |                  |
+| Interest rates model                                | 24               |
+| Basic lending pool admin & management               | 16               |
+| Interest accumulation mechanism                     | 32               |
+| **Code quality**                                    |                  |
+| Hackathon Code Refactoring                          | 24               |
+| Code documentation                                  | 4                |
+| Preparing test suite with multiple scenarios        | 32               |
+| **Total tasks**                                     | 200              |
+
 ## Price (SNX):
 
-Assuming $60 USD/h ~ 30 SNX = 16,500 SNX in total
-Duration: estimated ~ 550h = 3-4 months
+Assuming $60 USD/h = $12k in total
+Duration: estimated ~ one month
 
 ## Ethereum Address:
 
-0xcC554f8c7C2b49151AE0A81524c3434307dE33cC
+0x7D5024bfb6512211acb7521A76A8d60f8980FD7c
