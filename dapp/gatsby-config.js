@@ -1,10 +1,19 @@
 require("dotenv/config")
+const path = require("path")
 
 module.exports = {
   siteMetadata: {
+    author: `Synthetix`,
     title: `Synthetix GrantsDAO DApp`,
   },
   plugins: [
+    {
+      resolve: `gatsby-plugin-favicon`,
+      options: {
+        logo: `${path.join(__dirname, "./src/assets/svgs/snx.svg")}`,
+      },
+    },
+    `gatsby-plugin-sharp`,
     // Configure React Helmet
     {
       resolve: "gatsby-plugin-react-helmet",
@@ -36,6 +45,15 @@ module.exports = {
       },
     },
 
+    {
+      resolve: "gatsby-plugin-react-svg",
+      options: {
+        rule: {
+          include: /svgs/,
+        },
+      },
+    },
+
     // Static data sources
     {
       resolve: "gatsby-source-graphql",
@@ -45,7 +63,36 @@ module.exports = {
         url: process.env.SUBGRAPH_URL,
       },
     },
-
-
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${path.join(__dirname, "../proposals")}`,
+        name: "proposals-pages",
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${path.join(__dirname, "../requests")}`,
+        name: "requests-pages",
+        ignore: [`**/request-template.md`],
+      },
+    },
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              // It's important to specify the maxWidth (in pixels) of
+              // the content container as this plugin uses this as the
+              // base for generating different widths of each image.
+              maxWidth: 590,
+            },
+          },
+        ],
+      },
+    },
   ],
 }

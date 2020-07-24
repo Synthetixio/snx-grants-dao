@@ -1,7 +1,8 @@
-import React, { useMemo } from "react"
+import React from "react"
 import styled from "styled-components"
 import { Link } from "gatsby"
 import { Pill } from "./common"
+import { formatNumber } from "../utils"
 
 type Props = {
   proposalsCount: string
@@ -10,21 +11,20 @@ type Props = {
 }
 
 const Tabs = ({ proposalsCount, requestsCount, availableBalance }: Props) => {
-  const formattedBalance = useMemo(
-    () => new Intl.NumberFormat().format(Number(availableBalance)),
-    [availableBalance]
-  )
-
   return (
     <Wrapper>
-      <LinkItem to="/proposals/" activeClassName="active">
-        Proposals <Pill size="md">{proposalsCount}</Pill>
+      <LinkItem
+        to="/proposals/"
+        activeClassName="active"
+        partiallyActive={true}
+      >
+        Proposals <Pill size="md"><p>{proposalsCount}</p></Pill>
       </LinkItem>
-      <LinkItem to="/requests/" activeClassName="active">
-        Requests <Pill size="md">{requestsCount}</Pill>
+      <LinkItem to="/requests/" activeClassName="active" partiallyActive={true}>
+        Requests <Pill size="md"><p>{requestsCount}</p></Pill>
       </LinkItem>
       <Rest>
-        <span>Available {formattedBalance} SNX</span>
+        <span>Available {formatNumber(Number(availableBalance))} SNX</span>
       </Rest>
     </Wrapper>
   )
