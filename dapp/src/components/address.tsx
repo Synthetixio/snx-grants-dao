@@ -8,9 +8,9 @@ type Props = {
   address: string
 }
 
-const Address: React.FC<Props> = ({ address, children }) => {
+const Address: React.FC<Props> = ({ address, children, ...rest }) => {
   return (
-    <Wrapper>
+    <Wrapper {...rest}>
       <Jazzicon diameter={30} seed={jsNumberForAddress(address)} />
       <Text>{shortenAccount(address)}</Text>
       {children}

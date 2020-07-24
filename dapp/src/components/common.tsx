@@ -53,7 +53,7 @@ export const Section = styled.h3`
   }
 `
 
-const Badge = styled.div`
+export const Badge = styled.div`
   text-transform: uppercase;
   white-space: nowrap;
   border-radius: 10px;

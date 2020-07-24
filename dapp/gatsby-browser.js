@@ -1,5 +1,8 @@
 import React from "react"
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client"
+import { Web3ReactProvider } from "@web3-react/core"
+import { Web3Provider } from "@ethersproject/providers"
+import { useInactiveListener, useEagerConnect } from "./src/utils/hooks"
 import fetch from "isomorphic-fetch"
 import Layout from "./src/components/layout"
 // The following import prevents a Font Awesome icon server-side rendering bug,
@@ -18,9 +21,31 @@ export function wrapRootElement({ element }) {
     fetch,
   })
 
-  return <ApolloProvider client={client}>{element}</ApolloProvider>
+  return (
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <ApolloProvider client={client}>{element}</ApolloProvider>
+    </Web3ReactProvider>
+  )
 }
 
-export function wrapPageElement({ element, props }) {
+const Wrapper = props => {
+  return <Page {...props} />
+}
+
+const Page = ({ element, props }) => {
+  // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
+  const triedEager = useEagerConnect()
+
+  // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
+  useInactiveListener(!triedEager)
+
   return <Layout {...props}>{element}</Layout>
+}
+
+export const wrapPageElement = Wrapper
+
+function getLibrary(provider) {
+  const library = new Web3Provider(provider)
+  library.pollingInterval = 12000
+  return library
 }
