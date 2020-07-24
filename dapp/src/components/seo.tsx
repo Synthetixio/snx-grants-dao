@@ -1,6 +1,7 @@
 import React from "react"
 import { Helmet } from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
+import MetamaskLogo from "../assets/images/metamask.png"
 
 interface SEOProps {
   lang?: string
@@ -26,6 +27,7 @@ const SEO: React.FC<SEOProps> = ({ title, lang }) => {
       htmlAttributes={{ lang }}
       title={title}
       titleTemplate={`%s | ${site.siteMetadata.title}`}
+      link={[{ rel: "preload", href: MetamaskLogo, as: "image" }]}
       meta={[
         {
           name: `description`,

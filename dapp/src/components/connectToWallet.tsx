@@ -15,10 +15,11 @@ import {
   MenuItem,
 } from "react-aria-menubutton"
 import MetamaskLogo from "../assets/images/metamask.png"
-import { injected } from "../utils/connectors"
 import Address from "./address"
 import { Badge } from "./common"
 import { PrimaryButton, SecondaryButton } from "./button"
+import { injected } from "../utils/connectors"
+import { SUPPORTED_NETWORKS } from "../utils/network"
 
 const ConnectToWallet = () => {
   const context = useWeb3React<Web3Provider>()
@@ -47,7 +48,7 @@ const ConnectToWallet = () => {
     <Container>
       {active ? (
         <>
-          <NetworkBadge>{networkIdToName[chainId]}</NetworkBadge>
+          <NetworkBadge>{SUPPORTED_NETWORKS[chainId]}</NetworkBadge>
           <StyledMenuWrapper className="AriaMenuButton">
             <AriaButton className="AriaMenuButton-trigger">
               <StyledAddress address={account}>
@@ -84,12 +85,6 @@ function getErrorMessage(error: Error) {
     console.error(error)
     return "An unknown error occurred. Check the console for more details."
   }
-}
-
-const networkIdToName = {
-  1: "mainnet",
-  3: "ropsten",
-  4: "rinkeby",
 }
 
 const NetworkBadge = styled(Badge)`

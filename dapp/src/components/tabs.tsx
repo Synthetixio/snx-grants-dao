@@ -18,10 +18,16 @@ const Tabs = ({ proposalsCount, requestsCount, availableBalance }: Props) => {
         activeClassName="active"
         partiallyActive={true}
       >
-        Proposals <Pill size="md"><p>{proposalsCount}</p></Pill>
+        Proposals{" "}
+        <Pill size="md">
+          <p>{proposalsCount}</p>
+        </Pill>
       </LinkItem>
       <LinkItem to="/requests/" activeClassName="active" partiallyActive={true}>
-        Requests <Pill size="md"><p>{requestsCount}</p></Pill>
+        Requests{" "}
+        <Pill size="md">
+          <p>{requestsCount}</p>
+        </Pill>
       </LinkItem>
       <Rest>
         <span>Available {formatNumber(Number(availableBalance))} SNX</span>
@@ -42,6 +48,10 @@ const LinkItem = styled(Link)`
 
   &:hover {
     text-decoration: none;
+
+    :not(.active) {
+      border-bottom: 1px solid var(--color-6);
+    }
   }
 `
 

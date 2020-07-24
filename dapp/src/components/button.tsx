@@ -1,47 +1,48 @@
-import React from "react"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
-type Props = {
-  onClick: () => void
-}
-
-const Button: React.FC<Props> = ({ children, ...rest }) => {
-  return <StyledButton {...rest}>{children}</StyledButton>
-}
-
-const StyledButton = styled.button`
+const style = css`
   display: flex;
   align-items: center;
   border-radius: 5px;
   border: 0;
-  padding: 0.5rem 0.8rem;
+  padding: 0.5rem 2rem;
   cursor: pointer;
 
   :focus {
     outline: 0;
   }
+
+  :hover {
+    text-decoration: none;
+  }
+
+  :disabled {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+  }
 `
 
-export const PrimaryButton = styled(Button)`
+export const PrimaryButton = styled.button`
+  ${style}
   color: #fff;
   background-color: var(--color-3);
 
-  :hover,
-  :focus {
+  :hover:not(:disabled),
+  :focus:not(:disabled) {
     background-color: var(--color-3-dark);
   }
 `
 
-export const SecondaryButton = styled(Button)`
+export const SecondaryButton = styled.button`
+  ${style}
   color: var(--color-3);
-  background-color: #fff;
+  background-color: transparent;
   border: 1px solid var(--color-3);
 
-  :hover,
-  :focus {
+  :hover:not(:disabled),
+  :focus:not(:disabled) {
     color: #fff;
     background-color: var(--color-3);
   }
 `
-
-export default Button
