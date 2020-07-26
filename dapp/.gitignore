@@ -63,3 +63,6 @@ yarn-error.log
 
 # Yarn Integrity file
 .yarn-integrity
+
+# TypeChain generated files
+types/ethers-contracts

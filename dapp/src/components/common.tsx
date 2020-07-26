@@ -55,6 +55,7 @@ export const Section = styled.h3`
 
 export const Badge = styled.div`
   text-transform: uppercase;
+  text-align: center;
   white-space: nowrap;
   border-radius: 10px;
   padding: 0.3125rem 0.625rem;
@@ -151,7 +152,8 @@ export const Wrapper = styled.section``
 
 export const Title = styled.h2`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   font-size: 1rem;
   text-transform: uppercase;
   margin: 2.25rem 0;
@@ -161,6 +163,15 @@ export const Title = styled.h2`
     color: var(--color-1);
     margin-right: 0.625rem;
     opacity: 0.5;
+
+    :hover {
+      opacity: 0.7;
+    }
+  }
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
   }
 `
 
@@ -223,4 +234,13 @@ export const PanelItemContainer = styled.div`
   ${PanelItem} {
     flex: 1;
   }
+`
+
+export const ErrorMessage = styled.div`
+  color: var(--color-7);
+  text-align: center;
+  border: 1px solid var(--color-7);
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 1rem;
 `

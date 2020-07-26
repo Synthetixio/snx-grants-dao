@@ -61,10 +61,6 @@ const Content = styled.div`
   width: 100%;
   max-width: 1024px;
   flex: 1;
-
-  @media (min-width: var(--screen-lg)) {
-    /* padding: 0; */
-  }
 `
 
 export default Layout

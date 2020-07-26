@@ -7,6 +7,7 @@ import { useInactiveListener, useEagerConnect } from "./src/utils/hooks"
 import fetch from "isomorphic-fetch"
 import Layout from "./src/components/layout"
 import Toast from "./src/components/toast"
+import { ConfirmationModalProvider } from "./src/components/confirmationModal"
 // The following import prevents a Font Awesome icon server-side rendering bug,
 // where the icons flash from a very large icon down to a properly sized one:
 import "@fortawesome/fontawesome-svg-core/styles.css"
@@ -26,7 +27,9 @@ export function wrapRootElement({ element }) {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
       <ToastProvider placement="bottom-right" components={{ Toast: Toast }}>
-        <ApolloProvider client={client}>{element}</ApolloProvider>
+        <ApolloProvider client={client}>
+          <ConfirmationModalProvider>{element}</ConfirmationModalProvider>
+        </ApolloProvider>
       </ToastProvider>
     </Web3ReactProvider>
   )

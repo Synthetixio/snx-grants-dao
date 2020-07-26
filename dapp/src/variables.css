@@ -4,12 +4,6 @@
   --header-height: 58px;
   --content-width: 1024px;
 
-  /* Breakpoints */
-  --screen-sm: 640px;
-  --screen-md: 768px;
-  --screen-lg: 1024px;
-  --screen-xl: 1280px;
-
   /* Palette */
   --color-1: #0a0816;
   --color-2: #19162d;
@@ -17,7 +11,11 @@
   --color-3-dark: #1e2694;
   --color-4: #f4f7fa;
   --color-5: #56bb98;
+  --color-5-dark: #3d846b;
   --color-6: #d4d4d4;
   --color-6-light: #d4d4d420;
   --color-7: #e76a6a;
+  --color-7-dark: #b54c4c;
+  --color-8: #939393;
+  --color-8-dark: #797777;
 }

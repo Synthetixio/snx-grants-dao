@@ -2,32 +2,25 @@ import React, { useCallback, useState } from "react"
 import { Link, navigate } from "gatsby"
 import styled from "styled-components"
 import { useForm } from "react-hook-form"
-import { useWeb3React } from "@web3-react/core"
-import SEO from "../../components/seo"
-import { Title } from "../../components/common"
+import { utils } from "ethers"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
-import { Contract, utils } from "ethers"
+import SEO from "../../components/seo"
+import { Title, ErrorMessage } from "../../components/common"
 import { PrimaryButton, SecondaryButton } from "../../components/button"
-import grantsDaoContract from "../../utils/grantsDaoContract"
+import { useGrantsDaoContract } from "../../utils/contracts/grantsDaoContract"
 import { useTxToast } from "../../components/toast"
 
 const CreateProposalPage = () => {
   const [error, setError] = useState("")
   const { register, handleSubmit, errors, formState } = useForm()
-  const { chainId, library } = useWeb3React()
   const { addTxToast } = useTxToast()
+  const grantsDaoContract = useGrantsDaoContract()
 
   const onSubmit = useCallback(
     async values => {
       try {
-        const GrantsDAOContract = new Contract(
-          grantsDaoContract.addresses[chainId],
-          grantsDaoContract.abi,
-          library.getSigner()
-        )
-
-        const tx = await GrantsDAOContract.createProposal(
+        const tx = await grantsDaoContract.createProposal(
           values.receiver,
           utils.parseEther(values.amount),
           values.description,
@@ -45,7 +38,7 @@ const CreateProposalPage = () => {
         setError(error.message || error)
       }
     },
-    [library, chainId]
+    [grantsDaoContract]
   )
 
   const { isSubmitting } = formState
@@ -171,15 +164,6 @@ const Input = styled.input`
     border: 1px solid var(--color-3);
     outline: 0;
   }
-`
-
-const ErrorMessage = styled.div`
-  color: var(--color-7);
-  text-align: center;
-  border: 1px solid var(--color-7);
-  border-radius: 8px;
-  background-color: #fff;
-  padding: 1rem;
 `
 
 const Form = styled.form`

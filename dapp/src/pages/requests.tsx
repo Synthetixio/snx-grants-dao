@@ -66,11 +66,14 @@ const RequestsPage: React.FC<PageProps> = () => {
       {
         Header: "Last Modified",
         accessor: "modifiedAt",
-        Cell: ({ value }) => (
-          <Text title={parseISO(value).toUTCString()}>
-            {formatDistanceToNow(parseISO(value)).toUpperCase()} AGO
-          </Text>
-        ),
+        Cell: ({ value }) =>
+          value ? (
+            <Text title={parseISO(value).toUTCString()}>
+              {formatDistanceToNow(parseISO(value)).toUpperCase()} AGO
+            </Text>
+          ) : (
+            ""
+          ),
       },
       {
         Header: "Created At",
@@ -102,7 +105,10 @@ const RequestsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Proposed <Pill size="sm"><p>{requests.proposed.length}</p></Pill>
+        Proposed{" "}
+        <Pill size="sm">
+          <p>{requests.proposed.length}</p>
+        </Pill>
       </Section>
 
       <Table
@@ -113,7 +119,10 @@ const RequestsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Completed <Pill size="sm"><p>{requests.completed.length}</p></Pill>
+        Completed{" "}
+        <Pill size="sm">
+          <p>{requests.completed.length}</p>
+        </Pill>
       </Section>
 
       <Table
@@ -124,7 +133,10 @@ const RequestsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Deprecated <Pill size="sm"><p>{requests.deprecated.length}</p></Pill>
+        Deprecated{" "}
+        <Pill size="sm">
+          <p>{requests.deprecated.length}</p>
+        </Pill>
       </Section>
 
       <Table

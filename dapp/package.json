@@ -10,7 +10,9 @@
     "lint": "eslint . --ext ts --ext tsx",
     "start": "yarn develop",
     "test": "yarn type-check && yarn lint",
-    "type-check": "tsc --noEmit --pretty"
+    "type-check": "tsc --noEmit --pretty",
+    "typechain": "typechain --target ethers-v5 **/*.abi.json",
+    "postinstall": "typechain"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-rc.10",
@@ -43,6 +45,7 @@
     "normalize.css": "^8.0.1",
     "react": "^16.13.1",
     "react-aria-menubutton": "^7.0.0",
+    "react-aria-modal": "^4.0.0",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^6.0.8",
@@ -55,6 +58,7 @@
     "styled-components": "^5.1.1"
   },
   "devDependencies": {
+    "@typechain/ethers-v5": "^0.0.3",
     "@types/node": "12",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
@@ -62,6 +66,7 @@
     "@types/styled-components": "^5.1.0",
     "netlify-cli": "^2.58.0",
     "prettier": "2.0.5",
+    "typechain": "^2.0.0",
     "typescript": "^3.9.6"
   }
 }

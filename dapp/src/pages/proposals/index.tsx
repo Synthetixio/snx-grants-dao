@@ -125,11 +125,14 @@ const ProposalsPage: React.FC<PageProps> = () => {
       {
         Header: "Last Modified",
         accessor: "modifiedAt",
-        Cell: ({ value }) => (
-          <Text title={fromUnixTime(value).toUTCString()}>
-            {formatDistanceToNow(fromUnixTime(value)).toUpperCase()} AGO
-          </Text>
-        ),
+        Cell: ({ value }) =>
+          value ? (
+            <Text title={fromUnixTime(value).toUTCString()}>
+              {formatDistanceToNow(fromUnixTime(value)).toUpperCase()} AGO
+            </Text>
+          ) : (
+            ""
+          ),
       },
       {
         Header: "Created At",
@@ -150,7 +153,7 @@ const ProposalsPage: React.FC<PageProps> = () => {
         accessor: "voteCount",
         Cell: ({ value }) => (
           <Text style={{ whiteSpace: "nowrap" }}>
-            <strong>{value}</strong> VOTES
+            <strong>{value}</strong> {value === "1" ? "VOTE" : "VOTES"}
           </Text>
         ),
       },
@@ -175,7 +178,10 @@ const ProposalsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Proposed <Pill size="sm"><p>{proposed.length}</p></Pill>
+        Proposed{" "}
+        <Pill size="sm">
+          <p>{proposed.length}</p>
+        </Pill>
       </Section>
 
       <Table
@@ -186,7 +192,10 @@ const ProposalsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Approved <Pill size="sm"><p>{approved.length}</p></Pill>{" "}
+        Approved{" "}
+        <Pill size="sm">
+          <p>{approved.length}</p>
+        </Pill>{" "}
         <span className="right">
           TRIBUTED {formatNumber(systemInfo.totalExecuted)} SNX
         </span>
@@ -200,7 +209,10 @@ const ProposalsPage: React.FC<PageProps> = () => {
       />
 
       <Section>
-        Completed <Pill size="sm"><p>{completed.length}</p></Pill>
+        Completed{" "}
+        <Pill size="sm">
+          <p>{completed.length}</p>
+        </Pill>
       </Section>
 
       <Table

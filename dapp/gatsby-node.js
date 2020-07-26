@@ -28,6 +28,7 @@ const createProposals = async ({ graphql, actions, reporter }) => {
           number
           status
           description
+          approvals
           amount
           createdAt
           url
