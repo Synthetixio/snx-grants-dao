@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
 import { graphql, PageProps, useStaticQuery, Link } from "gatsby"
+import { gql, useQuery } from "@apollo/client"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import fromUnixTime from "date-fns/fromUnixTime"
 
@@ -10,102 +11,104 @@ import {
   Section,
   Text,
   proposalStatusToBadge,
+  ErrorMessage,
 } from "../../components/common"
 import Table, { TitleLink } from "../../components/table"
 import { formatNumber } from "../../utils"
+import Loading from "../../components/loading"
 
-const PROPOSALS_PAGE_QUERY = graphql`
-  query ProposalsPage {
+const REQUESTS_COUNT_QUERY = graphql`
+  query RequestsCount {
     requests: allMarkdownRemark(
       filter: { fileAbsolutePath: { regex: "/requests//" } }
     ) {
       totalCount
     }
+  }
+`
 
-    grantsdao {
-      systemInfo(id: "current") {
-        proposalCount
-        totalBalance
-        totalExecuted
-        votingPhaseDuration
+const PROPOSALS_QUERY = gql`
+  query Proposals {
+    systemInfo(id: "current") {
+      proposalCount
+      totalBalance
+      totalExecuted
+      votingPhaseDuration
+    }
+
+    all: proposals(orderBy: createdAt) {
+      number
+      description
+      amount
+      receiver {
+        address
+        earned
       }
-
-      all: proposals(orderBy: createdAt) {
-        number
-        description
-        amount
-        receiver {
+      proposer {
+        account {
           address
-          earned
-        }
-        proposer {
-          account {
-            address
-          }
         }
       }
+    }
 
-      proposed: proposals(
-        where: { status: PROPOSED }
-        orderBy: modifiedAt
-        orderDirection: desc
-      ) {
-        number
-        description
-        approvals
-        teamApproval
-        voteCount
-        createdAt
-        modifiedAt
-      }
+    proposed: proposals(
+      where: { status: PROPOSED }
+      orderBy: modifiedAt
+      orderDirection: desc
+    ) {
+      number
+      description
+      approvals
+      teamApproval
+      voteCount
+      createdAt
+      modifiedAt
+    }
 
-      approved: proposals(
-        where: { status: APPROVED }
-        orderBy: createdAt
-        orderDirection: desc
-      ) {
-        number
-        voteCount
-        description
-        createdAt
-        modifiedAt
-      }
+    approved: proposals(
+      where: { status: APPROVED }
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      number
+      voteCount
+      description
+      createdAt
+      modifiedAt
+    }
 
-      rejected: proposals(
-        where: { status: REJECTED }
-        orderBy: createdAt
-        orderDirection: desc
-      ) {
-        number
-        voteCount
-        status
-        description
-        teamApproval
-        createdAt
-        modifiedAt
-      }
+    rejected: proposals(
+      where: { status: REJECTED }
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      number
+      voteCount
+      status
+      description
+      teamApproval
+      createdAt
+      modifiedAt
+    }
 
-      completed: proposals(
-        where: { status: COMPLETED }
-        orderBy: createdAt
-        orderDirection: desc
-      ) {
-        number
-        voteCount
-        status
-        description
-        createdAt
-        modifiedAt
-      }
+    completed: proposals(
+      where: { status: COMPLETED }
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      number
+      voteCount
+      status
+      description
+      createdAt
+      modifiedAt
     }
   }
 `
 
 const ProposalsPage: React.FC<PageProps> = () => {
-  const {
-    requests,
-    grantsdao: { systemInfo, proposed, approved, completed, rejected },
-  } = useStaticQuery(PROPOSALS_PAGE_QUERY)
+  const { requests } = useStaticQuery(REQUESTS_COUNT_QUERY)
+  const { data, loading, error } = useQuery(PROPOSALS_QUERY)
   const columns = useMemo(
     () => [
       {
@@ -166,6 +169,16 @@ const ProposalsPage: React.FC<PageProps> = () => {
     }),
     []
   )
+
+  if (loading) {
+    return <Loading />
+  }
+
+  if (error) {
+    return <ErrorMessage>{error.message || error.toString()}</ErrorMessage>
+  }
+
+  const { systemInfo, proposed, approved, completed, rejected } = data
 
   return (
     <>
