@@ -33,7 +33,7 @@ const ConnectToWallet = () => {
     active,
     error,
   } = context
-  console.log(context)
+
   const handleOnConnect = async () => {
     await activate(injected, error => {
       console.error(error)

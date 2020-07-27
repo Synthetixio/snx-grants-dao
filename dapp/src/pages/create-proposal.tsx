@@ -5,11 +5,11 @@ import { useForm } from "react-hook-form"
 import { utils } from "ethers"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
-import SEO from "../../components/seo"
-import { Title, ErrorMessage } from "../../components/common"
-import { PrimaryButton, SecondaryButton } from "../../components/button"
-import { useGrantsDaoContract } from "../../utils/contracts/grantsDaoContract"
-import { useTxToast } from "../../components/toast"
+import SEO from "../components/seo"
+import { Title, ErrorMessage } from "../components/common"
+import { PrimaryButton, SecondaryButton } from "../components/button"
+import { useGrantsDaoContract } from "../utils/contracts/grantsDaoContract"
+import { useTxToast } from "../components/toast"
 
 const CreateProposalPage = () => {
   const [error, setError] = useState("")

@@ -33,7 +33,7 @@ const Header: React.FC = () => {
                 <Link to="/requests/">Requests</Link>
               </MenuItem>
               <MenuItem tag="li" className="item">
-                <Link to="/proposals/new/">Create proposal</Link>
+                <Link to="/create-proposal/">Create proposal</Link>
               </MenuItem>
               <MenuItem tag="li" className="item">
                 <Link to="/members/">Members</Link>

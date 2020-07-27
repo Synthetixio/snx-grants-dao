@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
-import { graphql, PageProps, useStaticQuery, Link } from "gatsby"
+import { graphql, useStaticQuery, Link } from "gatsby"
+import { RouteComponentProps } from "@reach/router"
 import { gql, useQuery } from "@apollo/client"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import fromUnixTime from "date-fns/fromUnixTime"
@@ -106,7 +107,7 @@ const PROPOSALS_QUERY = gql`
   }
 `
 
-const ProposalsPage: React.FC<PageProps> = () => {
+const ProposalsPage: React.FC<RouteComponentProps> = () => {
   const { requests } = useStaticQuery(REQUESTS_COUNT_QUERY)
   const { data, loading, error } = useQuery(PROPOSALS_QUERY)
   const columns = useMemo(

@@ -21,7 +21,7 @@ import {
 import Tabs from "../components/tabs"
 import { formatDate } from "../utils"
 
-const ProposalPage = ({
+const RequestPage = ({
   pageContext: { request, requestsCount, systemInfo },
 }) => {
   return (
@@ -73,4 +73,4 @@ const ProposalPage = ({
   )
 }
 
-export default ProposalPage
+export default RequestPage

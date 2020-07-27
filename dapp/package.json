@@ -12,7 +12,7 @@
     "test": "yarn type-check && yarn lint",
     "type-check": "tsc --noEmit --pretty",
     "typechain": "typechain --target ethers-v5 **/*.abi.json",
-    "postinstall": "typechain"
+    "postinstall": "npm run typechain"
   },
   "dependencies": {
     "@apollo/client": "^3.0.0-rc.10",

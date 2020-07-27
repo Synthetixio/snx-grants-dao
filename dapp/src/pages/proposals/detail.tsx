@@ -1,6 +1,8 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useMemo } from "react"
+import { gql, useQuery } from "@apollo/client"
 import styled from "styled-components"
-import { Link } from "gatsby"
+import { Link, graphql, useStaticQuery } from "gatsby"
+import { RouteComponentProps } from "@reach/router"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faArrowLeft,
@@ -8,9 +10,9 @@ import {
   faTimes,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons"
-import SNXIcon from "../assets/svgs/snx.svg"
 import "github-markdown-css/github-markdown.css"
-import SEO from "../components/seo"
+import SNXIcon from "../../assets/svgs/snx.svg"
+import SEO from "../../components/seo"
 import {
   Text,
   proposalStatusToBadge,
@@ -26,25 +28,108 @@ import {
   Title,
   Wrapper,
   ErrorMessage,
-} from "../components/common"
-import Tabs from "../components/tabs"
-import Address from "../components/address"
+} from "../../components/common"
+import Tabs from "../../components/tabs"
+import Address from "../../components/address"
 import {
   formatNumber,
   toShortDate,
   getProposalEndDate,
   formatDateTime,
   toShortDateTime,
-} from "../utils"
-import { CopyAddressToClipboard } from "../components/copyToClipboard"
-import { PrimaryButton } from "../components/button"
-import { ConfirmationModalContext } from "../components/confirmationModal"
-import { useGrantsDaoContract } from "../utils/contracts/grantsDaoContract"
-import { useTxToast } from "../components/toast"
+} from "../../utils"
+import { CopyAddressToClipboard } from "../../components/copyToClipboard"
+import { PrimaryButton } from "../../components/button"
+import { ConfirmationModalContext } from "../../components/confirmationModal"
+import { useGrantsDaoContract } from "../../utils/contracts/grantsDaoContract"
+import { useTxToast } from "../../components/toast"
+import Loading from "../../components/loading"
 
-const ProposalPage = ({
-  pageContext: { proposal, systemInfo, html, requestsTotalCount },
-}) => {
+const PROPOSAL_QUERY = gql`
+  query ProposalDetail($id: ID!) {
+    systemInfo(id: "current") {
+      proposalCount
+      totalBalance
+      totalExecuted
+      votingPhaseDuration
+      votesToPass
+      memberCount
+    }
+
+    proposal(id: $id) {
+      number
+      status
+      description
+      approvals
+      amount
+      createdAt
+      url
+      receiver {
+        address
+        earned
+      }
+      proposer {
+        account {
+          address
+        }
+      }
+      votes {
+        timestamp
+        approve
+        member {
+          type
+          account {
+            address
+          }
+        }
+      }
+    }
+  }
+`
+
+const STATIC_QUERY = graphql`
+  query {
+    requests: allMarkdownRemark(
+      filter: { fileAbsolutePath: { regex: "/requests//" } }
+    ) {
+      totalCount
+    }
+
+    proposalDocuments: allMarkdownRemark(
+      filter: { fileAbsolutePath: { regex: "/proposals//" } }
+    ) {
+      nodes {
+        fileAbsolutePath
+        html
+      }
+    }
+  }
+`
+
+type Props = {
+  proposalId?: string
+} & RouteComponentProps
+
+const ProposalPage = ({ proposalId }: Props) => {
+  const { data, loading, error: apolloError } = useQuery(PROPOSAL_QUERY, {
+    variables: { id: proposalId },
+  })
+  const { requests, proposalDocuments } = useStaticQuery(STATIC_QUERY)
+  const html = useMemo(() => {
+    if (data?.proposal) {
+      const proposalFile = data.proposal.url.substring(
+        data.proposal.url.lastIndexOf("/") + 1
+      )
+
+      const documentNode = proposalDocuments.nodes.find(node =>
+        new RegExp(`${proposalFile}$`).test(node.fileAbsolutePath)
+      )
+
+      if (documentNode) {
+        return documentNode.html
+      }
+    }
+  }, [data, proposalDocuments])
   const { confirmAction } = useContext(ConfirmationModalContext)
   const { addTxToast } = useTxToast()
   const [pendingTx, setPendingTx] = useState(false)
@@ -135,13 +220,23 @@ const ProposalPage = ({
     }
   }
 
+  if (loading) {
+    return <Loading />
+  }
+
+  if (apolloError) {
+    return <ErrorMessage>{apolloError.message}</ErrorMessage>
+  }
+
+  const { systemInfo, proposal } = data
+
   return (
     <Wrapper>
       <SEO title={`#${proposal.number} ${proposal.description}`} />
 
       <Tabs
         proposalsCount={systemInfo.proposalCount}
-        requestsCount={requestsTotalCount}
+        requestsCount={requests.totalCount}
         availableBalance={systemInfo.totalBalance}
       />
 
@@ -261,6 +356,7 @@ const IconText = styled(Text)`
 
 const Votes = ({ votes }) => {
   return votes
+    .slice()
     .sort((a, b) => {
       if (a.member.type !== b.member.type && a.member.type === "TEAM") {
         return -1
@@ -440,6 +536,7 @@ const DescriptionContainer = styled.div`
   margin-bottom: 1rem;
 
   @media (min-width: 768px) {
+    max-width: 45%;
     margin-bottom: 0;
   }
 `
