@@ -115,7 +115,6 @@ const Container = styled.div`
   justify-content: flex-end;
   flex: 1;
   align-items: center;
-  margin-right: 1.5rem;
 
   ${NetworkBadge} {
     margin-right: 1.5rem;

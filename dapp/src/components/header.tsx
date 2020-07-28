@@ -6,8 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 import SynthetixLogo from "../assets/svgs/Synthetix-logo.svg"
 import ConnectToWallet from "./connectToWallet"
+import { useAccount } from "../utils/hooks"
 
 const Header: React.FC = () => {
+  const { isMember, isTeamMember } = useAccount()
+
   return (
     <Container>
       <Content>
@@ -32,15 +35,19 @@ const Header: React.FC = () => {
               <MenuItem tag="li" className="item">
                 <Link to="/requests/">Requests</Link>
               </MenuItem>
-              <MenuItem tag="li" className="item">
-                <Link to="/create-proposal/">Create proposal</Link>
-              </MenuItem>
+              {isMember && (
+                <MenuItem tag="li" className="item">
+                  <Link to="/create-proposal/">Create proposal</Link>
+                </MenuItem>
+              )}
               <MenuItem tag="li" className="item">
                 <Link to="/members/">Members</Link>
               </MenuItem>
-              <MenuItem tag="li" className="item">
-                <Link to="/pool/">Pool</Link>
-              </MenuItem>
+              {isTeamMember && (
+                <MenuItem tag="li" className="item">
+                  <Link to="/pool/">Pool</Link>
+                </MenuItem>
+              )}
             </ul>
           </Menu>
         </StyledMenuWrapper>
@@ -85,6 +92,7 @@ const StyledLink = styled(Link)`
 const StyledMenuWrapper = styled(Wrapper)`
   display: inline-block;
   position: relative;
+  margin-left: 1.5rem;
 
   .AriaMenuButton-trigger {
     cursor: pointer;

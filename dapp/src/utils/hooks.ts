@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
 import { useWeb3React } from "@web3-react/core"
-
+import { gql, useQuery } from "@apollo/client"
+import { Web3Provider } from "@ethersproject/providers"
+import toLower from "lodash/toLower"
 import { injected } from "./connectors"
 
 export function useEagerConnect() {
-  const { activate, active } = useWeb3React()
+  const { activate, active } = useWeb3React<Web3Provider>()
 
   const [tried, setTried] = useState(false)
 
@@ -31,7 +33,7 @@ export function useEagerConnect() {
 }
 
 export function useInactiveListener(suppress: boolean = false) {
-  const { active, error, activate } = useWeb3React()
+  const { active, error, activate } = useWeb3React<Web3Provider>()
 
   useEffect((): any => {
     const { ethereum } = window as any
@@ -70,4 +72,50 @@ export function useInactiveListener(suppress: boolean = false) {
       }
     }
   }, [active, error, suppress, activate])
+}
+
+const MEMBERS_QUERY = gql`
+  query MEMBERS {
+    members {
+      id
+      type
+    }
+  }
+`
+
+export const useAccount = () => {
+  const { active, account } = useWeb3React<Web3Provider>()
+  const { data, error } = useQuery(MEMBERS_QUERY, { skip: !active })
+  const [state, setState] = useState({
+    isMember: false,
+    isCommunityMember: false,
+    isTeamMember: false,
+    type: "",
+  })
+  useEffect(() => {
+    if (data) {
+      const member = data.members.find(
+        member => toLower(member.id) === toLower(account)
+      )
+      setState({
+        isMember: !!member,
+        isCommunityMember: member?.type === "COMMUNITY",
+        isTeamMember: member?.type === "TEAM",
+        type: member?.type,
+      })
+    }
+  }, [data, account])
+
+  useEffect(() => {
+    if (!active) {
+      setState({
+        isMember: false,
+        isCommunityMember: false,
+        isTeamMember: false,
+        type: "",
+      })
+    }
+  }, [active])
+
+  return { active, error, account, ...state }
 }

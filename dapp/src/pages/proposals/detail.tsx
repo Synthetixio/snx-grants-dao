@@ -3,6 +3,7 @@ import { gql, useQuery } from "@apollo/client"
 import styled from "styled-components"
 import { Link, graphql, useStaticQuery } from "gatsby"
 import { RouteComponentProps } from "@reach/router"
+import toLower from "lodash/toLower"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faArrowLeft,
@@ -37,6 +38,7 @@ import {
   getProposalEndDate,
   formatDateTime,
   toShortDateTime,
+  inVotingPeriod,
 } from "../../utils"
 import { CopyAddressToClipboard } from "../../components/copyToClipboard"
 import { PrimaryButton } from "../../components/button"
@@ -44,6 +46,7 @@ import { ConfirmationModalContext } from "../../components/confirmationModal"
 import { useGrantsDaoContract } from "../../utils/contracts/grantsDaoContract"
 import { useTxToast } from "../../components/toast"
 import Loading from "../../components/loading"
+import { useAccount } from "../../utils/hooks"
 
 const PROPOSAL_QUERY = gql`
   query ProposalDetail($id: ID!) {
@@ -135,6 +138,34 @@ const ProposalPage = ({ proposalId }: Props) => {
   const [pendingTx, setPendingTx] = useState(false)
   const [error, setError] = useState()
   const grantsDaoContract = useGrantsDaoContract()
+  const { isMember, account } = useAccount()
+  const isInVotingPeriod = useMemo(() => {
+    return (
+      data &&
+      inVotingPeriod(
+        data.proposal.createdAt,
+        data.systemInfo.votingPhaseDuration
+      )
+    )
+  }, [data])
+  const canVote = useMemo(() => {
+    if (
+      !data ||
+      !isMember ||
+      data.proposal.status === "COMPLETED" ||
+      data.proposal.status === "REJECTED" ||
+      !isInVotingPeriod
+    ) {
+      return false
+    }
+
+    // didn't vote
+    return (
+      data.proposal.votes.find(
+        vote => toLower(vote.member.account.address) === toLower(account)
+      ) === undefined
+    )
+  }, [isMember, data])
 
   const vote = async (approve: boolean) => {
     let vote
@@ -248,9 +279,15 @@ const ProposalPage = ({ proposalId }: Props) => {
           #{proposal.number} {proposal.description}
         </DescriptionContainer>
         <div>
-          <VoteYes onClick={() => vote(true)} disabled={pendingTx} />
-          <VoteNo onClick={() => vote(false)} disabled={pendingTx} />
-          <DeleteProposal onClick={deleteProposal} disabled={pendingTx} />
+          {canVote && (
+            <>
+              <VoteYes onClick={() => vote(true)} disabled={pendingTx} />
+              <VoteNo onClick={() => vote(false)} disabled={pendingTx} />
+            </>
+          )}
+          {isMember && (
+            <DeleteProposal onClick={deleteProposal} disabled={pendingTx} />
+          )}
         </div>
       </Title>
 
@@ -265,9 +302,12 @@ const ProposalPage = ({ proposalId }: Props) => {
         <DetailPanel>
           <PanelItem>
             <label>Status</label>
-            {proposal.status === "PROPOSED" ? (
+            {proposal.status === "PROPOSED" && (
               <InvertedInfoBadge>Proposed</InvertedInfoBadge>
-            ) : null}
+            )}
+            {proposal.status === "APPROVED" && (
+              <InvertedInfoBadge>Approved</InvertedInfoBadge>
+            )}
             {proposalStatusToBadge(proposal, systemInfo)}
           </PanelItem>
           <PanelItem>

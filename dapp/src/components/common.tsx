@@ -1,7 +1,6 @@
 import React from "react"
 import styled, { css } from "styled-components"
-import isFuture from "date-fns/isFuture"
-import { getProposalEndDate } from "../utils"
+import { inVotingPeriod } from "../utils"
 import GithubMark from "../assets/svgs/github-mark.svg"
 
 type PillProps = {
@@ -92,12 +91,11 @@ export const proposalStatusToBadge = (proposal, systemInfo) => {
     return <DangerBadge>Rejected</DangerBadge>
   }
 
-  if (proposal.status === "PROPOSED") {
-    const inVotingPeriod = isFuture(
-      getProposalEndDate(proposal.createdAt, systemInfo.votingPhaseDuration)
-    )
-
-    return inVotingPeriod ? (
+  if (proposal.status === "PROPOSED" || proposal.status === "APPROVED") {
+    return inVotingPeriod(
+      proposal.createdAt,
+      systemInfo.votingPhaseDuration
+    ) ? (
       <InfoBadge>In Voting</InfoBadge>
     ) : (
       <DangerBadge>Expired</DangerBadge>
@@ -156,6 +154,7 @@ export const Title = styled.h2`
   align-items: flex-start;
   font-size: 1rem;
   text-transform: uppercase;
+  height: 2rem;
   margin: 2.25rem 0;
 
   a svg {
