@@ -6,7 +6,15 @@ import { utils } from "ethers"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import SEO from "../components/seo"
-import { Title, ErrorMessage, Input, InputError } from "../components/common"
+import {
+  Title,
+  ErrorMessage,
+  Input,
+  InputError,
+  Form,
+  InputGroup,
+  ButtonContainer,
+} from "../components/common"
 import { PrimaryButton, SecondaryButton } from "../components/button"
 import { useGrantsDaoContract } from "../utils/contracts/grantsDaoContract"
 import { useTxToast } from "../components/toast"
@@ -124,46 +132,5 @@ const CreateProposalPage = () => {
     </>
   )
 }
-
-const InputGroup = styled.div`
-  display: grid;
-  align-items: center;
-  grid-template-columns: 11rem auto;
-  grid-template-rows: auto auto;
-  grid-row-gap: 0.75rem;
-
-  label {
-    grid-column: 1;
-    grid-row: 1;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-  }
-
-  input {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  ${InputError} {
-    grid-column: 2;
-    grid-row: 2;
-  }
-`
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-
-  > * {
-    margin-left: 1.5rem;
-  }
-`
-
-const Form = styled.form`
-  display: grid;
-  grid-gap: 2rem;
-
-  margin: 2rem 0;
-`
 
 export default CreateProposalPage
