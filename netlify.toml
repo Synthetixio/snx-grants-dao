@@ -5,3 +5,9 @@
 
 [dev]
   command = "gatsby develop"
+
+[context.production.environment]
+  SUBGRAPH_URL = "https://api.thegraph.com/subgraphs/name/protofire/synthetix-grantsdao"
+
+[context.deploy-preview.environment]
+  SUBGRAPH_URL = "https://api.thegraph.com/subgraphs/name/protofire/synthetix-grantsdao-ropsten"
