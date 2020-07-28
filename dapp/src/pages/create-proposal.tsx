@@ -6,7 +6,7 @@ import { utils } from "ethers"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import SEO from "../components/seo"
-import { Title, ErrorMessage } from "../components/common"
+import { Title, ErrorMessage, Input, InputError } from "../components/common"
 import { PrimaryButton, SecondaryButton } from "../components/button"
 import { useGrantsDaoContract } from "../utils/contracts/grantsDaoContract"
 import { useTxToast } from "../components/toast"
@@ -63,7 +63,9 @@ const CreateProposalPage = () => {
             disabled={isSubmitting}
             autoFocus
           />
-          {errors.description && <p>Please enter a description</p>}
+          {errors.description && (
+            <InputError>Please enter a description</InputError>
+          )}
         </InputGroup>
 
         <InputGroup>
@@ -73,7 +75,9 @@ const CreateProposalPage = () => {
             ref={register({ required: true })}
             disabled={isSubmitting}
           />
-          {errors.link && <p>Please enter the proposal's document URL</p>}
+          {errors.link && (
+            <InputError>Please enter the proposal's document URL</InputError>
+          )}
         </InputGroup>
 
         <InputGroup>
@@ -86,7 +90,9 @@ const CreateProposalPage = () => {
             })}
             disabled={isSubmitting}
           />
-          {errors.amount && <p>Please enter a valid SNX amount</p>}
+          {errors.amount && (
+            <InputError>Please enter a valid SNX amount</InputError>
+          )}
         </InputGroup>
 
         <InputGroup>
@@ -99,7 +105,9 @@ const CreateProposalPage = () => {
             })}
             disabled={isSubmitting}
           />
-          {errors.receiver && <p>Please enter a valid address</p>}
+          {errors.receiver && (
+            <InputError>Please enter a valid address</InputError>
+          )}
         </InputGroup>
 
         {error && <ErrorMessage>{error}</ErrorMessage>}
@@ -122,6 +130,7 @@ const InputGroup = styled.div`
   align-items: center;
   grid-template-columns: 11rem auto;
   grid-template-rows: auto auto;
+  grid-row-gap: 0.75rem;
 
   label {
     grid-column: 1;
@@ -135,12 +144,9 @@ const InputGroup = styled.div`
     grid-row: 1;
   }
 
-  p {
+  ${InputError} {
     grid-column: 2;
     grid-row: 2;
-    font-size: 0.75rem;
-    color: var(--color-7);
-    margin: 0.75rem 0 0 0;
   }
 `
 
@@ -150,19 +156,6 @@ const ButtonContainer = styled.div`
 
   > * {
     margin-left: 1.5rem;
-  }
-`
-
-const Input = styled.input`
-  padding: 1rem;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  box-shadow: 1px 2px 10px rgba(212, 212, 211, 0.59);
-
-  :focus,
-  :active {
-    border: 1px solid var(--color-3);
-    outline: 0;
   }
 `
 

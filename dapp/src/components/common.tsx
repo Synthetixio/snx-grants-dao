@@ -121,7 +121,7 @@ export const requestStatusToBadge = status => {
   return null
 }
 
-const GithubLinkWrapper = styled.div`
+export const IconLinkWrapper = styled.div`
   display: flex;
   align-items: center;
 
@@ -137,12 +137,12 @@ const GithubLinkWrapper = styled.div`
 `
 export const GithubLink = ({ text, href }) => {
   return (
-    <GithubLinkWrapper>
+    <IconLinkWrapper>
       <GithubMark />
       <a href={href} target="blank">
         {text}
       </a>
-    </GithubLinkWrapper>
+    </IconLinkWrapper>
   )
 }
 
@@ -242,4 +242,33 @@ export const ErrorMessage = styled.div`
   border-radius: 8px;
   background-color: #fff;
   padding: 1rem;
+`
+
+export const Input = styled.input`
+  padding: 1rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  box-shadow: 1px 2px 10px rgba(212, 212, 211, 0.59);
+
+  :focus,
+  :active {
+    border: 1px solid var(--color-3);
+    outline: 0;
+  }
+
+  ::placeholder {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  :disabled {
+    background-color: var(--color-4);
+    opacity: 0.7;
+  }
+`
+
+export const InputError = styled.span`
+  font-size: 0.75rem;
+  color: var(--color-7);
 `

@@ -6,13 +6,19 @@ import { Text } from "./common"
 
 type Props = {
   address: string
+  shortAccount?: boolean
 }
 
-const Address: React.FC<Props> = ({ address, children, ...rest }) => {
+const Address: React.FC<Props> = ({
+  address,
+  shortAccount = true,
+  children,
+  ...rest
+}) => {
   return (
     <Wrapper {...rest}>
       <Jazzicon diameter={30} seed={jsNumberForAddress(address)} />
-      <Text>{shortenAccount(address)}</Text>
+      <Text>{shortAccount ? shortenAccount(address) : address}</Text>
       {children}
     </Wrapper>
   )
