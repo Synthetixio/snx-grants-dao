@@ -2,6 +2,7 @@ import React, { useMemo } from "react"
 import { graphql, useStaticQuery, Link } from "gatsby"
 import { RouteComponentProps } from "@reach/router"
 import { gql, useQuery } from "@apollo/client"
+import styled from "styled-components"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import fromUnixTime from "date-fns/fromUnixTime"
 
@@ -37,21 +38,6 @@ const PROPOSALS_QUERY = gql`
       votingPhaseDuration
     }
 
-    all: proposals(orderBy: createdAt) {
-      number
-      description
-      amount
-      receiver {
-        address
-        earned
-      }
-      proposer {
-        account {
-          address
-        }
-      }
-    }
-
     proposed: proposals(
       where: { status: PROPOSED }
       orderBy: modifiedAt
@@ -62,6 +48,7 @@ const PROPOSALS_QUERY = gql`
       approvals
       teamApproval
       voteCount
+      amount
       createdAt
       modifiedAt
     }
@@ -73,6 +60,7 @@ const PROPOSALS_QUERY = gql`
     ) {
       number
       voteCount
+      amount
       description
       createdAt
       modifiedAt
@@ -85,6 +73,7 @@ const PROPOSALS_QUERY = gql`
     ) {
       number
       voteCount
+      amount
       status
       description
       teamApproval
@@ -99,6 +88,7 @@ const PROPOSALS_QUERY = gql`
     ) {
       number
       voteCount
+      amount
       status
       description
       createdAt
@@ -155,10 +145,13 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
       {
         Header: "",
         accessor: "voteCount",
-        Cell: ({ value }) => (
-          <Text style={{ whiteSpace: "nowrap" }}>
-            <strong>{value}</strong> {value === "1" ? "VOTE" : "VOTES"}
-          </Text>
+        Cell: ({ value, row }) => (
+          <VoteCountColumn>
+            <span>
+              <strong>{value}</strong> {value === "1" ? "VOTE" : "VOTES"}
+            </span>
+            <strong>{formatNumber(row.original.amount)} SNX</strong>
+          </VoteCountColumn>
         ),
       },
     ],
@@ -210,9 +203,6 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
         <Pill size="sm">
           <p>{approved.length}</p>
         </Pill>{" "}
-        <span className="right">
-          TRIBUTED {formatNumber(systemInfo.totalExecuted)} SNX
-        </span>
       </Section>
 
       <Table
@@ -227,6 +217,9 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
         <Pill size="sm">
           <p>{completed.length}</p>
         </Pill>
+        <span className="right">
+          TRIBUTED {formatNumber(systemInfo.totalExecuted)} SNX
+        </span>
       </Section>
 
       <Table
@@ -238,5 +231,14 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
     </>
   )
 }
+
+const VoteCountColumn = styled(Text)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.625rem;
+  white-space: nowrap;
+  line-height: 1rem;
+`
 
 export default ProposalsPage

@@ -88,6 +88,8 @@ const MembersPage: React.FC<PageProps> = () => {
         ),
         txHash: tx.hash,
       })
+
+      setAddressValue("")
     } catch (error) {
       console.error(error)
       setError(error.message || error)

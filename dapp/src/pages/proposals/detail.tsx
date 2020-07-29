@@ -165,7 +165,7 @@ const ProposalPage = ({ proposalId }: Props) => {
         vote => toLower(vote.member.account.address) === toLower(account)
       ) === undefined
     )
-  }, [isMember, data])
+  }, [isMember, data, account, isInVotingPeriod])
 
   const vote = async (approve: boolean) => {
     let vote
