@@ -2,8 +2,11 @@ import { useState, useEffect } from "react"
 import { useWeb3React } from "@web3-react/core"
 import { gql, useQuery } from "@apollo/client"
 import { Web3Provider } from "@ethersproject/providers"
+import { utils } from "ethers"
 import toLower from "lodash/toLower"
 import { injected } from "./connectors"
+import { useGrantsDaoContract } from "./contracts/grantsDaoContract"
+import { formatNumber } from "."
 
 export function useEagerConnect() {
   const { activate, active } = useWeb3React<Web3Provider>()
@@ -118,4 +121,21 @@ export const useAccount = () => {
   }, [active])
 
   return { active, error, account, ...state }
+}
+
+export const useTotalBalance = () => {
+  const grantsDaoContract = useGrantsDaoContract()
+  const [totalBalance, setTotalBalance] = useState("0")
+
+  useEffect(() => {
+    if (grantsDaoContract) {
+      grantsDaoContract
+        .totalBalance()
+        .then(totalBalance =>
+          setTotalBalance(formatNumber(Number(utils.formatEther(totalBalance))))
+        )
+    }
+  }, [grantsDaoContract])
+
+  return totalBalance
 }

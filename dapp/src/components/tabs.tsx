@@ -1,16 +1,34 @@
 import React from "react"
 import styled from "styled-components"
-import { Link } from "gatsby"
+import { Link, graphql, useStaticQuery } from "gatsby"
+import { gql, useQuery } from "@apollo/client"
 import { Pill } from "./common"
 import { formatNumber } from "../utils"
+import { useTotalBalance } from "../utils/hooks"
 
-type Props = {
-  proposalsCount: string
-  requestsCount: string
-  availableBalance: string
-}
+const REQUESTS_COUNT_QUERY = graphql`
+  query RequestsCount {
+    requests: allMarkdownRemark(
+      filter: { fileAbsolutePath: { regex: "/requests//" } }
+    ) {
+      totalCount
+    }
+  }
+`
 
-const Tabs = ({ proposalsCount, requestsCount, availableBalance }: Props) => {
+const PROPOSALS_COUNT_QUERY = gql`
+  query Proposals {
+    systemInfo(id: "current") {
+      proposalCount
+    }
+  }
+`
+
+const Tabs = () => {
+  const { requests } = useStaticQuery(REQUESTS_COUNT_QUERY)
+  const { data } = useQuery(PROPOSALS_COUNT_QUERY)
+  const totalBalance = useTotalBalance()
+
   return (
     <Wrapper>
       <LinkItem
@@ -20,17 +38,17 @@ const Tabs = ({ proposalsCount, requestsCount, availableBalance }: Props) => {
       >
         Proposals{" "}
         <Pill size="md">
-          <p>{proposalsCount}</p>
+          <p>{data?.systemInfo.proposalCount || 0}</p>
         </Pill>
       </LinkItem>
       <LinkItem to="/requests/" activeClassName="active" partiallyActive={true}>
         Requests{" "}
         <Pill size="md">
-          <p>{requestsCount}</p>
+          <p>{requests.totalCount}</p>
         </Pill>
       </LinkItem>
       <Rest>
-        <span>Available {formatNumber(Number(availableBalance))} SNX</span>
+        <span>Available {formatNumber(Number(totalBalance))} SNX</span>
       </Rest>
     </Wrapper>
   )

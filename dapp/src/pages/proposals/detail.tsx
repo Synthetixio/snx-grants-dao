@@ -51,8 +51,6 @@ import { useAccount } from "../../utils/hooks"
 const PROPOSAL_QUERY = gql`
   query ProposalDetail($id: ID!) {
     systemInfo(id: "current") {
-      proposalCount
-      totalBalance
       totalExecuted
       votingPhaseDuration
       votesToPass
@@ -92,12 +90,6 @@ const PROPOSAL_QUERY = gql`
 
 const STATIC_QUERY = graphql`
   query {
-    requests: allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "/requests//" } }
-    ) {
-      totalCount
-    }
-
     proposalDocuments: allMarkdownRemark(
       filter: { fileAbsolutePath: { regex: "/proposals//" } }
     ) {
@@ -117,7 +109,7 @@ const ProposalPage = ({ proposalId }: Props) => {
   const { data, loading, error: apolloError } = useQuery(PROPOSAL_QUERY, {
     variables: { id: proposalId },
   })
-  const { requests, proposalDocuments } = useStaticQuery(STATIC_QUERY)
+  const { proposalDocuments } = useStaticQuery(STATIC_QUERY)
   const html = useMemo(() => {
     if (data?.proposal) {
       const proposalFile = data.proposal.url.substring(
@@ -265,11 +257,7 @@ const ProposalPage = ({ proposalId }: Props) => {
     <Wrapper>
       <SEO title={`#${proposal.number} ${proposal.description}`} />
 
-      <Tabs
-        proposalsCount={systemInfo.proposalCount}
-        requestsCount={requests.totalCount}
-        availableBalance={systemInfo.totalBalance}
-      />
+      <Tabs />
 
       <Title>
         <DescriptionContainer>

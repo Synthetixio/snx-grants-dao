@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { graphql, useStaticQuery, Link } from "gatsby"
+import { Link } from "gatsby"
 import { RouteComponentProps } from "@reach/router"
 import { gql, useQuery } from "@apollo/client"
 import styled from "styled-components"
@@ -19,21 +19,9 @@ import Table, { TitleLink } from "../../components/table"
 import { formatNumber } from "../../utils"
 import Loading from "../../components/loading"
 
-const REQUESTS_COUNT_QUERY = graphql`
-  query RequestsCount {
-    requests: allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "/requests//" } }
-    ) {
-      totalCount
-    }
-  }
-`
-
 const PROPOSALS_QUERY = gql`
   query Proposals {
     systemInfo(id: "current") {
-      proposalCount
-      totalBalance
       totalExecuted
       votingPhaseDuration
     }
@@ -98,7 +86,6 @@ const PROPOSALS_QUERY = gql`
 `
 
 const ProposalsPage: React.FC<RouteComponentProps> = () => {
-  const { requests } = useStaticQuery(REQUESTS_COUNT_QUERY)
   const { data, loading, error } = useQuery(PROPOSALS_QUERY)
   const columns = useMemo(
     () => [
@@ -178,11 +165,7 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
     <>
       <SEO title="Proposals" />
 
-      <Tabs
-        proposalsCount={systemInfo.proposalCount}
-        requestsCount={requests.totalCount}
-        availableBalance={systemInfo.totalBalance}
-      />
+      <Tabs />
 
       <Section>
         Proposed{" "}

@@ -1,61 +1,37 @@
-import React, {
-  useMemo,
-  useContext,
-  useState,
-  useRef,
-  useCallback,
-} from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import { PageProps, Link } from "gatsby"
-import { gql, useQuery } from "@apollo/client"
 import styled from "styled-components"
 import { useForm } from "react-hook-form"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowLeft, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import { utils } from "ethers"
 
 import SEO from "../components/seo"
 import {
   Section,
-  Pill,
   ErrorMessage,
   Title,
-  IconLinkWrapper,
   Input,
   InputError,
   Form,
   InputGroup,
   ButtonContainer,
 } from "../components/common"
-import Table from "../components/table"
-import Address from "../components/address"
-import Loading from "../components/loading"
-import { ConfirmationModalContext } from "../components/confirmationModal"
 import { useTxToast } from "../components/toast"
 import { useGrantsDaoContract } from "../utils/contracts/grantsDaoContract"
-import { useAccount } from "../utils/hooks"
-import SimpleDropDown from "../components/simpleDropDown"
 import { PrimaryButton, SecondaryButton } from "../components/button"
-
-const POOL_QUERY = gql`
-  query PoolPage {
-    systemInfo(id: "current") {
-      totalBalance
-    }
-  }
-`
+import { useTotalBalance } from "../utils/hooks"
 
 const PoolPage: React.FC<PageProps> = () => {
-  const { data, loading, error: apolloError } = useQuery(POOL_QUERY)
   const { register, handleSubmit, errors, formState, reset } = useForm()
   const { addTxToast } = useTxToast()
-  const [pendingTx, setPendingTx] = useState(false)
   const [error, setError] = useState()
   const grantsDaoContract = useGrantsDaoContract()
+  const totalBalance = useTotalBalance()
 
   const onSubmit = useCallback(
     async values => {
       try {
-        setPendingTx(true)
         setError(null)
 
         const tx = await grantsDaoContract.withdraw(
@@ -73,8 +49,6 @@ const PoolPage: React.FC<PageProps> = () => {
       } catch (error) {
         console.error(error)
         setError(error.message || error)
-      } finally {
-        setPendingTx(false)
       }
     },
     [grantsDaoContract]
@@ -93,11 +67,9 @@ const PoolPage: React.FC<PageProps> = () => {
         Pool
       </Title>
 
-      {apolloError && <ErrorMessage>{apolloError.message}</ErrorMessage>}
-
       <BalanceContainer>
         <Section>Total SNX</Section>
-        <span>{data?.systemInfo.totalBalance}</span>
+        <span>{totalBalance}</span>
       </BalanceContainer>
 
       <Section>Withdraw SNX</Section>
@@ -137,7 +109,9 @@ const PoolPage: React.FC<PageProps> = () => {
         {error && <ErrorMessage>{error}</ErrorMessage>}
 
         <ButtonContainer>
-          <SecondaryButton onClick={() => reset()}>Reset</SecondaryButton>
+          <SecondaryButton onClick={() => reset()} disabled={isSubmitting}>
+            Reset
+          </SecondaryButton>
           <PrimaryButton type="submit" disabled={isSubmitting}>
             Confirm
           </PrimaryButton>

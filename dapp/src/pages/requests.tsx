@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import { graphql, PageProps, useStaticQuery, Link } from "gatsby"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import parseISO from "date-fns/parseISO"
@@ -10,13 +10,6 @@ import Table, { TitleLink } from "../components/table"
 
 const REQUESTS_PAGE_QUERY = graphql`
   query RequestsPage {
-    grantsdao {
-      systemInfo: systemInfos {
-        proposalCount
-        totalBalance
-      }
-    }
-
     allMarkdownRemark(filter: { fileAbsolutePath: { regex: "/requests//" } }) {
       edges {
         node {
@@ -40,10 +33,7 @@ const REQUESTS_PAGE_QUERY = graphql`
 `
 
 const RequestsPage: React.FC<PageProps> = () => {
-  const {
-    grantsdao: { systemInfo },
-    allMarkdownRemark,
-  } = useStaticQuery(REQUESTS_PAGE_QUERY)
+  const { allMarkdownRemark } = useStaticQuery(REQUESTS_PAGE_QUERY)
 
   const requests = useMemo(() => remarkFilesToRequests(allMarkdownRemark), [
     allMarkdownRemark,
@@ -98,11 +88,7 @@ const RequestsPage: React.FC<PageProps> = () => {
     <>
       <SEO title="Requests" />
 
-      <Tabs
-        proposalsCount={systemInfo[0].proposalCount}
-        requestsCount={allMarkdownRemark.edges.length}
-        availableBalance={systemInfo[0].totalBalance}
-      />
+      <Tabs />
 
       <Section>
         Proposed{" "}
