@@ -19,13 +19,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 const createRequests = async ({ graphql, actions, reporter }) => {
   const { data, errors } = await graphql(`
     query {
-      grantsdao {
-        systemInfo(id: "current") {
-          proposalCount
-          totalBalance
-        }
-      }
-
       allMarkdownRemark(
         filter: { fileAbsolutePath: { regex: "/requests//" } }
       ) {
@@ -76,8 +69,6 @@ const createRequests = async ({ graphql, actions, reporter }) => {
       component: requestPageTemplate,
       context: {
         request,
-        requestsCount: data.allMarkdownRemark.edges.length,
-        systemInfo: data.grantsdao.systemInfo,
       },
     })
   })

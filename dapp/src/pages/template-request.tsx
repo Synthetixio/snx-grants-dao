@@ -21,18 +21,12 @@ import {
 import Tabs from "../components/tabs"
 import { formatDate } from "../utils"
 
-const RequestPage = ({
-  pageContext: { request, requestsCount, systemInfo },
-}) => {
+const RequestPage = ({ pageContext: { request } }) => {
   return (
     <Wrapper>
       <SEO title={request.title} />
 
-      <Tabs
-        proposalsCount={systemInfo.proposalCount}
-        requestsCount={requestsCount}
-        availableBalance={systemInfo.totalBalance}
-      />
+      <Tabs />
 
       <Title>
         <Link to="/requests/">
