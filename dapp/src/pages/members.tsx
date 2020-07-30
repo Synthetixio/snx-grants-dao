@@ -28,11 +28,11 @@ import { PrimaryButton } from "../components/button"
 
 const MEMBERS_QUERY = gql`
   query MembersPage {
-    teamMembers: members(where: { type: TEAM }) {
+    teamMembers: members(where: { type: TEAM, removedAt: null }) {
       id
       type
     }
-    communityMembers: members(where: { type: COMMUNITY }) {
+    communityMembers: members(where: { type: COMMUNITY, removedAt: null }) {
       id
       type
     }

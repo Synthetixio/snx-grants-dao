@@ -79,7 +79,7 @@ export function useInactiveListener(suppress: boolean = false) {
 
 const MEMBERS_QUERY = gql`
   query MEMBERS {
-    members {
+    members(where: { removedAt: null }) {
       id
       type
     }
