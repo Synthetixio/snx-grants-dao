@@ -19,10 +19,14 @@ export const useGrantsDaoContract = () => {
       )
     }
 
-    return GrantsDaoAbiFactory.connect(
-      addresses[process.env.GATSBY_SUBGRAPH_NETWORK_ID],
-      getDefaultProvider(NETWORK_MAP[process.env.GATSBY_SUBGRAPH_NETWORK_ID])
-    )
+    return GrantsDaoAbiFactory
+      ? GrantsDaoAbiFactory.connect(
+          addresses[process.env.GATSBY_SUBGRAPH_NETWORK_ID],
+          getDefaultProvider(
+            NETWORK_MAP[process.env.GATSBY_SUBGRAPH_NETWORK_ID]
+          )
+        )
+      : null
   }, [active, chainId, library])
 
   return contract

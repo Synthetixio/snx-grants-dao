@@ -207,9 +207,23 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
 
       <Table
         columns={columns}
-        data={completed.concat(rejected)}
+        data={completed}
         initialState={tablesInitialState}
         noDataMessage="No Completed Proposals"
+      />
+
+      <Section>
+        Rejected{" "}
+        <Pill size="sm">
+          <p>{rejected.length}</p>
+        </Pill>
+      </Section>
+
+      <Table
+        columns={columns}
+        data={rejected}
+        initialState={tablesInitialState}
+        noDataMessage="No Rejected Proposals"
       />
     </>
   )

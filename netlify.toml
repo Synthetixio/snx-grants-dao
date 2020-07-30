@@ -8,8 +8,8 @@
 
 [context.production.environment]
   SUBGRAPH_URL = "https://api.thegraph.com/subgraphs/name/protofire/synthetix-grantsdao"
-  GATSBY_SUBGRAPH_NETWORK_ID=1
+  GATSBY_SUBGRAPH_NETWORK_ID = "1"
 
 [context.deploy-preview.environment]
   SUBGRAPH_URL = "https://api.thegraph.com/subgraphs/name/protofire/synthetix-grantsdao-ropsten"
-  GATSBY_SUBGRAPH_NETWORK_ID=3
+  GATSBY_SUBGRAPH_NETWORK_ID = "3"
