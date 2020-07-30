@@ -1,5 +1,6 @@
 import { useMemo } from "react"
 import { useWeb3React } from "@web3-react/core"
+import { getDefaultProvider } from "ethers"
 import { Web3Provider } from "@ethersproject/providers"
 import { GrantsDaoAbiFactory } from "../../../types/ethers-contracts/GrantsDaoAbiContract"
 
@@ -10,13 +11,27 @@ export const addresses = {
 
 export const useGrantsDaoContract = () => {
   const { active, chainId, library } = useWeb3React<Web3Provider>()
-  const contract = useMemo(
-    () =>
-      active
-        ? GrantsDaoAbiFactory.connect(addresses[chainId], library.getSigner())
-        : null,
-    [active, chainId, library]
-  )
+  const contract = useMemo(() => {
+    if (active) {
+      return GrantsDaoAbiFactory.connect(
+        addresses[chainId],
+        library.getSigner()
+      )
+    }
+
+    return GrantsDaoAbiFactory.connect(
+      addresses[process.env.GATSBY_SUBGRAPH_NETWORK_ID],
+      getDefaultProvider(NETWORK_MAP[process.env.GATSBY_SUBGRAPH_NETWORK_ID])
+    )
+  }, [active, chainId, library])
 
   return contract
+}
+
+const NETWORK_MAP = {
+  1: "homestead",
+  3: "ropsten",
+  4: "rinkeby",
+  5: "goerli",
+  42: "kovan",
 }
