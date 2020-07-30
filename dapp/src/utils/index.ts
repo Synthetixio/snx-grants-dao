@@ -32,3 +32,13 @@ export const getProposalEndDate = (createdAt, votingPhaseDuration) => {
 
 export const inVotingPeriod = (createdAt, votingPhaseDuration) =>
   isFuture(getProposalEndDate(createdAt, votingPhaseDuration))
+
+export const validMarkdownUrl = (url: string): boolean => {
+  try {
+    const parsedUrl = new URL(url)
+
+    return /\.md$/i.test(parsedUrl.pathname)
+  } catch (error) {
+    return false
+  }
+}

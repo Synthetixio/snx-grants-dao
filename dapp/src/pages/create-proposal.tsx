@@ -18,6 +18,7 @@ import {
 import { PrimaryButton, SecondaryButton } from "../components/button"
 import { useGrantsDaoContract } from "../utils/contracts/grantsDaoContract"
 import { useTxToast } from "../components/toast"
+import { validMarkdownUrl } from "../utils"
 
 const CreateProposalPage = () => {
   const [error, setError] = useState("")
@@ -80,11 +81,16 @@ const CreateProposalPage = () => {
           <label>Link</label>
           <Input
             name="link"
-            ref={register({ required: true })}
+            ref={register({
+              required: true,
+              validate: value => validMarkdownUrl(value),
+            })}
             disabled={isSubmitting}
           />
           {errors.link && (
-            <InputError>Please enter the proposal's document URL</InputError>
+            <InputError>
+              Please enter a valid proposal's document URL
+            </InputError>
           )}
         </InputGroup>
 
