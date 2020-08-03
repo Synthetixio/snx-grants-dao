@@ -150,11 +150,9 @@ export const Wrapper = styled.section``
 
 export const Title = styled.h2`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   font-size: 1rem;
   text-transform: uppercase;
-  height: 2rem;
   margin: 2.25rem 0;
 
   a svg {
@@ -167,15 +165,11 @@ export const Title = styled.h2`
       opacity: 0.7;
     }
   }
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    align-items: center;
-  }
 `
 
 export const Content = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
   border-radius: 8px;
   box-shadow: 0px 0px 15px -4px rgba(212, 212, 212, 1);
@@ -183,6 +177,10 @@ export const Content = styled.div`
   padding: 2rem;
   box-sizing: border-box;
   letter-spacing: normal;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 `
 
 export const Document = styled.article.attrs(props => ({
@@ -190,7 +188,11 @@ export const Document = styled.article.attrs(props => ({
 }))`
   font-family: Montserrat, sans-serif;
   font-size: 0.8rem;
-  width: 70%;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 70%;
+  }
 `
 
 export const PanelItem = styled.div`
@@ -216,14 +218,22 @@ export const PanelItemInfo = styled(PanelItem)`
 `
 
 export const DetailPanel = styled.div`
-  width: 30%;
-  position: sticky;
-  top: 0;
+  width: 100%;
   align-self: flex-start;
-  padding-right: 1.5rem;
+  margin-bottom: 2rem;
 
   ${PanelItem}, ${PanelItemInfo} {
     margin-top: 1rem;
+  }
+
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 30%;
+    padding-right: 1.5rem;
+    margin-bottom: 0;
+    position: sticky;
+    top: 0;
   }
 `
 
@@ -276,25 +286,35 @@ export const InputError = styled.span`
 export const InputGroup = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 11rem auto;
-  grid-template-rows: auto auto;
+  grid-template-columns: auto;
+  grid-template-rows: auto auto auto;
   grid-row-gap: 0.75rem;
 
   label {
-    grid-column: 1;
-    grid-row: 1;
     font-size: 0.75rem;
     text-transform: uppercase;
   }
 
-  input {
-    grid-column: 2;
-    grid-row: 1;
-  }
+  @media (min-width: 768px) {
+    grid-template-columns: 11rem auto;
+    grid-template-rows: auto auto;
 
-  ${InputError} {
-    grid-column: 2;
-    grid-row: 2;
+    label {
+      grid-column: 1;
+      grid-row: 1;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    input {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    ${InputError} {
+      grid-column: 2;
+      grid-row: 2;
+    }
   }
 `
 

@@ -18,7 +18,9 @@ const Address: React.FC<Props> = ({
   return (
     <Wrapper {...rest}>
       <Jazzicon diameter={30} seed={jsNumberForAddress(address)} />
-      <Text>{shortAccount ? shortenAccount(address) : address}</Text>
+      <Text className="address">
+        {shortAccount ? shortenAccount(address) : address}
+      </Text>
       {children}
     </Wrapper>
   )

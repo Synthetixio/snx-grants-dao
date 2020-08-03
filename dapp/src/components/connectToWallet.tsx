@@ -106,6 +106,14 @@ const StyledAddress = styled(Address)`
   .fa-chevron-down {
     opacity: 0.5;
   }
+
+  .address {
+    display: none;
+
+    @media (min-width: 640px) {
+      display: block;
+    }
+  }
 `
 
 const Container = styled.div`

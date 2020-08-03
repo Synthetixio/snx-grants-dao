@@ -259,7 +259,7 @@ const ProposalPage = ({ proposalId }: Props) => {
 
       <Tabs />
 
-      <Title>
+      <StyledTitle>
         <DescriptionContainer>
           <Link to="/proposals/">
             <FontAwesomeIcon icon={faArrowLeft} />
@@ -277,7 +277,7 @@ const ProposalPage = ({ proposalId }: Props) => {
             <DeleteProposal onClick={deleteProposal} disabled={pendingTx} />
           )}
         </div>
-      </Title>
+      </StyledTitle>
 
       {error && (
         <>
@@ -379,6 +379,16 @@ const IconText = styled(Text)`
 
   svg {
     margin-right: 0.375rem;
+  }
+`
+
+const StyledTitle = styled(Title)`
+  flex-direction: column;
+  align-items: flex-start;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
   }
 `
 

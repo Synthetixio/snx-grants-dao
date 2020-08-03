@@ -73,6 +73,16 @@ const LinkItem = styled(Link)`
   }
 `
 
+const Rest = styled.div`
+  flex: 1;
+  text-align: right;
+
+  span {
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+`
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -81,15 +91,13 @@ const Wrapper = styled.div`
   ${LinkItem}:not(:first-child) {
     margin-left: 50px;
   }
-`
 
-const Rest = styled.div`
-  flex: 1;
-  text-align: right;
+  ${Rest} {
+    display: none;
 
-  span {
-    font-weight: 700;
-    text-transform: uppercase;
+    @media (min-width: 768px) {
+      display: block;
+    }
   }
 `
 

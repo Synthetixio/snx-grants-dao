@@ -2,6 +2,7 @@ import React, { useMemo } from "react"
 import { graphql, PageProps, useStaticQuery, Link } from "gatsby"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import parseISO from "date-fns/parseISO"
+import { useMedia } from "react-use"
 
 import SEO from "../components/seo"
 import Tabs from "../components/tabs"
@@ -34,11 +35,10 @@ const REQUESTS_PAGE_QUERY = graphql`
 
 const RequestsPage: React.FC<PageProps> = () => {
   const { allMarkdownRemark } = useStaticQuery(REQUESTS_PAGE_QUERY)
-
+  const isWide = useMedia("(min-width: 768px)")
   const requests = useMemo(() => remarkFilesToRequests(allMarkdownRemark), [
     allMarkdownRemark,
   ])
-
   const columns = useMemo(
     () => [
       {
@@ -80,6 +80,7 @@ const RequestsPage: React.FC<PageProps> = () => {
   const tablesInitialState = useMemo(
     () => ({
       sortBy: [{ id: "modifiedAt", desc: true }],
+      hiddenColumns: isWide ? [] : ["createdAt", "modifiedAt"],
     }),
     []
   )

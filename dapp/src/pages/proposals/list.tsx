@@ -5,6 +5,7 @@ import { gql, useQuery } from "@apollo/client"
 import styled from "styled-components"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import fromUnixTime from "date-fns/fromUnixTime"
+import { useMedia } from "react-use"
 
 import SEO from "../../components/seo"
 import Tabs from "../../components/tabs"
@@ -87,6 +88,7 @@ const PROPOSALS_QUERY = gql`
 
 const ProposalsPage: React.FC<RouteComponentProps> = () => {
   const { data, loading, error } = useQuery(PROPOSALS_QUERY)
+  const isWide = useMedia("(min-width: 768px)")
   const columns = useMemo(
     () => [
       {
@@ -147,6 +149,7 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
   const tablesInitialState = useMemo(
     () => ({
       sortBy: [{ id: "modifiedAt", desc: true }],
+      hiddenColumns: isWide ? [] : ["createdAt", "modifiedAt", "status"],
     }),
     []
   )
