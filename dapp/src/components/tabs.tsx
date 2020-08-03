@@ -48,7 +48,7 @@ const Tabs = () => {
         </Pill>
       </LinkItem>
       <Rest>
-        <span>Available {formatNumber(Number(totalBalance))} SNX</span>
+        <span>Available {totalBalance} SNX</span>
       </Rest>
     </Wrapper>
   )
