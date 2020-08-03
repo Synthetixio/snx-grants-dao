@@ -133,7 +133,6 @@ const TransactionStatusContainer = styled.div`
 `
 
 const ToastContainer = styled.div`
-  width: 400px;
   padding: 1rem;
   margin-top: 1rem;
   background-color: #fff;
@@ -162,6 +161,10 @@ const ToastContainer = styled.div`
 
   &.exited {
     opacity: 0;
+  }
+
+  @media (min-width: 768px) {
+    width: 400px;
   }
 `
 

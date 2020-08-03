@@ -5,6 +5,7 @@ import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft, faTrashAlt } from "@fortawesome/free-solid-svg-icons"
 import { utils } from "ethers"
+import { useMedia } from "react-use"
 
 import SEO from "../components/seo"
 import {
@@ -64,6 +65,7 @@ const MembersPage: React.FC<PageProps> = () => {
   const [error, setError] = useState()
   const grantsDaoContract = useGrantsDaoContract()
   const { isTeamMember } = useAccount()
+  const isWide = useMedia("(min-width: 768px)")
 
   const handleAddMember = async () => {
     if (!addressValue) {
@@ -142,7 +144,7 @@ const MembersPage: React.FC<PageProps> = () => {
       {
         Header: "Address",
         accessor: "id",
-        Cell: ({ value }) => <Address address={value} shortAccount={false} />,
+        Cell: ({ value }) => <Address address={value} shortAccount={!isWide} />,
       },
       {
         Header: "",
@@ -164,7 +166,7 @@ const MembersPage: React.FC<PageProps> = () => {
           ),
       },
     ],
-    [grantsDaoContract, isTeamMember]
+    [grantsDaoContract, isTeamMember, isWide]
   )
 
   if (loading) {
@@ -239,23 +241,13 @@ const MembersPage: React.FC<PageProps> = () => {
   )
 }
 
-const AddMemberContainer = styled.div`
-  display: grid;
-  grid-template-columns: auto auto auto;
-  grid-template-rows: auto auto;
-  grid-column-gap: 1rem;
-  grid-row-gap: 0.75rem;
-  justify-content: start;
-
-  ${InputError} {
-    grid-column: 2;
-    grid-row: 2;
-  }
-`
-
 const AddressInput = styled(Input)`
-  width: 25rem;
+  width: auto;
   padding: 0.75rem 1rem;
+
+  @media (min-width: 768px) {
+    width: 25rem;
+  }
 `
 
 const DeleteLink = styled(IconLinkWrapper)`
@@ -265,6 +257,31 @@ const DeleteLink = styled(IconLinkWrapper)`
   svg {
     font-size: 1rem;
     opacity: 0.5;
+  }
+`
+
+const AddMemberContainer = styled.div`
+  display: grid;
+  grid-row-gap: 0.75rem;
+
+  .simple-drop-down {
+    width: auto;
+  }
+
+  ${PrimaryButton} {
+    width: fit-content;
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto;
+    grid-column-gap: 1rem;
+    justify-content: start;
+
+    ${InputError} {
+      grid-column: 2;
+      grid-row: 2;
+    }
   }
 `
 

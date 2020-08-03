@@ -71,7 +71,6 @@ const ConfirmationModalProvider = ({ children }) => {
 }
 
 const ModalContainer = styled.div`
-  width: 400px;
   background-color: #fff;
   box-shadow: 0px 0px 15px -4px #000;
 

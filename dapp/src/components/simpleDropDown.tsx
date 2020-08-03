@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useMemo } from "react"
 import { Wrapper, Button, Menu, MenuItem } from "react-aria-menubutton"
 import styled from "styled-components"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -28,7 +28,10 @@ const SimpleDropDown = ({ disabled, items, selectedValue, onValueChange }) => {
   }
 
   return (
-    <StyledMenuWrapper onSelection={handleSelection}>
+    <StyledMenuWrapper
+      onSelection={handleSelection}
+      className="simple-drop-down"
+    >
       <StyledButton className="AriaMenuButton-trigger" disabled={disabled}>
         {currentItem.label}
         <FontAwesomeIcon icon={faChevronDown} />
@@ -89,6 +92,8 @@ const StyledMenuWrapper = styled(Wrapper)`
 const StyledButton = styled(Button)`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
   background-color: #fff;
   padding: 0.75rem 1rem;
   border: 1px solid transparent;
