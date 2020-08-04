@@ -108,6 +108,7 @@ type Props = {
 const ProposalPage = ({ proposalId }: Props) => {
   const { data, loading, error: apolloError } = useQuery(PROPOSAL_QUERY, {
     variables: { id: proposalId },
+    pollInterval: 5000,
   })
   const { proposalDocuments } = useStaticQuery(STATIC_QUERY)
   const html = useMemo(() => {

@@ -16,23 +16,27 @@ export const Pill = styled.div<PillProps>`
   border-radius: 9999px;
   color: var(--color-1);
   background-color: var(--color-6);
+  width: auto;
+
+  p {
+    margin-left: 2px;
+    padding: 0.2rem;
+  }
+
   ${props =>
     props.size === "sm" &&
     css`
       font-size: 0.75rem;
-      width: 20px;
+      min-width: 20px;
       height: 20px;
     `}
   ${props =>
     props.size === "md" &&
     css`
       font-size: 1.125rem;
-      width: 24px;
+      min-width: 24px;
       height: 24px;
     `}
-    p {
-    margin-left: 2px;
-  }
 `
 
 export const Section = styled.h3`

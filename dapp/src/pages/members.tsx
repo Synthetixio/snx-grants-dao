@@ -51,7 +51,9 @@ const memberTypeLabel = isTeamMember =>
   isTeamMember ? "Core Contributor" : "Community Member"
 
 const MembersPage: React.FC<PageProps> = () => {
-  const { data, loading, error: apolloError } = useQuery(MEMBERS_QUERY)
+  const { data, loading, error: apolloError } = useQuery(MEMBERS_QUERY, {
+    pollInterval: 5000,
+  })
   const { confirmAction } = useContext(ConfirmationModalContext)
   const { addTxToast } = useTxToast()
   const [pendingTx, setPendingTx] = useState(false)

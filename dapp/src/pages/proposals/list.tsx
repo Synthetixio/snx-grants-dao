@@ -87,7 +87,9 @@ const PROPOSALS_QUERY = gql`
 `
 
 const ProposalsPage: React.FC<RouteComponentProps> = () => {
-  const { data, loading, error } = useQuery(PROPOSALS_QUERY)
+  const { data, loading, error } = useQuery(PROPOSALS_QUERY, {
+    pollInterval: 5000,
+  })
   const isWide = useMedia("(min-width: 768px)")
   const columns = useMemo(
     () => [
