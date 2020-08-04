@@ -65,16 +65,14 @@ const CreateProposalPage = () => {
 
       <Form onSubmit={handleSubmit(onSubmit)}>
         <InputGroup>
-          <label>Description</label>
+          <label>Title</label>
           <Input
             name="description"
             ref={register({ required: true })}
             disabled={isSubmitting}
             autoFocus
           />
-          {errors.description && (
-            <InputError>Please enter a description</InputError>
-          )}
+          {errors.description && <InputError>Please enter a title</InputError>}
         </InputGroup>
 
         <InputGroup>
