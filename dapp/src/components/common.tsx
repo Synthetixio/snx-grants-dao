@@ -82,8 +82,26 @@ export const DangerBadge = styled(Badge)`
   color: #fff;
   background-color: var(--color-7);
 `
+export const OutlineInfoBadge = styled(Badge)`
+  color: var(--color-3);
+  background-color: #fff;
+  border: 1px solid var(--color-3);
+`
+export const OutlinePrimaryBadge = styled(Badge)`
+  color: var(--color-5);
+  background-color: #fff;
+  border: 1px solid var(--color-5);
+`
 export const Text = styled.span`
   font-family: Montserrat, sans-serif;
+`
+
+const StyledOutLineInfoBadge = styled(OutlineInfoBadge)`
+  margin-bottom: 5px;
+`
+
+const StyledOutLinePrimaryBadge = styled(OutlinePrimaryBadge)`
+  margin-bottom: 5px;
 `
 
 export const proposalStatusToBadge = (proposal, systemInfo) => {
@@ -96,13 +114,25 @@ export const proposalStatusToBadge = (proposal, systemInfo) => {
   }
 
   if (proposal.status === "PROPOSED" || proposal.status === "APPROVED") {
-    return inVotingPeriod(
+    const InVoting = inVotingPeriod(
       proposal.createdAt,
       systemInfo.votingPhaseDuration
     ) ? (
       <InfoBadge>In Voting</InfoBadge>
     ) : (
       <DangerBadge>Expired</DangerBadge>
+    )
+    const Status =
+      proposal.status === "PROPOSED" ? (
+        <StyledOutLineInfoBadge>Proposed</StyledOutLineInfoBadge>
+      ) : (
+        <StyledOutLinePrimaryBadge>Approved</StyledOutLinePrimaryBadge>
+      )
+
+    return (
+      <>
+        {Status} {InVoting}
+      </>
     )
   }
 

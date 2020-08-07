@@ -34,6 +34,7 @@ const PROPOSALS_QUERY = gql`
     ) {
       number
       description
+      status
       approvals
       teamApproval
       voteCount
@@ -51,6 +52,7 @@ const PROPOSALS_QUERY = gql`
       voteCount
       amount
       description
+      status
       createdAt
       modifiedAt
     }
@@ -146,7 +148,7 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
         ),
       },
     ],
-    []
+    [data, isWide]
   )
   const tablesInitialState = useMemo(
     () => ({
@@ -155,6 +157,11 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
     }),
     []
   )
+  const proposed = useMemo(() => {
+    if (data) {
+      return data.proposed.concat(data.approved)
+    }
+  }, [data])
 
   if (loading) {
     return <Loading />
@@ -164,7 +171,7 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
     return <ErrorMessage>{error.message || error.toString()}</ErrorMessage>
   }
 
-  const { systemInfo, proposed, approved, completed, rejected } = data
+  const { systemInfo, completed, rejected } = data
 
   return (
     <>
@@ -184,20 +191,6 @@ const ProposalsPage: React.FC<RouteComponentProps> = () => {
         data={proposed}
         initialState={tablesInitialState}
         noDataMessage="No Proposals"
-      />
-
-      <Section>
-        Approved{" "}
-        <Pill size="sm">
-          <p>{approved.length}</p>
-        </Pill>{" "}
-      </Section>
-
-      <Table
-        columns={columns}
-        data={approved}
-        initialState={tablesInitialState}
-        noDataMessage="No Approved Proposals"
       />
 
       <Section>
