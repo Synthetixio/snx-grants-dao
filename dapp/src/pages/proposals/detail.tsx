@@ -17,7 +17,6 @@ import SEO from "../../components/seo"
 import {
   Text,
   proposalStatusToBadge,
-  InvertedInfoBadge,
   Pill,
   GithubLink,
   Document,
@@ -291,12 +290,6 @@ const ProposalPage = ({ proposalId }: Props) => {
         <DetailPanel>
           <PanelItem>
             <label>Status</label>
-            {proposal.status === "PROPOSED" && (
-              <InvertedInfoBadge>Proposed</InvertedInfoBadge>
-            )}
-            {proposal.status === "APPROVED" && (
-              <InvertedInfoBadge>Approved</InvertedInfoBadge>
-            )}
             {proposalStatusToBadge(proposal, systemInfo)}
           </PanelItem>
           <PanelItem>
