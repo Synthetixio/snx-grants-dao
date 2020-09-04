@@ -1,3 +1,7 @@
+---
+status: "completed"
+---
+
 ## New grantsDAO frontend
  
 We're looking for someone to build a new frontend for the Synthetix grantsDAO. 
