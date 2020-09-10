@@ -10,7 +10,7 @@ export const SUPPORTED_NETWORKS = {
 export const SUPPORTED_NETWORKS_MAP = invert(SUPPORTED_NETWORKS)
 
 export const isMainNet = networkId =>
-  networkId === SUPPORTED_NETWORKS_MAP.MAINNET
+  String(networkId) === SUPPORTED_NETWORKS_MAP.MAINNET
 
 const getEtherScanBaseURL = networkId => {
   const network = SUPPORTED_NETWORKS[networkId]
