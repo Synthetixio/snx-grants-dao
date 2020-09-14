@@ -27,5 +27,7 @@ Total: 2x hours
 e.g. 
 - y SNX 
 
+Please note that you can either opt to be paid in SNX at a USD rate (e.g. US$5000 in SNX) or as a flat SNX rate (e.g. 5000 SNX). If you opt to be paid in an amount denominated in USD, then the SNX rate will be whatever the SNX price is at the time of payment. If it is a two-part payment to be denominated in USD, then each payment's SNX rate will differ according to the SNX price at each time. 
+
 ## Ethereum Address: 
 - Please add an eligible Ethereum wallet address you'd like the funds sent to. 
